@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+	<!--  https://tomcat.apache.org/tomcat-9.0-doc/jndi-datasource-examples-howto.html#MySQL_DBCP_2_Example -->
+	<!-- 2. Context configuration 에서 코드 가져옴 -->
+	<Resource name="jdbc/TestDB" auth="Container"
+		type="javax.sql.DataSource" maxTotal="100" maxIdle="30"
+		maxWaitMillis="10000" username="bloguser" password="1234"
+		driverClassName="com.mysql.cj.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/project4?serverTimezone=Asia/Seoul" />
+</Context>

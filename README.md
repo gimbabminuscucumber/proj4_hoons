@@ -1,8 +1,8 @@
-#환경
+## 환경
 
 - macOs
-- jdk2.1
-- tomcat9.0
+- jdk 21
+- tomcat 9.0
 - sts tool
 - mysql 8.3.0
 - postman
@@ -10,6 +10,9 @@
 - gson (json파싱)
 - 인코딩 utf-8
 - git
+
+## 프로젝트 설명
+- 어떤 목적 때문에 만들었고, 어떤 기술을 왜 사용했는지 설명
 
 ## MySQL 데이터베이스 생성 및 사용자 생성
 
