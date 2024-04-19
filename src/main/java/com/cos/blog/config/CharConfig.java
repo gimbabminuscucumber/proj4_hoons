@@ -23,8 +23,8 @@ public class CharConfig implements Filter {
 		reponse.setContentType("text/html; charset=utf-8");
 
 		// Test
-		String username = request.getParameter("username");
-		System.out.println("username : " + username);
+//		String username = request.getParameter("username");
+//		System.out.println("username : " + username);
 		
 		chain.doFilter(request, reponse);
 	}

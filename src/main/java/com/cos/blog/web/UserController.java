@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
 import com.cos.blog.service.UserService;
+import com.cos.blog.util.Script;
 
 // http://localhost:8080/project4/user
 @WebServlet("/user")	
@@ -28,7 +29,7 @@ public class UserController extends HttpServlet {
 		doProcess(request, response);
 	}
 
-	// http://localhost:8080/project4/user?cmd=쿼리스트링
+	// http://localhost:8080/project4/user?cmd=쿼리스트링	>> project4의 user폴더 내에 있는 html에서 넘어온 데이터이기 때문에
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String cmd = request.getParameter("cmd");
 		UserService userService = new UserService(); 
@@ -65,8 +66,16 @@ public class UserController extends HttpServlet {
 			dto.setEmail(email);
 			dto.setAddress(address);
 			
+			// Test
+			System.out.println("회원가입 : " + dto);
+			
 			// 3. Service에 오브젝트 담기 (Service : 전달받은 데이터 처리 / 가공은 다른 곳에서 처리)
-			userService.회원가입(dto);
+			int result = userService.회원가입(dto);
+			if(result == 1) {
+				response.sendRedirect("index.jsp");
+			}else {
+				Script.back(response, "회원가입 실패");
+			}
 		}
 	}
 }
