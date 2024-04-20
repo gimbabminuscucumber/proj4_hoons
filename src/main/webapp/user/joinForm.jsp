@@ -9,9 +9,11 @@
 		<div class="form-group">
 			<div class="d-flex justify-content-between">
 				<label>Username :</label> 
-				<button type="button" class="btn btn-info" onclick="usernameCheck()">중복확인</button>
+				<button type="button" class="btn btn-info"  onclick="usernameCheck()">중복확인</button>
 			</div>				
 			<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required/>
+			<!-- 반응형..?? -->
+			<font id="checkId" size = "2"></font>
 		</div>
 		
 		<div class="form-group">
@@ -60,13 +62,15 @@ function usernameCheck(){
 	// DB에서 확인 후 아이디가 중복이 아니면 isChecking = true로 변경
 	var username = $("#username").val();
 	
+	/*
 	// type test (json과 text)
 	var a = "{\"result\" : \"a\"}";
 	var b = {result: "b"}
 	
-	//console.log(a);				// text (결과값의 외형은 json 같지만 text type 이다)
-	//console.log(b);				// json (데이터를 Java object로 다 바꿔줌 / key:value 로 엮인 json type이다)
-	//console.log(b.result);		// json일 경우, Java object로 바꾸기 때문에 .result 같은 기능을 사용할 수 있음
+	console.log(a);				// text (결과값의 외형은 json 같지만 text type 이다)
+	console.log(b);				// json (데이터를 Java object로 다 바꿔줌 / key:value 로 엮인 json type이다)
+	console.log(b.result);		// json일 경우, Java object로 바꾸기 때문에 .result 같은 기능을 사용할 수 있음
+	*/
 	
  	$.ajax({
 		type: "POST",
@@ -80,19 +84,25 @@ function usernameCheck(){
 			console.log('공란 : username : ' + username);
 
 			isChecking = false;			// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
-			alert('유저네임을 입력해주세요.')
+			//alert('유저네임을 입력해주세요.')
+			$("#checkId").html('유저네임을 입력해주세요.');
+			$("#checkId").attr('color', 'red');
 		}else if(data === 'ok'){		// 유저네임이 중복 됨
 			console.log('중복 : data : ' + data);
 			console.log('중복 : username : ' + username);
 			
 			isChecking = false;
-			alert('유저네임이 중복되었습니다.')
+			//alert('유저네임이 중복되었습니다.')
+			$("#checkId").html('유저네임이 중복되었습니다.');
+			$("#checkId").attr('color', 'red');
 		}else{									// 유저네임이 중복 안 됨
 			console.log('신규 : data : ' + data);
 			console.log('신규 : username : ' + username);
 
 			isChecking = true;
-			alert('해당 유저네임은 사용가능합니다.')
+			//alert('해당 유저네임은 사용가능합니다.')
+			$("#checkId").html('해당 유저네임은 사용가능합니다.');
+			$("#checkId").attr('color', 'blue');
 		}
 	});
 	
