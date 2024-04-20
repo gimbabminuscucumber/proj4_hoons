@@ -1,6 +1,9 @@
 package com.cos.blog.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -67,7 +70,7 @@ public class UserController extends HttpServlet {
 			dto.setAddress(address);
 			
 			// Test
-			System.out.println("회원가입 : " + dto);
+			System.out.println("UserController.회원가입 : " + dto);
 			
 			// 3. Service에 오브젝트 담기 (Service : 전달받은 데이터 처리 / 가공은 다른 곳에서 처리)
 			int result = userService.회원가입(dto);
@@ -76,6 +79,20 @@ public class UserController extends HttpServlet {
 			}else {
 				Script.back(response, "회원가입 실패");
 			}
+			
+		}else if(cmd.equals("usernameCheck")) {
+			// joinForm.jsp의 ajax에서 보내는 username 데이터가 text 타입이라서 버퍼로 받아야함 (파라미터로 받을 수 없기 때문에)
+			BufferedReader br = request.getReader();
+			String username = br.readLine();
+			System.out.println("UserController.username : "+username);
+			int result = userService.유저네임중복체크(username);
+			PrintWriter out = response.getWriter();
+			if(result == 1	) {		// result가 1(중복)이면
+				out.print("ok");		// println을 하면 칸 띄우기 때문에 일치여부 확인 불가
+			}else {							// result가 -1(신규)이면 
+				out.print("fail");	
+			}
+			out.flush();
 		}
 	}
 }

@@ -36,8 +36,9 @@ public class UserService {
 		return -1;
 	} 
 	
-	public int 아이디중복체크(String username) {
-		
-		return -1; 
+	public int 유저네임중복체크(String username) {
+		int result = userDao.findByUsername(username);
+		System.out.println("UserService.유저네임 중복 여부 : " + result);		// 1 이면 중복, -1 이면 신규
+		return result; 
 	}
 }
