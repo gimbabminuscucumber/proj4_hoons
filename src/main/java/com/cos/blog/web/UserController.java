@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
 import com.cos.blog.service.UserService;
@@ -52,7 +54,15 @@ public class UserController extends HttpServlet {
 			dto.setPassword(password);
 			
 			// 3. Service에 오브젝트 담기 (Service : 전달받은 데이터 처리 / 가공은 다른 곳에서 처리)
-			userService.로그인(dto);
+			User userEntity = userService.로그인(dto);
+			
+			if(userEntity != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("principal", userEntity);
+				response.sendRedirect("index.jsp");
+			}else {
+				Script.back(response, "로그인 실패");		// Script.java의 back() 메소드로 매개변수 전달 / PrintWriter로 "로그인 실패"를 담은 response를 전달
+			}
 		}else if(cmd.equals("joinForm")) {
 			response.sendRedirect("user/joinForm.jsp");
 		}else if(cmd.equals("join")) {
@@ -93,6 +103,10 @@ public class UserController extends HttpServlet {
 				out.print("fail");	
 			}
 			out.flush();
+		}else if(cmd.equals("logout")) {
+			HttpSession session = request.getSession();
+			session.invalidate();	// session 무효화
+			response.sendRedirect("index.jsp");
 		}
 	}
 }

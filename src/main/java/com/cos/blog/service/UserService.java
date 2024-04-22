@@ -27,8 +27,7 @@ public class UserService {
 	}
 	
 	public User 로그인(LoginReqDto dto) {		// select 작업 : 특정 행을 찾아서 결과값으로 리턴
-		
-		return null;
+		return userDao.findByUsernameAndPassword(dto);
 	}
 	
 	public int 회원수정(UpdateReqDto dto) {
