@@ -94,9 +94,12 @@ public class UserController extends HttpServlet {
 			// joinForm.jsp의 ajax에서 보내는 username 데이터가 text 타입이라서 버퍼로 받아야함 (파라미터로 받을 수 없기 때문에)
 			BufferedReader br = request.getReader();
 			String username = br.readLine();
+			
 			System.out.println("UserController.username : "+username);
+			
 			int result = userService.유저네임중복체크(username);
 			PrintWriter out = response.getWriter();
+			
 			if(result == 1	) {		// result가 1(중복)이면
 				out.print("ok");		// println을 하면 칸 띄우기 때문에 일치여부 확인 불가
 			}else {							// result가 -1(신규)이면 
