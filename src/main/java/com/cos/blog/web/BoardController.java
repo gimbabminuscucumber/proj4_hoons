@@ -62,6 +62,7 @@ public class BoardController extends HttpServlet {
 			int result = boardService.글쓰기(dto);
 			
 			if(result == 1) {	// 정상 입력 완료
+				
 				response.sendRedirect("index.jsp");
 			}else {					// 정상 입력 실패
 				Script.back(response, "글쓰기 실패");

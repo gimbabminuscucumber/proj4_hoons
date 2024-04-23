@@ -17,15 +17,15 @@ public class CharConfig implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse reponse = (HttpServletResponse) resp;
+		HttpServletResponse response = (HttpServletResponse) resp;
 
 		request.setCharacterEncoding("utf-8");
-		reponse.setContentType("text/html; charset=utf-8");
+		response.setContentType("text/html; charset=utf-8");
 
 		// Test
 //		String username = request.getParameter("username");
 //		System.out.println("username : " + username);
 		
-		chain.doFilter(request, reponse);
+		chain.doFilter(request, response);
 	}
 }

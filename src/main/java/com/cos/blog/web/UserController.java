@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,7 +43,11 @@ public class UserController extends HttpServlet {
 		// http://localhost:8080/project4/user?cmd=loginForm
 		if(cmd.equals("loginForm")) {
 			// 아이디 기억하게 하는 서비스 작성
-			response.sendRedirect("user/loginForm.jsp");
+			RequestDispatcher dis =
+					request.getRequestDispatcher("user/loginForm.jsp");
+			dis.forward(request, response);	
+			
+			//response.sendRedirect("user/loginForm.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
 		}else if(cmd.equals("login")) {
 			// 1. http에서 데이터를 받기
 			String username = request.getParameter("username");
@@ -59,12 +64,20 @@ public class UserController extends HttpServlet {
 			if(userEntity != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("principal", userEntity);
-				response.sendRedirect("index.jsp");
+				RequestDispatcher dis =
+						request.getRequestDispatcher("index.jsp");
+				dis.forward(request, response);	
+				
+				//response.sendRedirect("index.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
 			}else {
 				Script.back(response, "로그인 실패");		// Script.java의 back() 메소드로 매개변수 전달 / PrintWriter로 "로그인 실패"를 담은 response를 전달
 			}
 		}else if(cmd.equals("joinForm")) {
-			response.sendRedirect("user/joinForm.jsp");
+			RequestDispatcher dis =
+					request.getRequestDispatcher("user/joinForm.jsp");
+			dis.forward(request, response);	
+			
+			//response.sendRedirect("user/joinForm.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가
 		}else if(cmd.equals("join")) {
 			// 1. http에서 데이터를 받기
 			String username = request.getParameter("username");
@@ -85,7 +98,7 @@ public class UserController extends HttpServlet {
 			// 3. Service에 오브젝트 담기 (Service : 전달받은 데이터 처리 / 가공은 다른 곳에서 처리)
 			int result = userService.회원가입(dto);
 			if(result == 1) {
-				response.sendRedirect("index.jsp");
+				response.sendRedirect("index.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가하지만 index.jsp 접근은 허용했기에 가능
 			}else {
 				Script.back(response, "회원가입 실패");
 			}
@@ -109,7 +122,7 @@ public class UserController extends HttpServlet {
 		}else if(cmd.equals("logout")) {
 			HttpSession session = request.getSession();
 			session.invalidate();	// session 무효화
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("index.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가하지만 index.jsp 접근은 허용했기에 가능
 		}
 	}
 }
