@@ -18,12 +18,16 @@
 		<div class="progress-bar" style="width: 70%"></div>
 	</div>
 
-	<div class="card col-md-12 m-2">
-		<div class="card-body">
-			<h4 class="card-title">제목</h4>
-			<a href="#" class="btn btn-primary">상세보기</a>
+	<!-- JSTL forEach문을 써서 el 표식으로 뿌리기 -->
+	
+	<c:forEach var="board" items="${boards }">
+		<div class="card col-md-12 m-2">
+			<div class="card-body">
+				<h4 class="card-title">${board.title }</h4>
+				<a href="/project4/board?cmd=detail&id=${board.id }" class="btn btn-primary">상세보기</a>
+			</div>
 		</div>
-	</div>
+	</c:forEach>
 
 	<br />
 	<ul class="pagination justify-content-center">

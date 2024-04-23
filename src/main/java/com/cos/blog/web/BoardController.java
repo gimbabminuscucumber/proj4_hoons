@@ -1,7 +1,9 @@
 package com.cos.blog.web;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
@@ -42,9 +45,17 @@ public class BoardController extends HttpServlet {
 			User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 			
 			if(principal != null) {
-				response.sendRedirect("board/saveForm.jsp");				// principal이 있으면 글쓰기 페이지로
+				RequestDispatcher dis =
+						request.getRequestDispatcher("board/saveForm.jsp");
+				dis.forward(request, response);	
+				
+				//response.sendRedirect("board/saveForm.jsp");				// principal이 있으면 글쓰기 페이지로
 			}else {
-				response.sendRedirect("user/loginForm.jsp");					// 없으면 로그인 페이지로
+				RequestDispatcher dis =
+						request.getRequestDispatcher("user/loginForm.jsp");
+				dis.forward(request, response);	
+				
+				//response.sendRedirect("user/loginForm.jsp");					// 없으면 로그인 페이지로
 			}
 		}else if(cmd.equals("save")) {
 			int userId = Integer.parseInt(request.getParameter("userId"));		// saveForm 에서 hidden으로 받아온 userId
@@ -67,8 +78,12 @@ public class BoardController extends HttpServlet {
 			}else {					// 정상 입력 실패
 				Script.back(response, "글쓰기 실패");
 			}
-			
-
+		}else if(cmd.equals("list")) {
+			List<Board> boards = boardService.글목록보기();
+			request.setAttribute("boards", boards);
+			RequestDispatcher dis =
+					request.getRequestDispatcher("board/list.jsp");
+			dis.forward(request, response);	
 		}
 	}
 

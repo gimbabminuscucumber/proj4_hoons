@@ -40,7 +40,7 @@ public class UserDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getUsername());
 			pstmt.setString(2, dto.getPassword());
-			rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
 			
 			if(rs.next()) {
 				User user = User.builder()

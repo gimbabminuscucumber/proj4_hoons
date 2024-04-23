@@ -2,9 +2,13 @@ package com.cos.blog.domain.board;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.board.dto.SaveReqDto;
+import com.cos.blog.domain.user.User;
 
 public class BoardDao {
 
@@ -25,6 +29,38 @@ public class BoardDao {
 			DB.close(conn, pstmt);
 		}
 		return 0;
+	}
+
+	public List<Board> findAll() {
+		String sql = "SELECT * FROM board ORDER BY id DESC";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
+		ResultSet rs = null;
+		List<Board> boards = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
+			
+			while(rs.next()) {								// 커서를 이동하는 함수 (board에 데이터가 한 행씩 담기면 커서가 이동해서 그 다음 행의 데이터를 담음)
+				Board board = Board.builder()
+						.id(rs.getInt("id"))
+						.title(rs.getString("title"))
+						.content(rs.getString("content"))
+						.readCount(rs.getInt("readCount"))
+						.userId(rs.getInt("userId"))
+						.createDate(rs.getTimestamp("createDate"))
+						.build();
+				boards.add(board);						// select 된 데이터를 한 행씩 읽어서 board에 담음
+			}
+			return boards;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		
+		return null;
 	}
 
 }

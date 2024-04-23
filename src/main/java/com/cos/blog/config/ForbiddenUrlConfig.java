@@ -22,9 +22,9 @@ public class ForbiddenUrlConfig implements Filter{
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 
-		System.out.println("ForbiddenUrlConfig 접근");
-		System.out.println("getRequestURL : " + request.getRequestURL());		// URL : 풀 주소가 다 나옴
-		System.out.println("getRequestURI : " + request.getRequestURI());			// URI : 끝에 context 주소만 나옴
+//		System.out.println("ForbiddenUrlConfig 접근");
+//		System.out.println("getRequestURL : " + request.getRequestURL());		// URL : 풀 주소가 다 나옴
+//		System.out.println("getRequestURI : " + request.getRequestURI());			// URI : 끝에 context 주소만 나옴
 		
 		if(request.getRequestURI().equals("/project4/") || request.getRequestURI().equals("/project4/index.jsp")) {
 			chain.doFilter(request, response);
