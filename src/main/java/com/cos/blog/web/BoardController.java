@@ -41,6 +41,7 @@ public class BoardController extends HttpServlet {
 		BoardService boardService = new BoardService(); 
 		// http://localhost:8080/project4/board?cmd=saveFor m
 		HttpSession session = request.getSession();							// 세션 불러오기
+		
 		if(cmd.equals("saveForm")) {
 			User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 			
@@ -48,23 +49,21 @@ public class BoardController extends HttpServlet {
 				RequestDispatcher dis =
 						request.getRequestDispatcher("board/saveForm.jsp");
 				dis.forward(request, response);	
-				
 				//response.sendRedirect("board/saveForm.jsp");				// principal이 있으면 글쓰기 페이지로
 			}else {
 				RequestDispatcher dis =
 						request.getRequestDispatcher("user/loginForm.jsp");
 				dis.forward(request, response);	
-				
-				//response.sendRedirect("user/loginForm.jsp");					// 없으면 로그인 페이지로
+				//response.sendRedirect("user/loginForm.jsp");				// 없으면 로그인 페이지로
 			}
 		}else if(cmd.equals("save")) {
 			int userId = Integer.parseInt(request.getParameter("userId"));		// saveForm 에서 hidden으로 받아온 userId
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 			
-			System.out.println("BoardController/userId : " + userId);
-			System.out.println("BoardController/title : " + title);
-			System.out.println("BoardController/content: " + content);
+//			System.out.println("BoardController/userId : " + userId);
+//			System.out.println("BoardController/title : " + title);
+//			System.out.println("BoardController/content: " + content);
 			
 			SaveReqDto dto = new SaveReqDto();
 			dto.setUserId(userId);
@@ -73,16 +72,26 @@ public class BoardController extends HttpServlet {
 			int result = boardService.글쓰기(dto);
 			
 			if(result == 1) {	// 정상 입력 완료
-				
 				response.sendRedirect("index.jsp");
 			}else {					// 정상 입력 실패
 				Script.back(response, "글쓰기 실패");
 			}
+			
 		}else if(cmd.equals("list")) {
-			List<Board> boards = boardService.글목록보기();
+			int page = Integer.parseInt(request.getParameter("page"));		// 최초 페이지는 0, NEXT 클릭시 1
+			List<Board> boards = boardService.글목록보기(page);
 			request.setAttribute("boards", boards);
-			RequestDispatcher dis =
-					request.getRequestDispatcher("board/list.jsp");
+			
+			// 페이지 계산
+			int boardCount = boardService.글개수();
+			int lastPage = (boardCount -1)/4;
+			request.setAttribute("lastPage", lastPage);
+			
+			// 페이지 진척도
+			double currentPercent = (double)page/(lastPage)*100;
+			request.setAttribute("currentPercent", currentPercent);
+			
+			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);	
 		}
 	}

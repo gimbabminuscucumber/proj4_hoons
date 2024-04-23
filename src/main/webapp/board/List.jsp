@@ -14,10 +14,8 @@
 		</form>
 	</div>
 
-	<div class="progress col-md-12 m-2">
-		<div class="progress-bar" style="width: 70%"></div>
-	</div>
 
+	<!-- 게시글 보기 -->
 	<!-- JSTL forEach문을 써서 el 표식으로 뿌리기 -->
 	
 	<c:forEach var="board" items="${boards }">
@@ -29,10 +27,35 @@
 		</div>
 	</c:forEach>
 
+	<!-- 페이지 진척도 -->
+	<div class="progress col-md-12 m-2">
+		<div class="progress-bar" style="width: ${currentPercent}%"></div>
+	</div>
+
+	<!-- 페이징 처리 -->
+<%-- 	페이지 확인 = ${param.page}
+	마지막 페이지 = ${lastPage } --%>
+
 	<br />
 	<ul class="pagination justify-content-center">
-		<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-		<li class="page-item"><a class="page-link" href="#">Next</a></li>
+	<c:choose>
+		<c:when test="${param.page == 0 }">
+			<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		</c:when>
+		<c:otherwise>
+			<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li>
+		</c:otherwise>
+	</c:choose>
+
+	<c:choose>
+		<c:when test="${lastPage == param.page}">
+			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+		</c:when>
+		<c:otherwise>
+			<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li>
+		</c:otherwise>
+	</c:choose>
+	
 	</ul>
 </div>
 
