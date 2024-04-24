@@ -25,7 +25,8 @@
 	
 	<c:if test="${sessionScope.principal.id == dto.userId }">
 		<div class="d-flex justify-content-end">
-			<button onclick="updateById()" class="btn btn-primary">수정</button>
+			<a href="/project4/board?cmd=list&page=0" class="btn btn-primary">목록</a>&nbsp;
+			<a href="/project4/board?cmd=updateForm&id=${dto.id}" class="btn btn-primary">수정</a>&nbsp;
 			<button onclick="deleteById(${dto.id})" class="btn btn-danger">삭제</button>
 		</div>
 	</c:if>

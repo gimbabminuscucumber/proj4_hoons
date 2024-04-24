@@ -17,6 +17,7 @@ import com.cos.blog.domain.board.dto.DeleteReqDto;
 import com.cos.blog.domain.board.dto.DeleteRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
+import com.cos.blog.domain.board.dto.UpdateReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
 import com.cos.blog.util.Script;
@@ -98,7 +99,7 @@ public class BoardController extends HttpServlet {
 			
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);	
-		}else if(cmd.equals("detail")) {
+		}else if(cmd.equals("detail")) {			// 게시글 상세보기
 			int id = Integer.parseInt(request.getParameter("id"));
 			DetailRespDto dto = boardService.글상세보기(id);		// board 테이블 + user 테이블 = 조인된 데이터 필요
 			
@@ -139,6 +140,33 @@ public class BoardController extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.print(respData);
 			out.flush();
+		}else if(cmd.equals("updateForm")) {
+			// 수정할 데이터를 가져가야 함
+			int id = Integer.parseInt(request.getParameter("id"));		// 수정할 게시글의 id 가져오기
+			DetailRespDto dto = boardService.글상세보기(id);					// 수정한 메소드 내용을 dto에 담기
+			request.setAttribute("dto", dto);											// dto 뿌리기
+			RequestDispatcher dis = request.getRequestDispatcher("board/updateForm.jsp");
+			dis.forward(request, response);	
+		}else if(cmd.equals("update")) {
+			// updateForm에서 데이터를 받아온 name 값들 (id, title, content)
+			int id = Integer.parseInt(request.getParameter("id"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			
+			UpdateReqDto dto = new UpdateReqDto();
+			dto.setId(id);
+			dto.setTitle(title);
+			dto.setContent(content);
+			
+			int result = boardService.글수정(dto);
+			
+			if(result == 1) {
+				// ReqestDispatch 안 쓰는 이유에 대해 고민해보기 (이해 안되면 ReqestDispatch로 detail.jsp 호출해보기)
+				response.sendRedirect("/project4/board?cmd=detail&id="+id);		// 수정된 내용으로 저장이 완성되면, 게시글 상세보기 페이지가 열려야해서 재호출
+			}else {
+				Script.back(response, "글 수정에 실패했습니다.");
+			}
+			
 		}
 	}
 
