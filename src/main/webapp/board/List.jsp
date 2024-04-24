@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ include file="../layout/header.jsp"%>
 
 <div class="container">
 
+	<!-- 검색창 -->
 	<div class="m-2">
 		<form class="form-inline d-flex justify-content-end" action="/blog/board">
 			<input type="hidden" name="cmd" value="search" /> 
@@ -14,15 +15,28 @@
 		</form>
 	</div>
 
-
 	<!-- 게시글 보기 -->
 	<!-- JSTL forEach문을 써서 el 표식으로 뿌리기 -->
+	<div class="card m-2">
+		<div class="card-header">
+			<i class="mtrl-select">모든 게시글</i>
+		</div>
+	</div>
 	
+	<c:if test="${empty boards }">
+		<div>작성된 게시글이 없습니다.</div>
+	</c:if>
 	<c:forEach var="board" items="${boards }">
-		<div class="card col-md-12 m-2">
+		<div class="card m-2">
 			<div class="card-body">
-				<h4 class="card-title">${board.title }</h4>
-				<a href="/project4/board?cmd=detail&id=${board.id }" class="btn btn-primary">상세보기</a>
+				<div class="d-flex justify-content-between">
+					<h4 class="card-title"><a href="/project4/board?cmd=detail&id=${board.id }">${board.title }</a></h4>
+					<div>작성자 : <a href="#">${board.username}</a></div>
+				</div>
+				<div><i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i></div><!-- 카테고리 추가 -->
+				<%-- <div>
+					<a href="/project4/board?cmd=detail&id=${board.id }" class="btn btn-primary">상세보기</a>
+				</div> --%>					
 			</div>
 		</div>
 	</c:forEach>

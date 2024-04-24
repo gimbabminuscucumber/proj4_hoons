@@ -70,7 +70,7 @@ public class UserController extends HttpServlet {
 				
 				//response.sendRedirect("index.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
 			}else {
-				Script.back(response, "로그인 실패");		// Script.java의 back() 메소드로 매개변수 전달 / PrintWriter로 "로그인 실패"를 담은 response를 전달
+				Script.back(response, "아이디/비밀번호가 틀립니다.");		// Script.java의 back() 메소드로 매개변수 전달 / PrintWriter로 "로그인 실패"를 담은 response를 전달
 			}
 		}else if(cmd.equals("joinForm")) {
 			RequestDispatcher dis =
@@ -103,7 +103,7 @@ public class UserController extends HttpServlet {
 				Script.back(response, "회원가입 실패");
 			}
 			
-		}else if(cmd.equals("usernameCheck")) {
+		}else if(cmd.equals("usernameCheck")) {	// 유저네임 중복 체크
 			// joinForm.jsp의 ajax에서 보내는 username 데이터가 text 타입이라서 버퍼로 받아야함 (파라미터로 받을 수 없기 때문에)
 			BufferedReader br = request.getReader();
 			String username = br.readLine();

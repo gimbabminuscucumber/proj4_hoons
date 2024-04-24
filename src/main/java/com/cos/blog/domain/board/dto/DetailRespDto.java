@@ -1,4 +1,4 @@
-package com.cos.blog.domain.board;
+package com.cos.blog.domain.board.dto;
 
 import java.sql.Timestamp;
 
@@ -7,17 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+// detail 에서 사용될 board와 user가 조인된 변수들
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Board {
+@Data
+public class DetailRespDto {
 	private int id;
-	private int userId;
 	private String title;
 	private String content;
-	private int readCount;			// 조회수 디폴트값 0
+	private int readCount;	
 	private Timestamp createDate;
+	private String username;
+	private int userId;
 	
 	// 게시글 작성시, 제목(title)에 <script> 코드 방어
 	// - lucy filter로도 방어 가능 (더 궁극적임)
@@ -25,5 +27,4 @@ public class Board {
 	public String getTitle() {
 		return title.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 	}
-	
 }

@@ -60,18 +60,6 @@ public class UserDao {
 		
 		return null;
 	}
-	
-	public void update() {	// 회원수정
-		
-	}
-	
-	public void usernameCheck() {	// 아이디 중복 체크
-		
-	}
-	
-	public void findById() {		// 회원 정보 보기
-		
-	}
 
 	public int findByUsername(String username) {		// 유저네임 중복 체크
 		String sql = "SELECT * FROM user WHERE username =?";
@@ -96,4 +84,17 @@ public class UserDao {
 		
 		return -1;			// DB에 해당 유저네임이 없다
 	}
+
+	public void update() {	// 회원수정
+		
+	}
+	
+	public void usernameCheck() {	// 아이디 중복 체크
+		
+	}
+	
+	public void findById() {		// 회원 정보 보기
+		
+	}
+
 }

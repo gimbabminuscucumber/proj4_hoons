@@ -30,14 +30,15 @@ public class UserService {
 		return userDao.findByUsernameAndPassword(dto);
 	}
 	
-	public int 회원수정(UpdateReqDto dto) {
-		
-		return -1;
-	} 
-	
 	public int 유저네임중복체크(String username) {
 		int result = userDao.findByUsername(username);
 		System.out.println("UserService.유저네임 중복 여부 : " + result);		// 1 이면 중복, -1 이면 신규
 		return result; 
 	}
+	
+	public int 회원수정(UpdateReqDto dto) {
+		
+		return -1;
+	}
+
 }

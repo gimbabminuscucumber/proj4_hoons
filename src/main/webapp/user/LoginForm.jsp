@@ -4,7 +4,7 @@
 
 <div class="container">
 
-	<form action="/project4/user?cmd=login" method="post" onsubmit="return valid()">
+	<form action="/project4/user?cmd=login" method="post" >
 	<!-- <form> 태그에 데이터를 담아서 POST 로 보내면 Key=Value 형태로 간다 (x-www-form-urlencoded) -->
 		<div class="form-group">
 			<div class="d-flex justify-content-between">
@@ -16,7 +16,7 @@
 		</div>
 
 		<div class="form-group">
-			<label>Password :</label> <input type="password" name="password" class="form-control" placeholder="Enter Password">
+			<label>Password :</label> <input type="password" name="password" class="form-control" placeholder="Enter Password" required/>
 		</div>
 
 		<!-- 아이디 기억하기   -->
@@ -26,7 +26,7 @@
 			</label>
 		</div> -->
 		<br>
-		<button type="submit" class="btn btn-primary">로그인 하기</button>
+		<button type="submit" class="btn btn-primary" >로그인 하기</button>
 	</form>
 
 </div>
