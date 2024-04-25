@@ -7,87 +7,65 @@
 	<br> 
 	<br>
 	<h6 class="m-2 d-flex justify-content-between">
-		<div>작성자 : <a href="#"><i>${dto.username }</i></div></a>
-		<div>조회수 : <i>${dto.readCount }</i></div>
+		<div>작성자 : <a href="#"><i>${boards.username }</i></div></a>
+		<div>조회수 : <i>${boards.readCount }</i></div>
 	</h6>
 	<br>
 	
 	<div class="form-group">
 		<b><label>Title : </label></b>
-		<h3>${dto.title }</h3>
+		<h3>${boards.title }</h3>
 	</div>
 	<hr>
 	<div class="form-group">
 		<b><label>Content : </label></b>
-		<div>${dto.content }</div>
+		<div>${boards.content }</div>
 	</div>
 	<hr>
 	
-	<c:if test="${sessionScope.principal.id == dto.userId }">
+	<c:if test="${sessionScope.principal.id == boards.userId }">
 		<div class="d-flex justify-content-end">
 			<a href="/project4/board?cmd=list&page=0" class="btn btn-primary">목록</a>&nbsp;
-			<a href="/project4/board?cmd=updateForm&id=${dto.id}" class="btn btn-primary">수정</a>&nbsp;
-			<button onclick="deleteById(${dto.id})" class="btn btn-danger">삭제</button>
+			<a href="/project4/board?cmd=updateForm&id=${boards.id}" class="btn btn-primary">수정</a>&nbsp;
+			<button onclick="deleteById(${boards.id})" class="btn btn-danger">삭제</button>
 		</div>
 	</c:if>
 	<br>
-	
-	<script>
-		function deleteById(boardId){
-			var data ={
-					boardId: boardId
-			}
-			
-			$.ajax({
-				type: "post",
-				url: "/project4/board?cmd=delete",
-				data: JSON.stringify(data),
-				contentType: "application/json; charset=utf-8",
-				dataType: "json"
-			}).done(function(result){
-				if(result.status == "ok"){
-					location.href="index.jsp";
-				}else{
-					alert("삭제에 실패하였습니다.");
-				}
-			});
-		}
-	</script>
 	
 	<!-- 댓글 박스 -->
 	<div class="row bootstrap snippets">
 		<div class="col-md-12">
 			<div class="comment-wrapper">
 				<div class="panel panel-info">
-					<div class="panel-heading m-2">
-						<b>Comment </b><i>(댓글 개수)</i>
-					</div>
+					<div class="panel-heading m-2"><b>Comment </b><i>(댓글 개수)</i></div>
 					<div class="panel-body">
-						<textarea id="reply__write__form" class="form-control"
-							placeholder="write a comment..." rows="2"></textarea>
+						<input type="hidden" name="userId" value="${sessionScope.principal.id }">
+						<input type="hidden" name="boardId" value="${boards.id }">
+						<textarea id="content" id="reply__write__form" class="form-control" placeholder="write a comment..." rows="2"></textarea>
 						<br>
-						<button onclick="#" class="btn btn-primary pull-right">댓글쓰기</button>
+						<button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary pull-right">댓글쓰기</button>
+						
 						<div class="clearfix"></div>
 						<hr />
 
 						<!-- 댓글 리스트-->
 						<ul id="reply__list" class="media-list">
-
 							<!-- 댓글 -->
-							<li id="reply-1" class="media">
-								<img onerror="#" src="/project4/images/user.png" style="height: 45px " alt="" class="img-circle">
-								<div class="media-body">
-									<strong class="text-primary">홍길동</strong>
-									<p>댓글입니다.</p>
-									작성시간(크기 작게 / 회색)
-									<fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate>
-								</div>
-								<div class="m-2">
-						
-										<i onclick="#" class="material-icons">delete</i>
-								</div>
-							</li>
-
+							<c:forEach var="reply" items="${replys }">
+								<li id="reply-${reply.id }" class="media ">
+									<!-- <img onerror="#" src="/project4/images/user.png" style="height: 45px " alt="" class="img-circle"></img> -->
+									<div class="media-body">
+										<strong class="text-primary">${reply.userId }</strong>
+										<p>${reply.content }</p>
+									</div>
+									<div class="m-2">
+										<c:if test="${sessonScope.principal.id == reply.userId }">
+											<!-- delete에 마우스 갖다댔을 때, css로 마우스 포인터가 손가락으로 바뀌게하기 -->
+											<i onclick="deleteReply(${reply.id})" class="material-icons">delete</i>
+										</c:if>
+									</div>
+								</li>
+							</c:forEach>
 						</ul>
 						<!-- 댓글 리스트 끝-->
 					</div>
@@ -99,6 +77,7 @@
 	<!-- 댓글 박스 끝 -->
 </div>
 
+<script src="/project4/js/boardDetail.js"></script>
 
 </body>
 </html>

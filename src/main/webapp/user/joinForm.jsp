@@ -12,7 +12,8 @@
 				<button type="button" class="btn btn-info"  onclick="usernameCheck()">중복확인</button>
 			</div>				
 			<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required/>
-			<!-- 반응형..?? -->
+			<!-- 사용 가능 유저네임일 경우, 수정 못하게 readOnly로 바꾸기 -->
+			<!-- ajax -->
 			<font id="checkId" size = "2"></font>
 		</div>
 		

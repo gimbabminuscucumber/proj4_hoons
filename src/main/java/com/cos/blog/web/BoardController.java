@@ -1,6 +1,5 @@
 package com.cos.blog.web;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -13,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.cos.blog.domain.board.dto.DeleteReqDto;
-import com.cos.blog.domain.board.dto.DeleteRespDto;
+import com.cos.blog.domain.board.dto.CommonRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
+import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
+import com.cos.blog.service.ReplyService;
 import com.cos.blog.util.Script;
 import com.google.gson.Gson;
 
@@ -44,8 +44,9 @@ public class BoardController extends HttpServlet {
 
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String cmd = request.getParameter("cmd");
-		BoardService boardService = new BoardService(); 
-		// http://localhost:8080/project4/board?cmd=saveFor m
+		BoardService boardService = new BoardService();
+		ReplyService replyService = new ReplyService();
+		// http://localhost:8080/project4/board?cmd=saveForm
 		HttpSession session = request.getSession();							// 세션 불러오기
 		
 		if(cmd.equals("saveForm")) {
@@ -101,39 +102,32 @@ public class BoardController extends HttpServlet {
 			dis.forward(request, response);	
 		}else if(cmd.equals("detail")) {			// 게시글 상세보기
 			int id = Integer.parseInt(request.getParameter("id"));
-			DetailRespDto dto = boardService.글상세보기(id);		// board 테이블 + user 테이블 = 조인된 데이터 필요
+			DetailRespDto boards = boardService.글상세보기(id);		// board 테이블 + user 테이블 = 조인된 데이터 필요
+			List<Reply> replys = replyService.댓글목록(id);
 			
-			if(dto == null) {
+			if(boards == null) {
 				Script.back(response, "게시글을 불러올 수 없습니다.");
 			}else {
-				request.setAttribute("dto", dto);
+				request.setAttribute("boards", boards);
+				request.setAttribute("replys", replys);
 				RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
 				dis.forward(request, response);	
 			}
 		}else if(cmd.equals("delete")) {
 			
 			// 1. 요청받은 JSON 데이터를 자바 오브젝트로 파싱
-			BufferedReader br = request.getReader();
-			String data = br.readLine();
+			int id =Integer.parseInt(request.getParameter("id"));
 			
-			Gson gson = new Gson();
-			DeleteReqDto dto = gson.fromJson(data, DeleteReqDto.class);
-			
-			System.out.println("data : " + data);
-			System.out.println("dto : " + dto);
-
-			// 2. DB에서 id 값으로 글 삭제
-			int result = boardService.글삭제(dto.getBoardId());
+ 			// 2. DB에서 id 값으로 글 삭제
+			int result = boardService.글삭제(id);
 			
 			// 3. 응답할 JSON 데이터 생성
-			DeleteRespDto respDto = new DeleteRespDto()	;
-			if(result == 1) {
-				respDto.setStatus("ok");
-			}else {
-				respDto.setStatus("fail");
-			}
+			CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
+			commonRespDto.setStatusCode(result);
+			commonRespDto.setData("성공");
 			
-			String respData = gson.toJson(respDto);
+			Gson gson = new Gson();
+			String respData = gson.toJson(commonRespDto);
 			System.out.println("respData : " + respData);
 			
 			// 4. 응답
@@ -162,6 +156,7 @@ public class BoardController extends HttpServlet {
 			
 			if(result == 1) {
 				// ReqestDispatch 안 쓰는 이유에 대해 고민해보기 (이해 안되면 ReqestDispatch로 detail.jsp 호출해보기)
+				// - ReqestDispatch를 쓰면 id 값을 못 가져가기 때문에?!
 				response.sendRedirect("/project4/board?cmd=detail&id="+id);		// 수정된 내용으로 저장이 완성되면, 게시글 상세보기 페이지가 열려야해서 재호출
 			}else {
 				Script.back(response, "글 수정에 실패했습니다.");

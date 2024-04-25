@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import lombok.Data;
 
-// detail 에서 사용될 board와 user가 조인된 변수들
+// detail 에서 사용될 Board 테이블과 User 테이블이 조인된 변수들
 @Data
 public class ListRespDto {
 	private int id;

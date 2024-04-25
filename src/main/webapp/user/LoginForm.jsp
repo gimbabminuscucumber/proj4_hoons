@@ -11,7 +11,7 @@
 				<label>Username :</label>
 			</div>
 			<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required />
-			<!-- 반응형..?? -->
+			<!-- ajax -->
 			<font id="checkId" size="2"></font>
 		</div>
 

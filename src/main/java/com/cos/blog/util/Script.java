@@ -20,4 +20,15 @@ public class Script {
  			e.printStackTrace();
 		}
 	}
+
+	public static void responseData(HttpServletResponse response, String jsonData) {
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.print(jsonData);
+			out.flush();		// 버퍼 비우기
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
