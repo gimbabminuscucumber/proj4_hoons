@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.dto.CommonRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
@@ -46,9 +47,9 @@ public class BoardController extends HttpServlet {
 		String cmd = request.getParameter("cmd");
 		BoardService boardService = new BoardService();
 		ReplyService replyService = new ReplyService();
-		// http://localhost:8080/project4/board?cmd=saveForm
 		HttpSession session = request.getSession();							// 세션 불러오기
 		
+		// http://localhost:8080/project4/board?cmd=saveForm
 		if(cmd.equals("saveForm")) {
 			User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 			
@@ -161,7 +162,27 @@ public class BoardController extends HttpServlet {
 			}else {
 				Script.back(response, "글 수정에 실패했습니다.");
 			}
+		}else if(cmd.equals("search")) {		// 검색 기능
+			// 파라미터로 가져온 3개 (cmd, keyword, page) 중 2개
+			String keyword = request.getParameter("keyword");	
+			int page = Integer.parseInt(request.getParameter("page"));
 			
+//			DetailRespDto boards = boardService.글검색(keyword, page); 		// List 안쓰면 어떻게 되나???
+			List<DetailRespDto> boards = boardService.글검색(keyword, page); 
+			//List<Board> boards = boardService.글검색(keyword, page);
+			request.setAttribute("boards", boards);
+			
+			// 페이지 계산
+			int boardCount = boardService.글개수(keyword);
+			int lastPage = (boardCount -1)/4;
+			request.setAttribute("lastPage", lastPage);
+			
+			// 페이지 진척도
+			double currentPercent = (double)page/(lastPage)*100;
+			request.setAttribute("currentPercent", currentPercent);
+			
+			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
+			dis.forward(request, response);	
 		}
 	}
 

@@ -6,9 +6,10 @@
 <div class="container">
 
 	<!-- 검색창 -->
+	<!-- - 검색 버튼 누르면 파라미터 3개가 controller로 감 (cmd, page, keyword) -->
 	<div class="m-2">
-		<form class="form-inline d-flex justify-content-end" action="/blog/board">
-			<input type="hidden" name="cmd" value="search" /> 
+		<form class="form-inline d-flex justify-content-end" action="/project4/board">
+			<input type="hidden" name="cmd" value="search" /> 		<!-- <form>태그가 /project4/board?cmd=search 로 감 -->
 			<input type="hidden" name="page" value="0" /> 
 			<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search">
 			<button class="btn btn-primary m-1">검색</button>
@@ -24,7 +25,7 @@
 	</div>
 	
 	<c:if test="${empty boards }">
-		<div>작성된 게시글이 없습니다.</div>
+		<div>&nbsp; 작성된 게시글이 없습니다.</div>
 	</c:if>
 	<c:forEach var="board" items="${boards }">
 		<div class="card m-2">
@@ -51,24 +52,43 @@
 	마지막 페이지 = ${lastPage } --%>
 
 	<br />
-	<ul class="pagination justify-content-center">
-	<c:choose>
-		<c:when test="${param.page == 0 }">
-			<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-		</c:when>
-		<c:otherwise>
-			<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li>
-		</c:otherwise>
-	</c:choose>
 
-	<c:choose>
-		<c:when test="${lastPage == param.page}">
-			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-		</c:when>
-		<c:otherwise>
-			<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li>
-		</c:otherwise>
-	</c:choose>
+	<ul class="pagination justify-content-center">
+
+		<!-- 검색을 통해 나온 페이지 처리 -->
+		<c:choose>
+			<c:when test="${empty param.keyword }">
+				<%-- <c:set> : 변수 사용 --%>
+				<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
+				<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
+			</c:when>
+			
+			<c:otherwise>
+				<c:set var="pagePrev" value="/project4/board?cmd=search&page=${param.page-1 }&keyword=${param.keyword }"></c:set>
+				<c:set var="pageNext" value="/project4/board?cmd=search&page=${param.page+1 }&keyword=${param.keyword }"></c:set>
+			</c:otherwise>
+		</c:choose>
+	
+		<!-- 단순 페이지 처리 -->
+		<c:choose> 
+			<c:when test="${param.page == 0 }">
+				<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			</c:when> 
+			<c:otherwise>
+				<li class="page-item"><a class="page-link" href="${pageScope.pagePrev }">Previous</a></li>
+<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
+			</c:otherwise>
+		</c:choose>
+	
+		<c:choose>
+			<c:when test="${lastPage == param.page}">
+				<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			</c:when>
+			<c:otherwise>
+				<li class="page-item"><a class="page-link" href="${pageScope.pageNext }">Next</a></li>
+<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
+			</c:otherwise>
+		</c:choose>
 	
 	</ul>
 </div>

@@ -32,9 +32,9 @@ public class BoardDao {
 		return -1;
 	}
 
+	// 페이징 처리 (list 페이지) 
 	public int count() {
-//		String sql = "SELECT count(*), id FROM board";			// MySQL 버젼 문제로 안 됨
-		String sql = "SELECT COUNT(*) AS total_records FROM board;";
+		String sql = "SELECT count(*) FROM board";	
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
 		ResultSet rs = null;
@@ -47,11 +47,35 @@ public class BoardDao {
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
-		}finally {
+		}finally { 
 			DB.close(conn, pstmt, rs);
 		}
  		return -1; 
 	}
+
+	// 페이징 처리 (search가 추가된 페이지) - 오버로딩 
+	public int count(String keyword) {
+		String sql = "SELECT count(*) FROM board WHERE title LIKE ? OR content LIKE ?";	
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
+			pstmt.setString(2, "%"+keyword+"%");
+			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally { 
+			DB.close(conn, pstmt, rs);
+		}
+ 		return -1; 
+	}
+	
 
 	public DetailRespDto findById(int id) {		// 게시글 상세보기
 		StringBuffer sb = new StringBuffer();
@@ -177,7 +201,43 @@ public class BoardDao {
 		return -1;
 	}
 
-
+	//public DetailRespDto findByKeyword(String keyword, int page) {
+	public List<DetailRespDto> findByKeyword(String keyword, int page) {
+		String sql = "SELECT * FROM board b INNER JOIN user u ON b.userId = u.id WHERE b.title LIKE ? OR b.content LIKE ? ORDER BY b.id DESC LIMIT ?, 4";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
+		ResultSet rs = null;
+		List<DetailRespDto> boards = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
+			pstmt.setString(2, "%"+keyword+"%");		// b.content의 물음표도 써야함
+			pstmt.setInt(3, page*4);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
+			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
+			
+			while(rs.next()) {								// 커서를 이동하는 함수 (board에 데이터가 한 행씩 담기면 커서가 이동해서 그 다음 행의 데이터를 담음)
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("b.id"))
+						.title(rs.getString("b.title"))
+						.content(rs.getString("b.content"))
+						.readCount(rs.getInt("b.readCount"))
+						.userId(rs.getInt("b.userId"))
+						.createDate(rs.getTimestamp("b.createDate"))
+						.username(rs.getString("u.username"))
+						.build();
+				boards.add(dto);							// select 된 데이터를 한 행씩 읽어서 board에 담음
+			}
+			return boards;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+		
+	
 	/*
 	 * Board 테이블 (User 데이터가 조인 안됨)
 	public List<Board> findAll(int page) {		// 게시글 목록 + 페이지 처리
@@ -214,5 +274,6 @@ public class BoardDao {
 		return null;
 	}
 	 */
+
 	
 }
