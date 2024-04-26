@@ -35,10 +35,16 @@ public class UserService {
 		System.out.println("UserService.유저네임 중복 여부 : " + result);		// 1 이면 중복, -1 이면 신규
 		return result; 
 	}
-	
-	public int 회원수정(UpdateReqDto dto) {
-		
-		return -1;
+
+	public User 회원찾기(int id) {
+		return userDao.findById(id);
 	}
+
+	public int 회원수정(User user) {
+		return userDao.update(user);
+	}
+
+	
+	
 
 }

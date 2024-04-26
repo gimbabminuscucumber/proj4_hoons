@@ -80,10 +80,6 @@ public class BoardDao {
 	public DetailRespDto findById(int id) {		// 게시글 상세보기
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT * FROM board b INNER JOIN user u ON b.userId = u.id WHERE b.id = ?;");
-//		sb.append("SELECT * ");												// 끝에 한 칸 띄어쓰기 필수!
-//		sb.append("FROM board b INNER JOIN user u ");		// 끝에 한 칸 띄어쓰기 필수!
-//		sb.append("ON b.userId = u.id ");									// 끝에 한 칸 띄어쓰기 필수!
-//		sb.append("WHERE b.id = ?;");
 		
 		String sql = sb.toString(); 
 		Connection conn = DB.getConnection();
@@ -114,22 +110,6 @@ public class BoardDao {
 		return null;
 	}
 
-	public int updateReadCount(int id) {		// 조회수 증가
-		String sql = "UPDATE board SET readCount = readCount +1 WHERE id = ?";
-		Connection conn = DB.getConnection();
-		PreparedStatement pstmt = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
-			int result = pstmt.executeUpdate();
-			return result; 
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			DB.close(conn, pstmt);
-		}
-		return -1;
-	}
 
 	// Board 테이블 + User 테이블 = 조인된 데이터
 	public List<DetailRespDto> findAll(int page) {		// 게시글 목록 + 페이지 처리
@@ -182,10 +162,28 @@ public class BoardDao {
 		return -1;
 	}
 
+	public int updateReadCount(int id) {		// 조회수 증가
+		String sql = "UPDATE board SET readCount = readCount +1 WHERE id = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			return result; 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+	
 	public int update(UpdateReqDto dto) {
 		String sql = "UPDATE board SET title = ?, content = ? WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getTitle());

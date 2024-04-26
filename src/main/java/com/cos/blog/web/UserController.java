@@ -43,8 +43,7 @@ public class UserController extends HttpServlet {
 		// http://localhost:8080/project4/user?cmd=loginForm
 		if(cmd.equals("loginForm")) {
 			// 아이디 기억하게 하는 서비스 작성
-			RequestDispatcher dis =
-					request.getRequestDispatcher("user/loginForm.jsp");
+			RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
 			dis.forward(request, response);	
 			
 			//response.sendRedirect("user/loginForm.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
@@ -64,8 +63,7 @@ public class UserController extends HttpServlet {
 			if(userEntity != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("principal", userEntity);
-				RequestDispatcher dis =
-						request.getRequestDispatcher("index.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
 				dis.forward(request, response);	
 				
 				//response.sendRedirect("index.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
@@ -73,8 +71,7 @@ public class UserController extends HttpServlet {
 				Script.back(response, "아이디/비밀번호가 틀립니다.");		// Script.java의 back() 메소드로 매개변수 전달 / PrintWriter로 "로그인 실패"를 담은 response를 전달
 			}
 		}else if(cmd.equals("joinForm")) {
-			RequestDispatcher dis =
-					request.getRequestDispatcher("user/joinForm.jsp");
+			RequestDispatcher dis = request.getRequestDispatcher("user/joinForm.jsp");
 			dis.forward(request, response);	
 			
 			//response.sendRedirect("user/joinForm.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가
@@ -123,6 +120,39 @@ public class UserController extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.invalidate();	// session 무효화
 			response.sendRedirect("index.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가하지만 index.jsp 접근은 허용했기에 가능
+		}else if(cmd.equals("updateForm")) {
+			// 1. 유저 확인
+			int id = Integer.parseInt(request.getParameter("id"));
+//			System.out.println("id : " + id);
+			User user = userService.회원찾기(id);
+//			System.out.println("2. UserController/result : " + user);	// 1 뜨면 유저 확인 됨
+			
+			// 2. 현재 데이터 뿌리기
+			request.setAttribute("user", user);
+			
+			// 3. 데이터 뿌릴 위치
+			RequestDispatcher dis = request.getRequestDispatcher("user/updateForm.jsp");
+			dis.forward(request, response);	
+		}else if(cmd.equals("update")) {
+			// 
+			int id = Integer.parseInt(request.getParameter("id"));		// 왜 파라미터의 변수 값을 쌍따옴표로 감싸지?
+			String password = request.getParameter("password");
+			String email = request.getParameter("email");
+			String address = request.getParameter("address");
+			
+			User user = new User();
+			user.setId(id);
+			user.setPassword(password);
+			user.setEmail(email);
+			user.setAddress(address);
+
+			int result = userService.회원수정(user);
+			
+			if(result == 1) {
+				response.sendRedirect("/project4/user?cmd=updateForm&id=" + id);	// id 값을 들고가야 해서 response.sendRedirect() 사용
+			}else {
+				Script.responseData(response, "회원정보 수정에 실패했습니다.");
+			}
 		}
 	}
 }
