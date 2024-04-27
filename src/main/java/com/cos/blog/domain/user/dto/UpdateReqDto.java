@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UpdateReqDto {
+	private int id;
 	private String passwrod;
 	private String email;
 	private String address;

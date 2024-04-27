@@ -37,7 +37,7 @@
 		<div class="col-md-12">
 			<div class="comment-wrapper">
 				<div class="panel panel-info">
-					<div class="panel-heading m-2"><b>Comment </b><i>(댓글 개수)</i></div>
+					<div class="panel-heading m-2"><b>Comment </b><i>(${replyCount })</i></div>
 					<div class="panel-body">
 						<input type="hidden" name="userId" value="${sessionScope.principal.id }">
 						<input type="hidden" name="boardId" value="${boards.id }">
@@ -55,7 +55,7 @@
 								<li id="reply-${reply.id }" class="media ">
 									<!-- <img onerror="#" src="/project4/images/user.png" style="height: 45px " alt="" class="img-circle"></img> -->
 									<div class="media-body">
-										<strong class="text-primary">${reply.userId }</strong>
+										<strong class="text-primary">${reply.username }</strong>
 										<p>${reply.content }</p>
 									</div>
 									<div class="m-2">

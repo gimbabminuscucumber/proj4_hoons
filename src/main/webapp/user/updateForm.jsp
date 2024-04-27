@@ -4,7 +4,7 @@
 
 <div class="container">
 	<form action="/project4/user?cmd=update" method="post">	<!-- http://localhost:8080/project4/user?cmd=update&id=${user.id} -->
-	<input type="hidden" name="id" value="${user.id }">
+		<input type="hidden" name="id" value="${user.id }">
 		<div class="form-group">
 			<div class="d-flex justify-content-between">
 				<label>Username :</label> 
@@ -40,24 +40,12 @@
 		</div> -->
 		<br>
 		<button type="button" class="btn btn-primary" onclick="history.back()">이전</button>
-		<button type="submit" class="btn btn-primary">회원정보 수정</button>
+		<button type="submit" class="btn btn-primary" >회원정보 수정</button>
+		<!-- <button type="button" class="btn btn-primary" oncilck="userUpdate()">회원정보 수정</button> -->
 	</form>
-
 </div>
  
-<script>
-
-// 주소 API 실행 함수
-function goPopup(){
-	var pop = window.open("/project4/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
-}
-
-function jusoCallBack(roadFullAddr){
-	var addressElement = document.querySelector("#address");	
-	addressElement.value = roadFullAddr;
-}
-
-</script>
+<script src="/project4/js/userInfo.js"></script>
 
 </body>
 </html>

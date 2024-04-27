@@ -12,6 +12,7 @@ function addReply(data){
 	$("#reply__list").prepend(replyItem);
 }
 */
+
 // 댓글 삭제
 function deleteReply(id){
 
@@ -49,7 +50,7 @@ function replySave(userId, boardId) {
 
 	$.ajax({
 		type: "post",
-		url: "/project4/reply?cmd=save",
+		url: "/project4/reply?cmd=save",			// 여기로 object 를 가져가겠다
 		data: JSON.stringify(data),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"

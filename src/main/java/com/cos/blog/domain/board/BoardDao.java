@@ -65,6 +65,7 @@ public class BoardDao {
 			pstmt.setString(1, "%"+keyword+"%");
 			pstmt.setString(2, "%"+keyword+"%");
 			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
+		
 			if(rs.next()) {
 				return rs.getInt(1);
 			}
@@ -98,8 +99,8 @@ public class BoardDao {
 				dto.setContent(rs.getString("b.content"));
 				dto.setReadCount(rs.getInt("b.readCount"));
 				dto.setCreateDate(rs.getTimestamp("b.createDate"));
-				dto.setUserId(rs.getInt("b.userId"));
 				dto.setUsername(rs.getString("u.username"));
+				dto.setUserId(rs.getInt("b.userId"));
 				return dto;
 			}
 		}catch(Exception e) {

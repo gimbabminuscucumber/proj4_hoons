@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Reply {
-	private int id;
+	private int replyId;
 	private int userId;
 	private int boardId;
 	private String content;
+	private int count;						// 댓글 개수
 	private Timestamp createDate;
 }

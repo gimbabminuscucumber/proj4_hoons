@@ -83,7 +83,7 @@ public class UserDao {
 		return -1;			// DB에 해당 유저네임이 없다
 	}
 
-	public User findById(int id) {
+	public User findById(int id) {	// 유저 찾기
 		String sql = "SELECT * FROM user WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;				// 외부로부터 injection 공격 방어
@@ -111,7 +111,7 @@ public class UserDao {
 		return null;	
 	}
 
-	public int update(User user) {
+	public int update(User user) {		// 회원정보 수정
 		String sql = "UPDATE user SET password =?, email =?, address =? WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -122,7 +122,9 @@ public class UserDao {
 			pstmt.setString(2, user.getEmail());
 			pstmt.setString(3, user.getAddress());
 			pstmt.setInt(4, user.getId());
+			
 			int result = pstmt.executeUpdate();
+			System.out.println("UserDao/update/result : " + result);
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();

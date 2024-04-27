@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.dto.CommonRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
 import com.cos.blog.domain.reply.Reply;
+import com.cos.blog.domain.reply.dto.ReplyRespDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
 import com.cos.blog.service.ReplyService;
@@ -54,13 +54,11 @@ public class BoardController extends HttpServlet {
 			User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 			
 			if(principal != null) {
-				RequestDispatcher dis =
-						request.getRequestDispatcher("board/saveForm.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("board/saveForm.jsp");
 				dis.forward(request, response);	
 				//response.sendRedirect("board/saveForm.jsp");				// principal이 있으면 글쓰기 페이지로
 			}else {
-				RequestDispatcher dis =
-						request.getRequestDispatcher("user/loginForm.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
 				dis.forward(request, response);	
 				//response.sendRedirect("user/loginForm.jsp");				// 없으면 로그인 페이지로
 			}
@@ -102,15 +100,18 @@ public class BoardController extends HttpServlet {
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);	
 		}else if(cmd.equals("detail")) {			// 게시글 상세보기
-			int id = Integer.parseInt(request.getParameter("id"));
-			DetailRespDto boards = boardService.글상세보기(id);		// board 테이블 + user 테이블 = 조인된 데이터 필요
-			List<Reply> replys = replyService.댓글목록(id);
+			int id = Integer.parseInt(request.getParameter("id"));	// 게시글 id 가져오기
+			DetailRespDto boards = boardService.글상세보기(id);			// board 테이블 + user 테이블 = 조인된 데이터 필요
+//			List<Reply> replys = replyService.댓글목록(id);					// 댓글 목록
+			List<ReplyRespDto> replys = replyService.댓글목록(id);		// 댓글 목록 + 유저의 username
+			int replyCount = replyService.댓글수(id);
 			
 			if(boards == null) {
 				Script.back(response, "게시글을 불러올 수 없습니다.");
 			}else {
 				request.setAttribute("boards", boards);
 				request.setAttribute("replys", replys);
+				request.setAttribute("replyCount", replyCount);
 				RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
 				dis.forward(request, response);	
 			}

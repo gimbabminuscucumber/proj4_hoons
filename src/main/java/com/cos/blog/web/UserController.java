@@ -12,11 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cos.blog.domain.board.dto.CommonRespDto;
+import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
+import com.cos.blog.domain.user.dto.UpdateReqDto;
 import com.cos.blog.service.UserService;
 import com.cos.blog.util.Script;
+import com.google.gson.Gson;
 
 // http://localhost:8080/project4/user
 @WebServlet("/user")	
@@ -133,26 +137,33 @@ public class UserController extends HttpServlet {
 			// 3. 데이터 뿌릴 위치
 			RequestDispatcher dis = request.getRequestDispatcher("user/updateForm.jsp");
 			dis.forward(request, response);	
-		}else if(cmd.equals("update")) {
-			// 
+		}else if(cmd.equals("update")) {		// 회원정보 수정
+			
+			// 1. 수정할 유저 정보 가져오기
 			int id = Integer.parseInt(request.getParameter("id"));		// 왜 파라미터의 변수 값을 쌍따옴표로 감싸지?
 			String password = request.getParameter("password");
 			String email = request.getParameter("email");
 			String address = request.getParameter("address");
 			
+			// 2. 유저 객체에 수정된 데이터 넣기
 			User user = new User();
 			user.setId(id);
 			user.setPassword(password);
 			user.setEmail(email);
 			user.setAddress(address);
-
-			int result = userService.회원수정(user);
 			
+			// 3. 수정된 유저 객체를 넣은 서비스 호출
+			int result = userService.회원수정(user);		// Service에서 결과 받기 (1이면 성공, -1이면 실패)
+			System.out.println("UserController/update/result : " + result);
+			
+			// 4. 결과에 따른 페이지 이동
 			if(result == 1) {
-				response.sendRedirect("/project4/user?cmd=updateForm&id=" + id);	// id 값을 들고가야 해서 response.sendRedirect() 사용
+				response.sendRedirect("index.jsp");	
+//				response.sendRedirect("/project4/user?cmd=list&id=" + id);	// id 값을 들고가야 해서 response.sendRedirect() 사용
 			}else {
 				Script.responseData(response, "회원정보 수정에 실패했습니다.");
 			}
+			
 		}
 	}
 }

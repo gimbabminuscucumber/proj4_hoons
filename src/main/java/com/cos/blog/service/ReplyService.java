@@ -5,6 +5,7 @@ import java.util.List;
 import com.cos.blog.domain.board.BoardDao;
 import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.reply.ReplyDao;
+import com.cos.blog.domain.reply.dto.ReplyRespDto;
 import com.cos.blog.domain.reply.dto.SaveReqDto;
 
 public class ReplyService {
@@ -27,8 +28,16 @@ public class ReplyService {
 		return replyDao.deleteById(id);
 	}
 
-	public List<Reply> 댓글목록(int boardId) {
-		return replyDao.findAll(boardId);
+//	public List<Reply> 댓글목록(int boardId) {					// 댓글 목록
+//		return replyDao.findAll(boardId);
+//	}
+	
+	public List<ReplyRespDto> 댓글목록(int id) {		// list : 댓글 목록 + 유저의 username / 파라미터는 게시글 id
+		return replyDao.findAll(id);
+	}
+	
+	public int 댓글수(int boardId){
+		return replyDao.updateCount(boardId);
 	}
 
 }

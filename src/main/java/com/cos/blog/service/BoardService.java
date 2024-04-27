@@ -2,9 +2,6 @@ package com.cos.blog.service;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
-
-import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.BoardDao;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
@@ -46,6 +43,7 @@ public class BoardService {
 	// 하나의 Service 안에 여러가지 DB 관련 로직이 섞인다
 	public DetailRespDto 글상세보기(int id) {
 		int result = boardDao.updateReadCount(id);
+		//int replyCount = replyDao.updateCount(id);		// 댓글 개수
 		if(result == 1) {
 			return boardDao.findById(id);
 		}else {
