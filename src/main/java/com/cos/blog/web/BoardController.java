@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.cos.blog.domain.board.dto.CommonRespDto;
 import com.cos.blog.domain.board.dto.DetailRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
+import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.reply.dto.ReplyRespDto;
 import com.cos.blog.domain.user.User;
@@ -66,6 +66,9 @@ public class BoardController extends HttpServlet {
 			int userId = Integer.parseInt(request.getParameter("userId"));		// saveForm 에서 hidden으로 받아온 userId
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
+			int category = Integer.parseInt(request.getParameter("category"));	// categoryId 추가
+			
+			System.out.println("BoardController/save/category : " + category);
 			
 //			System.out.println("BoardController/userId : " + userId);
 //			System.out.println("BoardController/title : " + title);
@@ -75,6 +78,7 @@ public class BoardController extends HttpServlet {
 			dto.setUserId(userId);
 			dto.setTitle(title);
 			dto.setContent(content);
+			dto.setCategory(category);			// categoryId 추가
 			int result = boardService.글쓰기(dto);
 			
 			if(result == 1) {	// 정상 입력 완료

@@ -12,6 +12,18 @@
 <div class="container">
 	<form action="/project4/board?cmd=save" method="POST">
 		<input type="hidden" name="userId" value="${sessionScope.principal.id }">
+		
+		<div class="form-group">
+		    <label for="category">Category:</label> 
+		    <br>
+		    <select name="category" class="form-control">
+		        <option value="0">카테고리 없음</option>
+		        <option value="1">IT 개발</option>
+		        <option value="2">퍼포먼스 마케팅</option>
+		    </select>
+		</div>
+
+
 		<div class="form-group">
 			<label for="title">Title:</label> 
 			<input type="text" class="form-control" placeholder="제목을 입력하세요" id="title" name="title">

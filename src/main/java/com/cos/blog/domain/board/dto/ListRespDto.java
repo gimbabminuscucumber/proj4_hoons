@@ -6,7 +6,7 @@ import lombok.Data;
 
 // detail 에서 사용될 Board 테이블과 User 테이블이 조인된 변수들
 @Data
-public class ListRespDto {
+public class ListRespDto {			// 사용 안된 테이블... >> 삭제해도 되나??
 	private int id;
 	private String title;
 	private String content;

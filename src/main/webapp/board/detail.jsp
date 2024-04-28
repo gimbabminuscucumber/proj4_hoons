@@ -13,6 +13,14 @@
 	<br>
 	
 	<div class="form-group">
+		<b><label>Category : </label></b>
+		<c:if test="${boards.category == 0 }"><div>카테고리 없음</div></c:if>
+		<c:if test="${boards.category == 1 }"><div>IT 개발</div></c:if>
+		<c:if test="${boards.category == 2 }"><div>퍼포먼스 마케팅</div></c:if>
+
+	</div>
+	
+	<div class="form-group">
 		<b><label>Title : </label></b>
 		<h3>${boards.title }</h3>
 	</div>
@@ -41,12 +49,19 @@
 					<div class="panel-body">
 						<input type="hidden" name="userId" value="${sessionScope.principal.id }">
 						<input type="hidden" name="boardId" value="${boards.id }">
-						<textarea id="content" id="reply__write__form" class="form-control" placeholder="write a comment..." rows="2"></textarea>
+ 					
+ 						<textarea id="content" id="reply__write__form" class="form-control" placeholder="write a comment..." rows="2"></textarea>
 						<br>
 						<button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary pull-right">댓글쓰기</button>
 						
 						<div class="clearfix"></div>
 						<hr />
+
+						<c:choose>
+							<c:when test=""></c:when>
+							<c:otherwise></c:otherwise>
+						</c:choose>
+
 
 						<!-- 댓글 리스트-->
 						<ul id="reply__list" class="media-list">

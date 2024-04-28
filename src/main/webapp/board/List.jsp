@@ -34,7 +34,14 @@
 					<h4 class="card-title"><a href="/project4/board?cmd=detail&id=${board.id }">${board.title }</a></h4>
 					<div>작성자 : <a href="#">${board.username}</a></div>
 				</div>
-				<div><i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i></div><!-- 카테고리 추가 -->
+				<div style="color: grey" class=d-flex>
+					<div>
+						<c:if test="${board.category == 0 }"><a href="#"><i>카테고리 없음 ·&nbsp;</i></a></c:if>
+						<c:if test="${board.category == 1 }"><a href="#"><i>IT 개발 ·&nbsp;</i></a></c:if>
+						<c:if test="${board.category == 2 }"><a href="#"><i>퍼포먼스 마케팅 ·&nbsp;</i></a></c:if>
+					</div>
+					<i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i>
+				</div>
 				<%-- <div>
 					<a href="/project4/board?cmd=detail&id=${board.id }" class="btn btn-primary">상세보기</a>
 				</div> --%>					

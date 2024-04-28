@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.cos.blog.domain.board.dto.CommonRespDto;
+import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.dto.JoinReqDto;

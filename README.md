@@ -57,4 +57,9 @@ CREATE TABLE reply(
     foreign key (userId) references user (id) on delete set null,
     foreign key (boardId) references board (id) on delete cascade
 ) engine=InnoDB default charset=utf8;
+
+CREATE TABLE category(
+		ctgrId int,
+    boardId int
+) engine=InnoDB default charset=utf8;
 ```

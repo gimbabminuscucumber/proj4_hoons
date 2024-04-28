@@ -1,4 +1,4 @@
-package com.cos.blog.domain.board.dto;
+package com.cos.blog.domain.common.dto;
 
 import lombok.Data;
 

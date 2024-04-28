@@ -3,6 +3,7 @@ package com.cos.blog.domain.board;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,27 @@ import com.cos.blog.domain.board.dto.UpdateReqDto;
 
 public class BoardDao {
 
+	public int save(SaveReqDto dto) {			// 게시글 작성
+		String sql = "INSERT INTO board(userId, title, content, createDate, category) VALUES(?,?,?, now(), ?)";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getUserId());
+			pstmt.setString(2, dto.getTitle());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setInt(4, dto.getCategory());
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+	
+	/*
 	public int save(SaveReqDto dto) {			// 게시글 작성
 		String sql = "INSERT INTO board(userId, title, content, createDate) VALUES(?,?,?, now())";
 		Connection conn = DB.getConnection();
@@ -31,7 +53,7 @@ public class BoardDao {
 		}
 		return -1;
 	}
-
+	*/
 	// 페이징 처리 (list 페이지) 
 	public int count() {
 		String sql = "SELECT count(*) FROM board";	
@@ -101,6 +123,7 @@ public class BoardDao {
 				dto.setCreateDate(rs.getTimestamp("b.createDate"));
 				dto.setUsername(rs.getString("u.username"));
 				dto.setUserId(rs.getInt("b.userId"));
+				dto.setCategory(rs.getInt("b.category"));
 				return dto;
 			}
 		}catch(Exception e) {
@@ -133,6 +156,7 @@ public class BoardDao {
 						.readCount(rs.getInt("b.readCount"))
 						.userId(rs.getInt("b.userId"))
 						.createDate(rs.getTimestamp("b.createDate"))
+						.category(rs.getInt("b.category"))
 						.username(rs.getString("u.username"))
 						.build();
 				boards.add(dto);						// select 된 데이터를 한 행씩 읽어서 board에 담음

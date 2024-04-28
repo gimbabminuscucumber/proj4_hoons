@@ -8,4 +8,5 @@ public class SaveReqDto {			// = Data Transfer Object : 계층 간 데이터 전
 	private int userId;
 	private String title;
 	private String content;
+	private int category;		// 추가
 }
