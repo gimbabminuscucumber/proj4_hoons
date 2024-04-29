@@ -42,7 +42,7 @@ public class UserService {
 
 	public int 회원수정(User user) {
 		int result = userDao.update(user);
-		System.out.println("UserService/회원수정()/result" + result);		// 1이면 성공, -1이면 실패
+		System.out.println("UserService/회원수정()/result : " + result);		// 1이면 성공, -1이면 실패
 		return result;	
 	}
 

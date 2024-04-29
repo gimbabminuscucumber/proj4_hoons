@@ -36,9 +36,10 @@
 				</div>
 				<div style="color: grey" class=d-flex>
 					<div>
-						<c:if test="${board.category == 0 }"><a href="#"><i>카테고리 없음 ·&nbsp;</i></a></c:if>
-						<c:if test="${board.category == 1 }"><a href="#"><i>IT 개발 ·&nbsp;</i></a></c:if>
-						<c:if test="${board.category == 2 }"><a href="#"><i>퍼포먼스 마케팅 ·&nbsp;</i></a></c:if>
+						<!-- 게시글 검색시, '카테고리 없음'으로만 나옴 >> 별도 테이블 만들기 -->
+						<c:if test="${board.category == 0 }"><a href="#"><i>카테고리 없음</i></a> ·&nbsp;</c:if>
+						<c:if test="${board.category == 1 }"><a href="#"><i>IT 개발</i></a> ·&nbsp;</c:if>
+						<c:if test="${board.category == 2 }"><a href="#"><i>퍼포먼스 마케팅</i></a> ·&nbsp;</c:if>
 					</div>
 					<i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i>
 				</div>
@@ -54,9 +55,11 @@
 		<div class="progress-bar" style="width: ${currentPercent}%"></div>
 	</div>
 
+<%-- 	
 	<!-- 페이징 처리 -->
-<%-- 	페이지 확인 = ${param.page}
-	마지막 페이지 = ${lastPage } --%>
+	페이지 확인 = ${param.page}
+	마지막 페이지 = ${lastPage } 
+--%>
 
 	<br />
 

@@ -205,7 +205,7 @@ public class BoardDao {
 	}
 	
 	public int update(UpdateReqDto dto) {
-		String sql = "UPDATE board SET title = ?, content = ? WHERE id = ?";
+		String sql = "UPDATE board SET title = ?, content = ?, category =? WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		
@@ -213,7 +213,8 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
-			pstmt.setInt(3, dto.getId());
+			pstmt.setInt(3, dto.getCategory());
+			pstmt.setInt(4, dto.getId());
 			int result = pstmt.executeUpdate();
 			return result; 
 		}catch(Exception e) {

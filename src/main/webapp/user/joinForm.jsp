@@ -12,7 +12,6 @@
 				<button type="button" class="btn btn-info"  onclick="usernameCheck()">중복확인</button>
 			</div>				
 			<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required/>
-			<!-- 사용 가능 유저네임일 경우, 수정 못하게 readOnly로 바꾸기 -->
 			<!-- ajax -->
 			<font id="checkId" size = "2"></font>
 		</div>
@@ -106,11 +105,11 @@ function usernameCheck(){
 			$("#checkId").attr('color', 'blue');
 		}
 	});
-	
 }
 
 // 주소 API 실행 함수
 function goPopup(){
+	console.log("goPopup()");
 	var pop = window.open("/project4/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
 }
 

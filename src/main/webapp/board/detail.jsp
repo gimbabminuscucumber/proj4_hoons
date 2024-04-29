@@ -6,24 +6,24 @@
 <div class="container">
 	<br> 
 	<br>
-	<h6 class="m-2 d-flex justify-content-between">
-		<div>작성자 : <a href="#"><i>${boards.username }</i></div></a>
+	<h6 class="d-flex justify-content-end">
+		<div style="color:orange" class="mr-auto">
+			<c:if test="${boards.category == 0 }"><i>카테고리 없음</i></c:if>
+			<c:if test="${boards.category == 1 }"><i>IT 개발</i></c:if>
+			<c:if test="${boards.category == 2 }"><i>퍼포먼스 마케팅</i></c:if>
+		</div>
+		<div>작성자 : <i><a href="#">${boards.username }</a></i></div>&nbsp;
+		<div>작성일 : <i><fmt:formatDate pattern="yyyy-MM-dd" value="${boards.createDate}"></fmt:formatDate></i></div>&nbsp;
 		<div>조회수 : <i>${boards.readCount }</i></div>
 	</h6>
 	<br>
 	
-	<div class="form-group">
-		<b><label>Category : </label></b>
-		<c:if test="${boards.category == 0 }"><div>카테고리 없음</div></c:if>
-		<c:if test="${boards.category == 1 }"><div>IT 개발</div></c:if>
-		<c:if test="${boards.category == 2 }"><div>퍼포먼스 마케팅</div></c:if>
-
-	</div>
 	
 	<div class="form-group">
 		<b><label>Title : </label></b>
 		<h3>${boards.title }</h3>
 	</div>
+
 	<hr>
 	<div class="form-group">
 		<b><label>Content : </label></b>
@@ -31,13 +31,13 @@
 	</div>
 	<hr>
 	
-	<c:if test="${sessionScope.principal.id == boards.userId }">
-		<div class="d-flex justify-content-end">
-			<a href="/project4/board?cmd=list&page=0" class="btn btn-primary">목록</a>&nbsp;
+	<div class="d-flex justify-content-end">
+		<a href="/project4/board?cmd=list&page=0" class="btn btn-primary">목록</a>&nbsp;
+		<c:if test="${sessionScope.principal.id == boards.userId }">
 			<a href="/project4/board?cmd=updateForm&id=${boards.id}" class="btn btn-primary">수정</a>&nbsp;
 			<button onclick="deleteById(${boards.id})" class="btn btn-danger">삭제</button>
-		</div>
-	</c:if>
+		</c:if>
+	</div>
 	<br>
 	
 	<!-- 댓글 박스 -->

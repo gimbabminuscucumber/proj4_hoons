@@ -144,6 +144,7 @@ public class BoardController extends HttpServlet {
 			// 수정할 데이터를 가져가야 함
 			int id = Integer.parseInt(request.getParameter("id"));		// 수정할 게시글의 id 가져오기
 			DetailRespDto dto = boardService.글상세보기(id);					// 수정한 메소드 내용을 dto에 담기
+			
 			request.setAttribute("dto", dto);											// dto 뿌리기
 			RequestDispatcher dis = request.getRequestDispatcher("board/updateForm.jsp");
 			dis.forward(request, response);	
@@ -152,11 +153,13 @@ public class BoardController extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
+			int category = Integer.parseInt(request.getParameter("category"));
 			
 			UpdateReqDto dto = new UpdateReqDto();
 			dto.setId(id);
 			dto.setTitle(title);
 			dto.setContent(content);
+			dto.setCategory(category);
 			
 			int result = boardService.글수정(dto);
 			
