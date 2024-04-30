@@ -26,7 +26,7 @@ public class ForbiddenUrlConfig implements Filter{
 //		System.out.println("getRequestURL : " + request.getRequestURL());		// URL : 풀 주소가 다 나옴
 //		System.out.println("getRequestURI : " + request.getRequestURI());			// URI : 끝에 context 주소만 나옴
 		
-		if(request.getRequestURI().equals("/project4/") || request.getRequestURI().equals("/project4/index.jsp") || request.getRequestURI().equals("/project4/user/jusoPopup.jsp")) {
+		if(request.getRequestURI().equals("/project4/") || request.getRequestURI().equals("/project4/index.jsp") || request.getRequestURI().equals("/project4/user/jusoPopup.jsp") || request.getRequestURI().equals("/project4/user/searchUsername.jsp") || request.getRequestURI().equals("/project4/user/searchPassword.jsp")) {
 			chain.doFilter(request, response);
 		}else {
 			PrintWriter out = response.getWriter();

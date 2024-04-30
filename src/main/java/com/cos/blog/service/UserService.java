@@ -1,15 +1,9 @@
 package com.cos.blog.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import com.cos.blog.config.DB;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.UserDao;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
-import com.cos.blog.domain.user.dto.UpdateReqDto;
 
 public class UserService {
 	// 필요 기능 : 회원가입, 회원수정, 로그인, 로그아웃, 아이디중복체크 ...
@@ -42,8 +36,16 @@ public class UserService {
 
 	public int 회원수정(User user) {
 		int result = userDao.update(user);
-		System.out.println("UserService/회원수정()/result : " + result);		// 1이면 성공, -1이면 실패
 		return result;	
+	}
+
+	public int 유저네임찾기(String email) {			// 이메일로 아이디 찾기
+		int result = userDao.findByEmail(email);
+		return result;
+	}
+
+	public User 회원정보(String email) {
+		return userDao.userInfo(email);
 	}
 
 }

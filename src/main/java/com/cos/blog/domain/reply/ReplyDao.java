@@ -87,7 +87,7 @@ public class ReplyDao {
 	}
 
 	
-	public List<ReplyRespDto> findAll(int id) {						// 파라미터 : 게시글 id
+	public List<ReplyRespDto> findAll(int id) {			// 파라미터 : 게시글 id
 		String sql = "SELECT * FROM reply r INNER JOIN user u ON r.userId = u.id INNER JOIN board b ON r.boardId = b.id WHERE r.boardId = ? ORDER BY r.replyId DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;

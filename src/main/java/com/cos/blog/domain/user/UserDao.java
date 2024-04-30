@@ -134,6 +134,54 @@ public class UserDao {
 		return -1;
 	}
 
+	public int findByEmail(String email) {		// 이메일로 아이디 찾기
+		String sql = "SELECT username FROM user WHERE email = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return 1;				// 확인한 email이 DB에 있을 때
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return -1;							// 확인한 email이 DB에 없을 떄
+	}
+
+	public User userInfo(String email) {			// 회원정보 가져오기
+		String sql = "SELECT * FROM user WHERE email = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		User user = new User();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				user.setEmail(rs.getString("email"));
+				user.setAddress(rs.getString("address"));
+			}
+			return user;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 	
 }

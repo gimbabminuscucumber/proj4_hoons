@@ -109,8 +109,6 @@ public class UserController extends HttpServlet {
 			BufferedReader br = request.getReader();
 			String username = br.readLine();
 			
-			System.out.println("UserController.username : "+username);
-			
 			int result = userService.유저네임중복체크(username);
 			PrintWriter out = response.getWriter();
 			
@@ -127,9 +125,7 @@ public class UserController extends HttpServlet {
 		}else if(cmd.equals("updateForm")) {
 			// 1. 유저 확인
 			int id = Integer.parseInt(request.getParameter("id"));
-//			System.out.println("id : " + id);
-			User user = userService.회원찾기(id);
-//			System.out.println("2. UserController/result : " + user);	// 1 뜨면 유저 확인 됨
+			User user = userService.회원찾기(id);		// 해당 id의 유저가 있으면 데이터 뿌리기
 			
 			// 2. 현재 데이터 뿌리기
 			request.setAttribute("user", user);
@@ -154,7 +150,6 @@ public class UserController extends HttpServlet {
 			
 			// 3. 수정된 유저 객체를 넣은 서비스 호출
 			int result = userService.회원수정(user);		// Service에서 결과 받기 (1이면 성공, -1이면 실패)
-			System.out.println("UserController/update/result : " + result);
 			
 			// 4. 결과에 따른 페이지 이동
 			if(result == 1) {
@@ -164,6 +159,52 @@ public class UserController extends HttpServlet {
 				Script.responseData(response, "회원정보 수정에 실패했습니다.");
 			}
 			
+		}else if(cmd.equals("emailCheck")) {		// 유저네임 찾기
+			// ajax에서 보내는 username 데이터가 text 타입이라서 버퍼로 받아야함 (파라미터로 받을 수 없기 때문에)
+			// 1.
+			String email = request.getParameter("email");
+			User user = userService.회원정보(email);
+			
+			System.out.println("UserController/user : " + user);
+
+			CommonRespDto<User> commonRespDto = new CommonRespDto<>();
+				
+			int result = userService.유저네임찾기(email);
+			if(result != -1) {			// 유저가 없지(-1) 않으면(!=)
+				commonRespDto.setStatusCode(1);
+				commonRespDto.setData(user);
+			}else {		
+				commonRespDto.setStatusCode(-1);
+			}
+			System.out.println("UserController/commonRespDto : " + commonRespDto);
+			
+			Gson gson = new Gson();
+			String responseData = gson.toJson(commonRespDto);
+			System.out.println("UserController/responseData : " + responseData);
+			
+			Script.responseData(response, responseData);
+			
+			// 2.
+//			BufferedReader br = request.getReader();
+//			String email = br.readLine();
+//			
+//			int result = userService.유저네임찾기(email);
+//			PrintWriter out = response.getWriter();
+//			
+//			if(result == 1) {
+//				out.print("ok");
+//			}else {
+//				out.print("fail");
+//			}
+//			
+//		}else if(cmd.equals("check")) {
+//			System.out.println("UserController/check 시작");
+//			String email = request.getParameter("email");
+//			System.out.println("UserController/email : " + email);
+//			
+//			User user = userService.회원정보(email);
+//			System.out.println("UserController 회원정보 접근");
+//			System.out.println("UserController/user : " + user);
 		}
 	}
 }

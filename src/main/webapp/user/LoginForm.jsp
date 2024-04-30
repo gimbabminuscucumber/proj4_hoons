@@ -26,10 +26,16 @@
 			</label>
 		</div> -->
 		<br>
-		<button type="submit" class="btn btn-primary" >로그인 하기</button>
+		<div class="d-flex">
+			<button type="submit" class="mr-auto btn btn-primary" >로그인 하기</button>
+			<button type="button" class="btn btn-info" onclick="searchUsername()">아이디 찾기</button>&nbsp;
+			<button type="button" class="btn btn-info" onclick="searchPassword()">비밀번호 찾기</button>
+		</div>
 	</form>
 
 </div>
+
+<script src="/project4/js/userInfo.js"></script>
 
 </body>
 </html>

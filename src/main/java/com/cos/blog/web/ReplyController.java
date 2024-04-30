@@ -48,15 +48,6 @@ public class ReplyController extends HttpServlet {
 			SaveReqDto dto = gson.fromJson(reqData, SaveReqDto.class);
 			System.out.println("dto : " + dto);
 
-//			int userId = Integer.parseInt(request.getParameter("userId"));
-//			int boardId = Integer.parseInt(request.getParameter("boardId"));
-//			String content = request.getParameter("content");
-			
-//			SaveReqDto dto = new SaveReqDto();
-//			dto.setUserId(userId);
-//			dto.setBoardId(boardId);
-//			dto.setContent(content);
-			
 			CommonRespDto<Reply> commonRespDto = new CommonRespDto<>();
 			Reply reply = null;
 			int result = replyService.댓글쓰기(dto);
@@ -70,6 +61,16 @@ public class ReplyController extends HttpServlet {
 			String responseData = gson.toJson(commonRespDto);
 			System.out.println("responseData : " + responseData);
 			Script.responseData(response, responseData);
+
+//			int userId = Integer.parseInt(request.getParameter("userId"));
+//			int boardId = Integer.parseInt(request.getParameter("boardId"));
+//			String content = request.getParameter("content");
+			
+//			SaveReqDto dto = new SaveReqDto();
+//			dto.setUserId(userId);
+//			dto.setBoardId(boardId);
+//			dto.setContent(content);
+
 		}else if(cmd.equals("delete")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			

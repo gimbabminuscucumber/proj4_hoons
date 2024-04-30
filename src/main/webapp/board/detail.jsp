@@ -50,10 +50,11 @@
 						<input type="hidden" name="userId" value="${sessionScope.principal.id }">
 						<input type="hidden" name="boardId" value="${boards.id }">
  					
- 						<textarea id="content" id="reply__write__form" class="form-control" placeholder="write a comment..." rows="2"></textarea>
+ 						<textarea id="content" id="reply__write__form" class="form-control" placeholder="내용을 입력하세요." rows="2"></textarea>
 						<br>
-						<button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary pull-right">댓글쓰기</button>
-						
+						<div class="d-flex justify-content-end"><button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary">댓글쓰기</button></div>
+						'sessionScope == null' = ${sessionScope.principal == null }
+						'param' = ${param }
 						<div class="clearfix"></div>
 						<hr />
 
