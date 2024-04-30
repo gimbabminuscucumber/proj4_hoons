@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
+import com.cos.blog.domain.user.dto.PasswordReqDto;
 
 public class UserDao {
 	
@@ -156,7 +157,7 @@ public class UserDao {
 		return -1;							// 확인한 email이 DB에 없을 떄
 	}
 
-	public User userInfo(String email) {			// 회원정보 가져오기
+	public User userInfo(String email) {			// 이메일로 유저정보 가져오기
 		String sql = "SELECT * FROM user WHERE email = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -180,6 +181,56 @@ public class UserDao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public User userInfo2(PasswordReqDto dto) {		// 유저네임과 이메일로 유저정보 가져오기2
+		String sql = "SELECT * FROM user WHERE username = ? AND email =?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		User user = new User();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getUsername());
+			pstmt.setString(2, dto.getEmail());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				user.setEmail(rs.getString("email"));
+				user.setAddress(rs.getString("address"));
+			}
+			return user;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public int findByUsernameAndEmail(PasswordReqDto dto) {
+		String sql = "SELECT username FROM user WHERE username = ? AND email = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getUsername());
+			pstmt.setString(2, dto.getEmail());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return 1;				// 확인한 username과 email이 DB에 있을 때
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return -1;					// 확인한 username과 email이 DB에 없을 떄
 	}
 
 

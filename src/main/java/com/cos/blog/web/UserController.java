@@ -17,6 +17,7 @@ import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
+import com.cos.blog.domain.user.dto.PasswordReqDto;
 import com.cos.blog.domain.user.dto.UpdateReqDto;
 import com.cos.blog.service.UserService;
 import com.cos.blog.util.Script;
@@ -161,9 +162,8 @@ public class UserController extends HttpServlet {
 			
 		}else if(cmd.equals("emailCheck")) {		// 유저네임 찾기
 			// ajax에서 보내는 username 데이터가 text 타입이라서 버퍼로 받아야함 (파라미터로 받을 수 없기 때문에)
-			// 1.
 			String email = request.getParameter("email");
-			User user = userService.회원정보(email);
+			User user = userService.회원이메일(email);
 			
 			System.out.println("UserController/user : " + user);
 
@@ -183,28 +183,30 @@ public class UserController extends HttpServlet {
 			System.out.println("UserController/responseData : " + responseData);
 			
 			Script.responseData(response, responseData);
+		}else if(cmd.equals("passwordCheck")) {
+	
+			BufferedReader br = request.getReader();
+			String reqData = br.readLine();
+			System.out.println("reqData : " + reqData);
 			
-			// 2.
-//			BufferedReader br = request.getReader();
-//			String email = br.readLine();
-//			
-//			int result = userService.유저네임찾기(email);
-//			PrintWriter out = response.getWriter();
-//			
-//			if(result == 1) {
-//				out.print("ok");
-//			}else {
-//				out.print("fail");
-//			}
-//			
-//		}else if(cmd.equals("check")) {
-//			System.out.println("UserController/check 시작");
-//			String email = request.getParameter("email");
-//			System.out.println("UserController/email : " + email);
-//			
-//			User user = userService.회원정보(email);
-//			System.out.println("UserController 회원정보 접근");
-//			System.out.println("UserController/user : " + user);
+			Gson gson = new Gson();
+			PasswordReqDto dto = gson.fromJson(reqData, PasswordReqDto.class);
+			
+			User user = userService.회원패스워드(dto);
+			System.out.println("UserController/회원패스워드.user : " + user);
+			
+			CommonRespDto<User> commonRespDto = new CommonRespDto<>();
+			
+			int result = userService.비밀번호찾기(dto);
+			if(result != -1) {			// 유저가 없지(-1) 않으면(!=)
+				commonRespDto.setStatusCode(1);
+				commonRespDto.setData(user);
+			}else {		
+				commonRespDto.setStatusCode(-1);
+			}
+			
+			String responseData = gson.toJson(commonRespDto);
+			Script.responseData(response, responseData);
 		}
 	}
 }

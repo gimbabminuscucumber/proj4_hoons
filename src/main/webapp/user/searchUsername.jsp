@@ -20,8 +20,6 @@
 
 <br>
 <div class="container">
-<!-- 	<form action="/project4/user?cmd=check" method="post">
-	<input type="hidden" name="userEmail"> -->
 
 		<div class="form-group">
 				<label>Email :</label> 
@@ -33,9 +31,11 @@
 		<br>
 	
 		<button type="button" class="btn btn-primary" onclick="emailCheck(${email})">아이디 찾기</button>
-<!-- 	</form> -->
+		<button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
 </div>	
 <script>
+
+	// 이메일로 유저네임 찾기
 	function emailCheck(){
 		var email = $("#email").val();
 		
@@ -54,7 +54,7 @@
 				$("#checkEmail").html('가입 당시 작성한 Email을 써주세요');
 				$("#checkEmail").attr('color', 'red');
 			}else if(user.statusCode == 1){
-				$("#checkEmail").html('Username은 "'+user.data.username+'" 입니다');
+				$("#checkEmail").html('Username은 "' +user.data.username+ '" 입니다');
 				$("#checkEmail").attr('color', 'blue');
 			}else if(user.statusCode == -1){
 				$("#checkEmail").html('해당 Email로 가입한 이력이 없습니다.');
