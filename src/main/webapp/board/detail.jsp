@@ -53,8 +53,6 @@
  						<textarea id="content" id="reply__write__form" class="form-control" placeholder="내용을 입력하세요." rows="2"></textarea>
 						<br>
 						<div class="d-flex justify-content-end"><button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary">댓글쓰기</button></div>
-						'sessionScope == null' = ${sessionScope.principal == null }
-						'param' = ${param }
 						<div class="clearfix"></div>
 						<hr />
 

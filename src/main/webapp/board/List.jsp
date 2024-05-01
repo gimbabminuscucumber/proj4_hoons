@@ -51,8 +51,8 @@
 	</c:forEach>
 
 	<!-- 페이지 진척도 -->
-	<div class="progress col-md-12 m-2">
-		<div class="progress-bar" style="width: ${currentPercent}%"></div>
+	<div class="progress col-md-12">
+		<div class="progress-bar" style="width: ${currentPercent}%">${percent}%</div>
 	</div>
 
 <%-- 	

@@ -83,4 +83,5 @@ function deleteById(boardId) {
 			alert("삭제에 실패하였습니다.");
 		}
 	});
+	
 }

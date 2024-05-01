@@ -39,10 +39,8 @@
 			<c:otherwise>
 				<div class="collapse navbar-collapse" id="collapsibleNavbar">
 					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/user?cmd=joinForm">회원가입</a></li>
-						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=joinForm">회원가입</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
 					</ul>
 				</div>
 			</c:otherwise>

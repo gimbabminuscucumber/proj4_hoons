@@ -50,7 +50,6 @@ public class UserController extends HttpServlet {
 			// 아이디 기억하게 하는 서비스 작성
 			RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
 			dis.forward(request, response);	
-			
 			//response.sendRedirect("user/loginForm.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
 		}else if(cmd.equals("login")) {
 			// 1. http에서 데이터를 받기
@@ -208,5 +207,7 @@ public class UserController extends HttpServlet {
 			String responseData = gson.toJson(commonRespDto);
 			Script.responseData(response, responseData);
 		}
+		
+		
 	}
 }

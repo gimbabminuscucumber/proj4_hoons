@@ -98,8 +98,10 @@ public class BoardController extends HttpServlet {
 			request.setAttribute("lastPage", lastPage);
 			
 			// 페이지 진척도
-			double currentPercent = (double)page/(lastPage)*100;
-			request.setAttribute("currentPercent", currentPercent);
+			double currentPercent = (double)page/(lastPage)*100;		// 진척도별 바 게이지
+			request.setAttribute("currentPercent", currentPercent);	
+			int percent = page/(lastPage)*100;											// 진척도별 바의 퍼센트
+			request.setAttribute("percent", percent);
 			
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);	
