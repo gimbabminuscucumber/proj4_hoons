@@ -5,9 +5,9 @@
 
 <br>
 <br>
-<a href="<%=request.getContextPath()%>/index.jsp">
-	<h1 style="text-align: center">User Infomation</h1>
-</a>
+<h1 style="text-align: center">
+	<a href="<%=request.getContextPath()%>/index.jsp">User Infomation</a>
+</h1>
 <br>
 <br>
 
@@ -30,7 +30,7 @@
 			</div>	
 		</div>
 		
-		<div class="form-group email-input-container">
+		<div class="form-group insert-input-container">
 		    <div class="material-icons-input" style="width: 183px">
 		        <span class="material-icons">personal_video</span>
 		        <input type="email"  name="email" class="form-control" value="${user.email}" placeholder="Enter Email"/>
@@ -43,13 +43,16 @@
 		    </div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input">
-			    <span class="material-icons">home</span>
-				<input type="text"  name="address" id="address"class="form-control" placeholder="Enter Address" value="${user.address }" required readOnly/>
-			</div>	
-			<button type="button" class="btn btn-info" onclick="goPopup();">주소검색</button>
+				<span class="material-icons">home</span>
+				<input type="text"  name="address" id="address"class="form-control" placeholder="Enter Address" value="${user.address }"  required readOnly/>
+			</div>
+			<div>
+				<button type="button" class="btn btn-info" onclick="goPopup();">주소검색</button> <!-- type="button"을 설정하지 않으면 submit이 실행된다 -->
+			</div>				
 		</div>
+		
 		
 		<div class="form-group">
 			<div class="d-flex justify-content-between">
@@ -93,18 +96,18 @@ function jusoCallBack(roadFullAddr){
     }
     
         /* 이메일 입력 칸과 버튼 간의 간격 조절 */
-    .email-input-container {
+    .insert-input-container {
         display: flex;
         align-items: center; /* 세로 정렬을 위해 */
         justify-content: center; /* 수평 정렬을 위해 */
     }
 
-    .email-input-container .form-control {
+    .insert-input-container .form-control {
         flex: 1; /* 입력 칸이 버튼의 크기에 따라 유동적으로 변할 수 있도록 */
         margin-right: 5px; /* 버튼과의 간격 조절 */
     }
 
-    .email-input-container .btn {
+    .insert-input-container .btn {
         flex-shrink: 0; /* 버튼이 입력 칸의 크기에 영향을 받지 않도록 */
     }
     

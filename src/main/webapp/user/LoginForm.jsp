@@ -4,9 +4,9 @@
 
 <br>
 <br>
-<a href="<%=request.getContextPath()%>/index.jsp">
-	<h1 style="text-align: center">My SNS</h1>
-</a>
+<h1 style="text-align: center">
+	<a href="<%=request.getContextPath()%>/index.jsp">My SNS</a>
+</h1>
 <br>
 <br>
 
