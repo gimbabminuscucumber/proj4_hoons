@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.user.dto.JoinReqDto;
+import com.cos.blog.domain.user.dto.LogReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
 import com.cos.blog.domain.user.dto.PasswordReqDto;
 
@@ -231,6 +232,55 @@ public class UserDao {
 			DB.close(conn, pstmt, rs);
 		}
 		return -1;					// 확인한 username과 email이 DB에 없을 떄
+	}
+
+	public User findByLog(LogReqDto dto) {
+		String sql = "SELECT username, password FROM user WHERE username =? AND password =?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		User user = new User();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getUsername());
+			pstmt.setString(2, dto.getPassword());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+			}
+			return user;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+	public int userInfo3(LogReqDto dto) {
+		String sql = "SELECT username, password FROM user WHERE username =? AND password =?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getUsername());
+			pstmt.setString(2, dto.getPassword());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return 1;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return -1;
 	}
 
 

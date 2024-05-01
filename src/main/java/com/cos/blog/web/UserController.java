@@ -13,12 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.common.dto.CommonRespDto;
-import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.dto.JoinReqDto;
+import com.cos.blog.domain.user.dto.LogReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
 import com.cos.blog.domain.user.dto.PasswordReqDto;
-import com.cos.blog.domain.user.dto.UpdateReqDto;
 import com.cos.blog.service.UserService;
 import com.cos.blog.util.Script;
 import com.google.gson.Gson;
@@ -51,6 +50,9 @@ public class UserController extends HttpServlet {
 			RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
 			dis.forward(request, response);	
 			//response.sendRedirect("user/loginForm.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
+		}else if(cmd.equals("test")) {
+			RequestDispatcher dis = request.getRequestDispatcher("test/ViewPageTest.jsp");
+			dis.forward(request, response);				
 		}else if(cmd.equals("login")) {
 			// 1. http에서 데이터를 받기
 			String username = request.getParameter("username");
@@ -197,11 +199,36 @@ public class UserController extends HttpServlet {
 			CommonRespDto<User> commonRespDto = new CommonRespDto<>();
 			
 			int result = userService.비밀번호찾기(dto);
-			if(result != -1) {			// 유저가 없지(-1) 않으면(!=)
+			if(result != -1) {			// 유저가 없지(-1) 않으면(!=)	>> 있으면
 				commonRespDto.setStatusCode(1);
 				commonRespDto.setData(user);
 			}else {		
 				commonRespDto.setStatusCode(-1);
+			}
+			
+			String responseData = gson.toJson(commonRespDto);
+			Script.responseData(response, responseData);
+		}else if(cmd.equals("logCheck")) {
+			BufferedReader br = request.getReader();		// 버퍼의 데이터 요청
+			String reqData = br.readLine();							// reqData에 요청한 데이터 담기 (JSON 타입의 데이터)
+			
+			Gson gson = new Gson();
+			LogReqDto dto = gson.fromJson(reqData, LogReqDto.class);
+			
+			User user = userService.로그찾기(dto);
+			
+			CommonRespDto<User> commonRespDto = new CommonRespDto<>();
+			
+			int result = userService.로그인체크(dto);
+			System.out.println("result : " + result);		// 있으면 1, 없으면 -1
+			
+			if(result == 1) {												// 유저 정보와 일치하면
+				commonRespDto.setStatusCode(1);
+				commonRespDto.setData(user);
+			} else if(result == -1) {				
+				commonRespDto.setStatusCode(-1);
+			} else {
+				commonRespDto.setStatusCode(0);
 			}
 			
 			String responseData = gson.toJson(commonRespDto);

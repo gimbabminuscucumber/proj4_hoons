@@ -3,6 +3,7 @@ package com.cos.blog.service;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.UserDao;
 import com.cos.blog.domain.user.dto.JoinReqDto;
+import com.cos.blog.domain.user.dto.LogReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
 import com.cos.blog.domain.user.dto.PasswordReqDto;
 
@@ -49,15 +50,25 @@ public class UserService {
 		return result;
 	}
 
-
-	public User 회원패스워드(PasswordReqDto dto) {
+	public User 회원패스워드(PasswordReqDto dto) {		// 비밀번호 찾기 1
 		System.out.println("UserService dto : " + dto);
 		return userDao.userInfo2(dto);
 	}
 
-	public int 비밀번호찾기(PasswordReqDto dto) {
+	public int 비밀번호찾기(PasswordReqDto dto) {			// 비밀번호 찾기 2
 		int result = userDao.findByUsernameAndEmail(dto);
 		return result;
 	}
+	
+	public User 로그찾기(LogReqDto dto) {		// 로그인 체크 1
+		return userDao.findByLog(dto);
+	}
+
+	public int 로그인체크(LogReqDto dto) {		// 로그인 체크 2
+		int result = userDao.userInfo3(dto);
+		return result;
+	}
+	
+	
 
 }
