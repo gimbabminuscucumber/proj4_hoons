@@ -1,65 +1,161 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ include file="../layout/header.jsp"%>
 
+<section class="container">
 
-<form action="/project4/user?cmd=login" method="post" >
-    <div class="form-group">
-        <div class="material-icons-input">
-            <span class="material-icons">person_outline</span>
-            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required />
-        </div>	
-    </div>
+    <!-- 왼쪽 섹션 -->
+	<div class="section">
+    <br>
+    <br>
+    	<div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/basic.jpg'); background-size: cover; background-position: center;">
+		    <div class="card-body" style="height: 100%; width: 100%;"></div>
+		</div>
     
-    <div class="form-group">
-        <div class="material-icons-input">
-            <span class="material-icons">lock_outline</span>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required/>
-        </div>	
-        <!-- ajax -->
-        <font id="checkLog" size = "2"></font>
-    </div>
-
-    <div>
-        <button type="button" onclick="logCheck();"class="mr-auto btn btn-primary" style="width: 25%">로그인 하기</button>
-    </div>
-</form>
-
-<script>
-    function logCheck() {
-    	console.log("logCheck");
-    	
-    	var username = document.getElementById("username").value;
-    	var password = document.getElementById("password").value;
-    	
-    	console.log("username : " + username);
-    	console.log("password : " + password);
-    	
-    	var data ={
-    			username: username,
-    			password: password
-    	}
-    	
-    	$.ajax({
-    		type: "post",
-    		url: "/project4/user?cmd=logCheck",
-    		data: JSON.stringify(data),
-    		contentType: "application/json; charset=utf-8",
-    		dataType: "json"
-    	}).done(function(data){
-    		console.log("ajax 접근");
-    		console.log("data : " + data);
-    		console.log("data.statusCode : " + data.statusCode);
-    		
-			if(data.statusCode == -1){
-				$("#checkLog").html('아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.');
-				$("#checkLog").attr('color', 'red');
-			}
-    		
-    	});
-    }
-</script>
-
+		<!-- 
+		<div class="card m-2" style="width: 180px">
+			<div class="card-body" style="height: 100px; width: 100%;">
+			    <div>이미지 넣고싶다 근데 왜 이거 칸이 짤리냐 해결해버렸쬬?</div>
+			</div>
+		</div>
+		 -->
+		<div class="card m-2" style="width: 180px">
+				<div class="card-body" style=" height: 420px; width: 100% ">
+					<div>이것도 칸이 잘리나ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ?</div>
+					<div>이것도 칸이 잘리나?</div>
+					<div>이것도 칸이 잘리나?</div>
+					<div>이것도 칸이 잘리나?</div>
+					<div>이것도 칸이 잘리나?</div>
+					<div>이것도 칸이 잘리나?</div>
+					<div>d</div>
+					<div>d</div>
+					<div>d</div>
+				</div>
+		</div>		
+	</div>
+	<!-- 왼쪽 섹션 종료 -->
+	
+	
+	<!-- 중앙 섹션 -->
+	<div class="section center">
+		<!-- 검색창 -->
+		<!-- - 검색 버튼 누르면 파라미터 3개가 controller로 감 (cmd, page, keyword) -->
+		<div class="m-2">
+			<form class="form-inline d-flex justify-content-end" action="/project4/board">
+				<input type="hidden" name="cmd" value="search" /> 		<!-- <form>태그가 /project4/board?cmd=search 로 감 -->
+				<input type="hidden" name="page" value="0" /> 
+				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search">
+				<button class="btn btn-primary m-1">검색</button>
+			</form>
+		</div>
+	
+		<!-- 게시글 보기 -->
+		<!-- JSTL forEach문을 써서 el 표식으로 뿌리기 -->
+		<div class="card m-2">
+			<div class="card-header">
+				<i class="mtrl-select">모든 게시글</i>
+			</div>
+		</div>
+		
+		<c:if test="${empty boards }">
+			<div>&nbsp; 작성된 게시글이 없습니다.</div>
+		</c:if>
+		<c:forEach var="board" items="${boards }">
+			<div class="card m-2">
+				<div class="card-body">
+					<div class="d-flex justify-content-between">
+						<h4 class="card-title"><a href="/project4/board?cmd=detail&id=${board.id }">${board.title }</a></h4>
+						<div>작성자 : <a href="#">${board.username}</a></div>
+					</div>
+					<div style="color: grey" class=d-flex>
+						<div class="mr-auto">
+							<!-- 게시글 검색시, '카테고리 없음'으로만 나옴 >> 별도 테이블 만들기 -->
+							<c:if test="${board.category == 0 }"><a href="#"><i>카테고리 없음</i></a> ·&nbsp;</c:if>
+							<c:if test="${board.category == 1 }"><a href="#"><i>IT 개발</i></a> ·&nbsp;</c:if>
+							<c:if test="${board.category == 2 }"><a href="#"><i>퍼포먼스 마케팅</i></a> ·&nbsp;</c:if>
+							<i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i>
+						</div>
+					</div>
+					<%-- <div>
+						<a href="/project4/board?cmd=detail&id=${board.id }" class="btn btn-primary">상세보기</a>
+					</div> --%>					
+				</div>
+			</div>
+		</c:forEach>
+	
+		<!-- 페이지 진척도 -->
+		<div class="progress col-md-12">
+			<div class="progress-bar" style="width: ${currentPercent}%"></div>
+		</div>
+	
+		<%-- 	
+		<!-- 페이징 처리 -->
+		페이지 확인 = ${param.page}
+		마지막 페이지 = ${lastPage } 
+		--%>
+	
+		<br />
+	
+		<!-- 검색을 통해 나온 페이지 처리 -->
+		<ul class="pagination justify-content-center">
+			<c:choose>
+				<c:when test="${empty param.keyword }">
+					<%-- <c:set> : 변수 사용 --%>
+					<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
+				</c:when>
+				
+				<c:otherwise>
+					<c:set var="pagePrev" value="/project4/board?cmd=search&page=${param.page-1 }&keyword=${param.keyword }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=search&page=${param.page+1 }&keyword=${param.keyword }"></c:set>
+				</c:otherwise>
+			</c:choose>
+		
+			<!-- 단순 페이지 처리 -->
+			<c:choose> 
+				<c:when test="${param.page == 0 }">
+					<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+				</c:when> 
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="${pageScope.pagePrev }">Previous</a></li>
+	<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
+				</c:otherwise>
+			</c:choose>
+		
+			<c:choose>
+				<c:when test="${lastPage == param.page}">
+					<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="${pageScope.pageNext }">Next</a></li>
+	<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
+				</c:otherwise>
+			</c:choose>
+		</ul>
+		<!-- 페이지 처리 종료 -->
+	</div>
+	<!-- 중앙 섹션 종료 -->
+</section>
 
 </body>
+
+ <style>
+       .container {
+           display: flex;
+          /* justify-content: space-between;*/
+       }
+
+       .section {
+           /*flex-grow: 1; /* 동일한 너비를 가지도록 */
+           padding: 10px;
+           /*background-color: lightblue;*/
+           margin: 1px;
+       }
+
+       .section.center {
+           flex-grow: 9; /* center section의 너비를 늘림 */
+       }
+   </style>
+
 </html>

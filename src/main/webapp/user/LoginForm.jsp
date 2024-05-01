@@ -11,7 +11,7 @@
 <br>
 
 
-<div class="container" style="text-align: center" onsubmit="return logCheck()">
+<div class="container" style="text-align: center">
 
 	<form action="/project4/user?cmd=login" method="post"  name="loginSuccess">
 	<!-- <form> 태그에 데이터를 담아서 POST 로 보내면 Key=Value 형태로 간다 (x-www-form-urlencoded) -->
