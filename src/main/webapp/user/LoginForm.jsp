@@ -27,10 +27,9 @@
 			    <span class="material-icons">lock_outline</span>
 				<input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required/>
 			</div>	
-			<div>
-				<!-- ajax -->
-				<font id="checkLog" size = "2"></font>
-			</div>
+			
+			<!-- ajax -->
+			<div><font id="checkLog" size = "2"></font></div>
 		</div>
 		<!-- 아이디 기억하기   -->
 		<!-- 		<div class="form-group form-check">
