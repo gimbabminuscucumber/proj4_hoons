@@ -30,8 +30,8 @@
 			<div>
 				<!-- ajax -->
 				<font id="checkLog" size = "2"></font>
-				</div>
 			</div>
+		</div>
 		<!-- 아이디 기억하기   -->
 		<!-- 		<div class="form-group form-check">
 			<label class="form-check-label"> 
@@ -61,8 +61,6 @@
 </div>
 		 --%>
 		 
-		 
-
 <script src="/project4/js/userInfo.js"></script>
 
 </body>

@@ -21,9 +21,20 @@
 			<input type="password" name="password" class="form-control" placeholder="Enter Password" >
 		</div>
 		
-		<div class="form-group">
+		<div class="input-group mt-3 mb-3">
+			<input type="email" name="email" class="form-control" placeholder="Enter Email">
+			<div class="input-group-prepend">
+				<button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">@example.com</button>
+				<div class="dropdown-menu">
+					<div class="dropdown-item">@naver.com</div>
+					<a class="dropdown-item">@google.com</a>
+					<a class="dropdown-item">@daum.net</a>
+				</div>
+			</div>
+			<!-- 
 			<label>Email :</label> 
 			<input type="email"  name="email" class="form-control" placeholder="Enter Email" >
+			 -->
 		</div>
 		<div class="form-group">
 			<div class="d-flex justify-content-between">

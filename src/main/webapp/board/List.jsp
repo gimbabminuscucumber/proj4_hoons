@@ -9,21 +9,26 @@
 	<div class="section">
     <br>
     <br>
-   		<div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/basic.jpg'); background-size: cover; background-position: center;">
+   		<div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/bluesky.png'); background-size: cover; background-position: center;">
 		    <div class="card-body" style="height: 100%; width: 100%;"></div>
 		</div>
 		
 		<div class="card m-2" style="width: 180px">
 				<div class="card-body" style=" height: 420px; width: 100% ">
-					<div>이것도 칸이 잘리나ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>d</div>
-					<div>d</div>
-					<div>d</div>
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<div class="nav-link"onclick="#" style="cursor: pointer">Category</div>
+						</li>
+						<li class="nav-item">
+							<div class="nav-link" onclick="#" style="cursor: pointer">Category</div>
+						</li>
+						<li class="nav-item">
+							<div class="nav-link" onclick="#" style="cursor: pointer">Category</div>
+						</li>
+						<li class="nav-item">
+							<div class="nav-link disabled" onclick="#" style="cursor: pointer">Disabled</div>
+						</li>
+					</ul>
 				</div>
 		</div>		
 	</div>

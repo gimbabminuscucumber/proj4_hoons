@@ -1,161 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+    pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jsp"%>
 
-<section class="container">
 
-    <!-- 왼쪽 섹션 -->
-	<div class="section">
-    <br>
-    <br>
-    	<div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/basic.jpg'); background-size: cover; background-position: center;">
-		    <div class="card-body" style="height: 100%; width: 100%;"></div>
-		</div>
-    
-		<!-- 
-		<div class="card m-2" style="width: 180px">
-			<div class="card-body" style="height: 100px; width: 100%;">
-			    <div>이미지 넣고싶다 근데 왜 이거 칸이 짤리냐 해결해버렸쬬?</div>
-			</div>
-		</div>
-		 -->
-		<div class="card m-2" style="width: 180px">
-				<div class="card-body" style=" height: 420px; width: 100% ">
-					<div>이것도 칸이 잘리나ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>이것도 칸이 잘리나?</div>
-					<div>d</div>
-					<div>d</div>
-					<div>d</div>
-				</div>
-		</div>		
-	</div>
-	<!-- 왼쪽 섹션 종료 -->
-	
-	
-	<!-- 중앙 섹션 -->
-	<div class="section center">
-		<!-- 검색창 -->
-		<!-- - 검색 버튼 누르면 파라미터 3개가 controller로 감 (cmd, page, keyword) -->
-		<div class="m-2">
-			<form class="form-inline d-flex justify-content-end" action="/project4/board">
-				<input type="hidden" name="cmd" value="search" /> 		<!-- <form>태그가 /project4/board?cmd=search 로 감 -->
-				<input type="hidden" name="page" value="0" /> 
-				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search">
-				<button class="btn btn-primary m-1">검색</button>
-			</form>
-		</div>
-	
-		<!-- 게시글 보기 -->
-		<!-- JSTL forEach문을 써서 el 표식으로 뿌리기 -->
-		<div class="card m-2">
-			<div class="card-header">
-				<i class="mtrl-select">모든 게시글</i>
-			</div>
+<br>
+<br>
+<a href="<%=request.getContextPath()%>/index.jsp">
+	<h1 style="text-align: center">User Infomation</h1>
+</a>
+<br>
+<br>
+
+
+<div class="container" style="text-align: center">
+	<form action="/project4/user?cmd=update" method="post">	<!-- http://localhost:8080/project4/user?cmd=update&id=${user.id} -->
+		<input type="hidden" name="id" value="${user.id }">
+		
+		<div class="form-group" >
+			<div class="material-icons-input" style="width: 335px">
+			    <span class="material-icons">person_outline</span>
+			    <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" value="${user.username }" readOnly required/>
+			</div>	
 		</div>
 		
-		<c:if test="${empty boards }">
-			<div>&nbsp; 작성된 게시글이 없습니다.</div>
-		</c:if>
-		<c:forEach var="board" items="${boards }">
-			<div class="card m-2">
-				<div class="card-body">
-					<div class="d-flex justify-content-between">
-						<h4 class="card-title"><a href="/project4/board?cmd=detail&id=${board.id }">${board.title }</a></h4>
-						<div>작성자 : <a href="#">${board.username}</a></div>
-					</div>
-					<div style="color: grey" class=d-flex>
-						<div class="mr-auto">
-							<!-- 게시글 검색시, '카테고리 없음'으로만 나옴 >> 별도 테이블 만들기 -->
-							<c:if test="${board.category == 0 }"><a href="#"><i>카테고리 없음</i></a> ·&nbsp;</c:if>
-							<c:if test="${board.category == 1 }"><a href="#"><i>IT 개발</i></a> ·&nbsp;</c:if>
-							<c:if test="${board.category == 2 }"><a href="#"><i>퍼포먼스 마케팅</i></a> ·&nbsp;</c:if>
-							<i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i>
-						</div>
-					</div>
-					<%-- <div>
-						<a href="/project4/board?cmd=detail&id=${board.id }" class="btn btn-primary">상세보기</a>
-					</div> --%>					
-				</div>
-			</div>
-		</c:forEach>
-	
-		<!-- 페이지 진척도 -->
-		<div class="progress col-md-12">
-			<div class="progress-bar" style="width: ${currentPercent}%"></div>
+		<div class="form-group">
+			<div class="material-icons-input" style="width: 335px">
+			    <span class="material-icons">lock_outline</span>
+				<input type="password" name="password" class="form-control" placeholder="Enter Password"  required/>
+			</div>	
 		</div>
-	
-		<%-- 	
-		<!-- 페이징 처리 -->
-		페이지 확인 = ${param.page}
-		마지막 페이지 = ${lastPage } 
-		--%>
-	
-		<br />
-	
-		<!-- 검색을 통해 나온 페이지 처리 -->
-		<ul class="pagination justify-content-center">
-			<c:choose>
-				<c:when test="${empty param.keyword }">
-					<%-- <c:set> : 변수 사용 --%>
-					<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
-					<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
-				</c:when>
-				
-				<c:otherwise>
-					<c:set var="pagePrev" value="/project4/board?cmd=search&page=${param.page-1 }&keyword=${param.keyword }"></c:set>
-					<c:set var="pageNext" value="/project4/board?cmd=search&page=${param.page+1 }&keyword=${param.keyword }"></c:set>
-				</c:otherwise>
-			</c:choose>
 		
-			<!-- 단순 페이지 처리 -->
-			<c:choose> 
-				<c:when test="${param.page == 0 }">
-					<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-				</c:when> 
-				<c:otherwise>
-					<li class="page-item"><a class="page-link" href="${pageScope.pagePrev }">Previous</a></li>
-	<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
-				</c:otherwise>
-			</c:choose>
+		<div class="form-group email-input-container">
+		    <div class="material-icons-input" style="width: 183px">
+		        <span class="material-icons">personal_video</span>
+		        <input type="email"  name="email" class="form-control" value="${user.email}" placeholder="Enter Email"/>
+		    </div>
+		    <button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">@example.com</button>
+		    <div class="dropdown-menu">
+		        <div class="dropdown-item">@naver.com</div>
+		        <a class="dropdown-item">@google.com</a>
+		        <a class="dropdown-item">@daum.net</a>
+		    </div>
+		</div>
+
+		<div class="form-group">
+			<div class="material-icons-input">
+			    <span class="material-icons">home</span>
+				<input type="text"  name="address" id="address"class="form-control" placeholder="Enter Address" value="${user.address }" required readOnly/>
+			</div>	
+			<button type="button" class="btn btn-info" onclick="goPopup();">주소검색</button>
+		</div>
 		
-			<c:choose>
-				<c:when test="${lastPage == param.page}">
-					<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-				</c:when>
-				<c:otherwise>
-					<li class="page-item"><a class="page-link" href="${pageScope.pageNext }">Next</a></li>
-	<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
-				</c:otherwise>
-			</c:choose>
-		</ul>
-		<!-- 페이지 처리 종료 -->
-	</div>
-	<!-- 중앙 섹션 종료 -->
-</section>
+		<div class="form-group">
+			<div class="d-flex justify-content-between">
+			</div>
+		</div>
+
+		<br>
+		<button type="submit" class="btn btn-primary" style="width: 300px">수정 완료</button>&nbsp;
+		<button type="button" class="btn btn-primary" onclick="history.back()">이전</button>
+	</form>
+</div>
+ 
+<script>
+//주소 API 실행 함수
+function goPopup(){
+	var pop = window.open("/project4/user/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+}
+
+function jusoCallBack(roadFullAddr){
+	var addressElement = document.querySelector("#address");	
+	addressElement.value = roadFullAddr;
+}
+</script>
 
 </body>
 
- <style>
-       .container {
-           display: flex;
-          /* justify-content: space-between;*/
-       }
+<style>
+    .material-icons-input {								/* input 될 아이콘 칸 */
+        display: inline-block;
+        position: relative;
+    }
+    .material-icons-input input {						/* 아이콘이 포함된 input 태그 */
+	    width: 100%;
+	    padding-left: 40px; /* 예시: 좀 더 넓은 여백을 주기 위해 padding-left 값 조정 */
+    }
+    .material-icons-input .material-icons {		/* 아이콘 위치 */
+        position: absolute;
+        left: 5px; /* 아이콘을 왼쪽에 위치 */
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+        /* 이메일 입력 칸과 버튼 간의 간격 조절 */
+    .email-input-container {
+        display: flex;
+        align-items: center; /* 세로 정렬을 위해 */
+        justify-content: center; /* 수평 정렬을 위해 */
+    }
 
-       .section {
-           /*flex-grow: 1; /* 동일한 너비를 가지도록 */
-           padding: 10px;
-           /*background-color: lightblue;*/
-           margin: 1px;
-       }
+    .email-input-container .form-control {
+        flex: 1; /* 입력 칸이 버튼의 크기에 따라 유동적으로 변할 수 있도록 */
+        margin-right: 5px; /* 버튼과의 간격 조절 */
+    }
 
-       .section.center {
-           flex-grow: 9; /* center section의 너비를 늘림 */
-       }
-   </style>
+    .email-input-container .btn {
+        flex-shrink: 0; /* 버튼이 입력 칸의 크기에 영향을 받지 않도록 */
+    }
+    
+</style>
 
 </html>
