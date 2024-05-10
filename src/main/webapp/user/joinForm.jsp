@@ -25,17 +25,17 @@
 			</div>	
 		</div>
 		<!-- ajax -->
-		<div><font id="checkId" size = "2"></font></div>
+		<p><font id="checkId" size = "2"></font></p>
 		
 		<div class="form-group insert-input-container">
-			<div class="material-icons-input" style="width: 335px">
+			<div class="material-icons-input" style="width: 336px">
 			    <span class="material-icons">lock_outline</span>
 				<input type="password" name="password" class="form-control" placeholder="Enter Password" >
 			</div>
 		</div>
 		
 		<div class="form-group insert-input-container">
-		    <div class="material-icons-input" style="width: 183px">
+		    <div class="material-icons-input" style="width: 188px">
 		        <span class="material-icons">personal_video</span>
 		        <input type="email" name="email" class="form-control" placeholder="Enter Email">
 		    </div>
@@ -48,6 +48,7 @@
 		        </div>
 		    </div>
 		</div>
+		이메일 중복확인 필요
 		
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input">

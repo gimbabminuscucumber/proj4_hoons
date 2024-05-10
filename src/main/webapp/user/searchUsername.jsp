@@ -29,9 +29,10 @@
 		</div>
 	
 		<br>
-	
-		<button type="button" class="btn btn-primary" onclick="emailCheck(${email})">아이디 찾기</button>
-		<button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
+		<div>
+			<button type="button" class="btn btn-primary" onclick="emailCheck(${email})">아이디 찾기</button>
+			<button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
+		</div>
 </div>	
 <script>
 

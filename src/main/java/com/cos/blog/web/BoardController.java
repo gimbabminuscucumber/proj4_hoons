@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.board.dto.DetailRespDto;
+import com.cos.blog.domain.board.dto.ListRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
-import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.reply.dto.ReplyRespDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BoardService;
@@ -49,6 +49,9 @@ public class BoardController extends HttpServlet {
 		ReplyService replyService = new ReplyService();
 		HttpSession session = request.getSession();							// 세션 불러오기
 		
+		// ====================================================	
+		// 												게시글 저장 1
+		// ====================================================	
 		// http://localhost:8080/project4/board?cmd=saveForm
 		if(cmd.equals("saveForm")) {
 			User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
@@ -62,6 +65,10 @@ public class BoardController extends HttpServlet {
 				dis.forward(request, response);	
 				//response.sendRedirect("user/loginForm.jsp");				// 없으면 로그인 페이지로
 			}
+			
+		// ====================================================	
+		// 												게시글 저장 2
+		// ====================================================	
 		}else if(cmd.equals("save")) {
 			int userId = Integer.parseInt(request.getParameter("userId"));		// saveForm 에서 hidden으로 받아온 userId
 			String title = request.getParameter("title");
@@ -87,11 +94,14 @@ public class BoardController extends HttpServlet {
 				Script.back(response, "글쓰기 실패");
 			}
 			
+		// ====================================================	
+		// 												메인 화면
+		// ====================================================	
 		}else if(cmd.equals("list")) {
 			int page = Integer.parseInt(request.getParameter("page"));		// 최초 페이지는 0, NEXT 클릭시 1
 			List<DetailRespDto> boards = boardService.글목록보기(page);
 			request.setAttribute("boards", boards);
-			
+
 			// 페이지 계산
 			int boardCount = boardService.글개수();
 			int lastPage = (boardCount -1)/4;
@@ -103,6 +113,10 @@ public class BoardController extends HttpServlet {
 			
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);	
+			
+		// ====================================================	
+		// 											게시글 상세보기
+		// ====================================================		
 		}else if(cmd.equals("detail")) {			// 게시글 상세보기
 			int id = Integer.parseInt(request.getParameter("id"));	// 게시글 id 가져오기
 			DetailRespDto boards = boardService.글상세보기(id);			// board 테이블 + user 테이블 = 조인된 데이터 필요
@@ -119,6 +133,10 @@ public class BoardController extends HttpServlet {
 				RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
 				dis.forward(request, response);	
 			}
+			
+		// ====================================================	
+		// 											게시글 삭제
+		// ====================================================		
 		}else if(cmd.equals("delete")) {
 			
 			// 1. 요청받은 JSON 데이터를 자바 오브젝트로 파싱
@@ -140,6 +158,10 @@ public class BoardController extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.print(respData);
 			out.flush();
+			
+		// ====================================================	
+		// 											게시글 수정 1
+		// ====================================================		
 		}else if(cmd.equals("updateForm")) {
 			// 수정할 데이터를 가져가야 함
 			int id = Integer.parseInt(request.getParameter("id"));		// 수정할 게시글의 id 가져오기
@@ -148,6 +170,10 @@ public class BoardController extends HttpServlet {
 			request.setAttribute("dto", dto);											// dto 뿌리기
 			RequestDispatcher dis = request.getRequestDispatcher("board/updateForm.jsp");
 			dis.forward(request, response);	
+			
+		// ====================================================	
+		// 											게시글 수정 2
+		// ====================================================		
 		}else if(cmd.equals("update")) {
 			// updateForm에서 데이터를 받아온 name 값들 (id, title, content)
 			int id = Integer.parseInt(request.getParameter("id"));
@@ -170,6 +196,10 @@ public class BoardController extends HttpServlet {
 			}else {
 				Script.back(response, "글 수정에 실패했습니다.");
 			}
+			
+		// ====================================================	
+		// 									메인 페이지 검색 기능
+		// ====================================================		
 		}else if(cmd.equals("search")) {		// 검색 기능
 			// 파라미터로 가져온 3개 (cmd, keyword, page) 중 2개
 			String keyword = request.getParameter("keyword");	

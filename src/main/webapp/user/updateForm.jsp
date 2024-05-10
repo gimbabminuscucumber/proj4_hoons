@@ -17,21 +17,21 @@
 		<input type="hidden" name="id" value="${user.id }">
 		
 		<div class="form-group" >
-			<div class="material-icons-input" style="width: 335px">
+			<div class="material-icons-input" style="width: 336px">
 			    <span class="material-icons">person_outline</span>
 			    <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" value="${user.username }" readOnly required/>
 			</div>	
 		</div>
 		
 		<div class="form-group">
-			<div class="material-icons-input" style="width: 335px">
+			<div class="material-icons-input" style="width: 336px">
 			    <span class="material-icons">lock_outline</span>
 				<input type="password" name="password" class="form-control" placeholder="Enter Password"  required/>
 			</div>	
 		</div>
 		
 		<div class="form-group insert-input-container">
-		    <div class="material-icons-input" style="width: 183px">
+		    <div class="material-icons-input" style="width: 188px">
 		        <span class="material-icons">personal_video</span>
 		        <input type="email"  name="email" class="form-control" value="${user.email}" placeholder="Enter Email"/>
 		    </div>
@@ -61,7 +61,7 @@
 
 		<br>
 		<button type="submit" class="btn btn-primary" style="width: 300px">수정 완료</button>&nbsp;
-		<button type="button" class="btn btn-primary" onclick="history.back()">이전</button>
+		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
 	</form>
 </div>
  

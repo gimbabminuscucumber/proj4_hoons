@@ -26,8 +26,11 @@
 			<label for="content">Content:</label>
 			<textarea id="summernote" class="form-control" rows="5" id="content" name="content" >${dto.content }</textarea>
 		</div>
-
-		<button type="submit" class="btn btn-primary">수정 완료</button>
+		
+		<div class="d-flex justify-content-end">
+			<button type="button" onclick="history.back()" class="btn btn-outline-secondary" >이전</button>&nbsp;
+			<button type="submit" class="btn btn-primary">수정 완료</button>
+		</div>	
 	</form>
 </div>
 

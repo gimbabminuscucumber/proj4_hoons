@@ -16,7 +16,7 @@
 	<form action="/project4/user?cmd=join" method="post" onsubmit="return valid()">	<!-- UserController의 cmd.equals("join") 으로 전달
 																																								onsubmit : submit 되면 무조건 실행되는 함수-->
 		<div class="form-group d-flex insert-input-container">
-			<div class="material-icons-input" style="width: 255px">
+			<div class="material-icons-input" style="width: 344px">
 			 	<span class="material-icons">person_outline</span>
 				<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required/>
 			</div>				
@@ -25,32 +25,40 @@
 			</div>	
 		</div>
 		<!-- ajax -->
-		<div><font id="checkId" size = "2"></font></div>
+		<p><font id="checkId" size = "2"></font></p>
 		
 		<div class="form-group insert-input-container">
-			<div class="material-icons-input" style="width: 335px">
+			<div class="material-icons-input" style="width: 425px">
 			    <span class="material-icons">lock_outline</span>
 				<input type="password" name="password" class="form-control" placeholder="Enter Password" >
 			</div>
 		</div>
 		
 		<div class="form-group insert-input-container">
-		    <div class="material-icons-input" style="width: 183px">
+		    <div class="material-icons-input" style="width: 190px">
 		        <span class="material-icons">personal_video</span>
-		        <input type="email" name="email" class="form-control" placeholder="Enter Email">
+		        <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email" oninput="emailCombine()"> <!-- oninput(): 입력 필드의 값이 변경될 때마다 발생합니다. 사용자가 입력을 하면 즉시 발생 -->
 		    </div>
-		    <div class="input-group-prepend">
-		        <button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">@example.com</button>
-		        <div class="dropdown-menu">
-		            <div class="dropdown-item">@naver.com</div>
-		            <a class="dropdown-item">@google.com</a>
-		            <a class="dropdown-item">@daum.net</a>
-		        </div>
-		    </div>
+		    
+		    <form>
+			  <select id="domain" name="cars" class="custom-select" style="width: 155px" onchange="emailCombine()"> <!-- onchange(): 입력 필드의 값이 변경되고 사용자가 입력을 완료하고 필드를 떠날 때 발생  -->
+			    <option selected disabled>@example.com</option>
+			    <option value="@naver.com">@naver.com</option>
+			    <option value="@gmail.com">@gmail.com</option>
+			    <option value="@nate.com">@nate.com</option>
+			    <option value="@daum.net">@daum.net</option>
+			    <option >Another...</option>	<!-- 다른 이메일도 쓸 수 있 -->
+			  </select>
+			</form>
+		    
+		    <button type="button" class="btn btn-info"  onclick="??">중복확인</button>
 		</div>
+		    회원가입에서 emailCheck 수정하고 같은 내용을 사용하기
+		<!-- ajax -->
+		<p><font id="checkEmail" size = "2"></font></p>
 		
 		<div class="form-group d-flex insert-input-container">
-			<div class="material-icons-input">
+			<div class="material-icons-input" style="width: 344px">
 				<span class="material-icons">home</span>
 				<input type="text"  name="address" id="address"class="form-control" placeholder="Enter Address" required readOnly/>
 			</div>
@@ -66,20 +74,28 @@
 			</label>
 		</div> -->
 		<br>
-		<button type="submit" class="btn btn-primary" style="width: 360px">회원가입 완료</button>
+		<button type="submit" class="btn btn-primary" style="width:368px">회원가입 완료</button>
+		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
 	</form>
 
 </div>
  
 <script>
-var isChecking = false;
+var userChecking = false		// 유저네임 중복확인 여부
+var emailChecking = false		// 이메일 중복확인 여부
+var isChecking = false			// 유저네임과 이메일 중복확인 여부 
 
 function valid(){
-	if(isChecking == false){
-		alert("아이디 중복체크를 하세요");
+	if(userChecking == false){
+		alert("아이디 중복확인을 하세요");
+	}else if(emailChecking == false){
+		alert("이메일 중복확인을 하세요")
+	}else{
+		isChecking = true;			// 유저네임과 이메일 중복확인 완료하면 true로 변경 
 	}
-	return isChecking;
+		return isChecking;
 }
+
 
 // 아이디 중복 체크 ajax 실행 함수
 function usernameCheck(){
@@ -98,16 +114,16 @@ function usernameCheck(){
 	
  	$.ajax({
 		type: "POST",
-		url: "/project4/user?cmd=usernameCheck",
-		data: username,
+		url: "/project4/user?cmd=??",		// 회원가입에서 emailCheck 수정하고 같은 내용을 사용하기
+		data: username,					// 위에서 var username으로 받은 데이터
 		contentType: "text/plain; charset=utf-8",
 		dataType: "text"				// 응답받을 데이터 타입 ("json"은 Java object로 파싱해줌)
-	}).done(function(data){		// .done() : 통신이 끝나면 실행할 기능
+	}).done(function(data){		// .done() : 통신이 끝나면 실행할 기능 / data 는 어디서 받음??
 		if(username === ''){			// 유저네임이 공란
 			console.log('공란 : data : ' + data);
 			console.log('공란 : username : ' + username);
 
-			isChecking = false;			// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
+			userChecking = false;			// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
 			//alert('유저네임을 입력해주세요.')
 			$("#checkId").html('유저네임을 입력해주세요.');
 			$("#checkId").attr('color', 'red');
@@ -115,7 +131,7 @@ function usernameCheck(){
 			console.log('중복 : data : ' + data);
 			console.log('중복 : username : ' + username);
 			
-			isChecking = false;
+			userChecking = false;
 			//alert('유저네임이 중복되었습니다.')
 			$("#checkId").html('유저네임이 중복되었습니다.');
 			$("#checkId").attr('color', 'red');
@@ -123,10 +139,51 @@ function usernameCheck(){
 			console.log('신규 : data : ' + data);
 			console.log('신규 : username : ' + username);
 
-			isChecking = true;
+			userChecking = true;
 			//alert('해당 유저네임은 사용가능합니다.')
 			$("#checkId").html('해당 유저네임은 사용가능합니다.');
 			$("#checkId").attr('color', 'blue');
+		}
+	});
+}
+
+// 이메일 합치기
+function emailCombine(){
+	var email = document.getElementById("email").value;
+	var domain = document.getElementById("domain").value;
+	fullEmail = email + domain;
+	console.log("fullEmail : " + fullEmail);
+}
+
+function emailCheck(){
+	console.log("emailCheck/fullEmail : " + fullEmail);
+	var email = fullEmail;
+	
+	$.ajax({
+		type: "post",
+		url: "/project4/user?cmd=emailCheck",
+		data: email,
+		contentType: "text/plain; charset=utf-8",
+		dataType: "text"
+	}).done(function(data){
+		if(email === ""){
+			console.log('공란 : data : ' + data);
+			console.log('공란 : email : ' + email);
+			emailChecking = false;
+			$("#checkEmail").html('이메일을 입력해주세요.');
+			$("#checkEmail").attr('color', 'red');
+		}else if(data === 'ok'){
+			console.log('중복 : data : ' + data);
+			console.log('중복 : email : ' + email);
+			emailChecking = false;
+			$("#checkEmail").html('이메일이 중복되었습니다.');
+			$("#checkEmail").attr('color', 'red');
+		}else{
+			console.log('신규 : data : ' + data);
+			console.log('신규 : email : ' + email);
+			emailChecking = true;
+			$("#checkEmail").html('해당 이메일은 사용가능합니다.');
+			$("#checkEmail").attr('color', 'blue');
 		}
 	});
 }
@@ -141,6 +198,8 @@ function jusoCallBack(roadFullAddr){
 	var addressElement = document.querySelector("#address");	
 	addressElement.value = roadFullAddr;
 }
+
+// submit
 
 </script>
 

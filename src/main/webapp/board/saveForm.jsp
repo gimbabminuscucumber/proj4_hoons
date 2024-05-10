@@ -34,7 +34,10 @@
 			<textarea id="summernote" class="form-control" rows="5" name="content" ></textarea>
 		</div>
 
-		<button type="button" class="btn btn-primary" onclick="nullCheck()">글쓰기 등록</button>
+		<div class="d-flex justify-content-end">
+			<button type="button" onclick="history.back()" class="btn btn-outline-secondary" >이전</button>&nbsp;
+			<button type="button" class="btn btn-primary" onclick="nullCheck()">글쓰기 등록</button>
+		</div>
 	</form>
 </div>
 

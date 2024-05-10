@@ -16,9 +16,9 @@ public class Board {
 	private int userId;
 	private String title;
 	private String content;
-	private int readCount;			// 조회수 디폴트값 0
+	private int readCount;		// 조회수 디폴트값 0
 	private Timestamp createDate;
-	private int category;			// 추가
+	private int category;	
 	
 	// 게시글 작성시, 제목(title)에 <script> 코드 방어
 	// - lucy filter로도 방어 가능 (더 궁극적임)

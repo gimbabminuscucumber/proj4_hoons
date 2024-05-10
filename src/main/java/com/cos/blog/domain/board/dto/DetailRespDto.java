@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DetailRespDto {
+public class DetailRespDto {		// Board 테이블 + User 테이블
 	private int id;
 	private String title;
 	private String content;
