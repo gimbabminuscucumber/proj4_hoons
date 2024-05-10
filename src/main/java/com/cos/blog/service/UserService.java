@@ -18,6 +18,7 @@ public class UserService {
 	}
 	
 	public int 회원가입(JoinReqDto dto) {		// insert 작업 : 잘됐다 안됐다의 결과값을 리턴
+		System.out.println("UserService/save/dto : " + dto);
 		int result = userDao.save(dto);
 		return result;
 	}
@@ -70,6 +71,7 @@ public class UserService {
 	}
 
 	public int 유저이메일중복체크(String email) {				// 이메일 중복 여부 확인
+		System.out.println("UserService/email : " + email);
 		int result = userDao.findByEmail(email);
 		return result;
 	}

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.user.User;
-import com.cos.blog.domain.user.dto.EmailReqDto;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LogReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
@@ -100,12 +99,20 @@ public class UserController extends HttpServlet {
 		// 													회원가입 2
 		// ====================================================				
 		}else if(cmd.equals("join")) {
-			// 1. http에서 데이터를 받기
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String email = request.getParameter("email");
-			String address = request.getParameter("address");
+			// 1. http에서 데이터 받기
+//			String username = request.getParameter("username");
+//			String password = request.getParameter("password");
+//			String address = request.getParameter("address");
+//			String email = request.getParameter("email");
 			
+			// 버퍼로 데이터 받기
+	        String username = request.getParameter("username");
+	        String password = request.getParameter("password");
+	        String email = request.getParameter("email");
+	        String address = request.getParameter("address");
+			
+			System.out.println("UserController/join/email : " + email);
+
 			// 2. dto로 오브젝트 만들어 데이터 넣기
 			JoinReqDto dto = new JoinReqDto();
 			dto.setUsername(username);
@@ -118,8 +125,11 @@ public class UserController extends HttpServlet {
 			
 			// 3. Service에 오브젝트 담기 (Service : 전달받은 데이터 처리 / 가공은 다른 곳에서 처리)
 			int result = userService.회원가입(dto);
+			
+			System.out.println("UserController/join/result : " + result);		// 회원가입이 완료돼도, alert로 "회원가입 실패"가 뜬다
+			
 			if(result == 1) {
-				response.sendRedirect("index.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가하지만 index.jsp 접근은 허용했기에 가능
+				response.sendRedirect("user/loginForm.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가하지만 loginForm 접근은 허용했기에 가능
 			}else {
 				Script.back(response, "회원가입 실패");
 			}

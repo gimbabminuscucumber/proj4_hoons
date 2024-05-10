@@ -5,7 +5,7 @@
 <br>
 <br>
 <h1 style="text-align: center">
-	<a href="<%=request.getContextPath()%>/index.jsp">My SNS</a>
+	<div style="color: #077BFF;">훈이네(이미지)</div>
 </h1>
 <br>
 <br>

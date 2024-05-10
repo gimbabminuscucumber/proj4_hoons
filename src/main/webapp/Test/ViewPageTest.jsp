@@ -6,7 +6,7 @@
 <br>
 <br>
 <h1 style="text-align: center">
-	<a href="<%=request.getContextPath()%>/index.jsp">Insert Infomation</a>
+	<div style="color: #077BFF;">Insert Infomation</div>
 </h1>
 <br>
 <br>
@@ -32,7 +32,7 @@
 		<div class="form-group insert-input-container">
 			<div class="material-icons-input" style="width: 419px">
 				<span class="material-icons">lock_outline</span> 
-				<input type="password" name="password" class="form-control" placeholder="Enter Password"  required />
+				<input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"  oninput="inputPwd()">
 			</div>
 		</div>
 
@@ -53,18 +53,15 @@
 					<option value="@daum.net">@daum.net</option>
 				</select>
 			</div>
-			
-			
 			<button type="button" id="domain" class="btn btn-info" onclick="emailCheck()">중복확인</button>
 		</div>
 		<!-- ajax -->
-		<p>
-			<font id="checkEmail" size="2"></font>
-		</p>
+		<p><font id="checkEmail" size="2"></font></p>
 
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
-				<span class="material-icons">home</span> <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address"  readOnly required />
+				<span class="material-icons">home</span> 
+				<input type="text" name="address" id="address" class="form-control" placeholder="Enter Address"  readOnly required />
 			</div>
 			<div>
 				<button type="button" class="btn btn-info" onclick="goPopup();">주소검색</button>
@@ -90,22 +87,65 @@
 	var userChecking = false;
 	var emailChecking = false;
 	var isChecking = false;
+
+	/*
+	var username = document.getElementById("username").value;
+	var password;
+	var email;
+	var address = document.getElementById("address").value;
+	*/
 	
+	// 중복확인 체크 및 미입력 데이터 체크
 	function joinSuccess() {				
+		var username = document.getElementById("username").value;
+		var password = document.getElementById("password").value;
+		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
+		var address = document.getElementById("address").value;
+
 		if (userChecking == false) {
 			alert("아이디 중복확인을 하세요");
 			isChecking = false;
+		} else if(password === ''){
+			console.log('password : ' + password);
+			alert("비밀번호를 입력하세요");
 		} else if (emailChecking == false) {
+			console.log('password : ' + password);
 			alert("이메일 중복확인을 하세요");
-			 isChecking = false;
+			isChecking = false;
 		} else if(userChecking == true && emailChecking == true) {
-			alert("회원가입 완료");			
 			isChecking = true;
-			document.join.submit();
+			//document.join.submit();
+			finalCheck();
 		}
-	}
+	}	
 
-	// 아이디 중복 체크 ajax 실행 함수
+	// submit
+	function finalCheck(){
+		var username = document.getElementById("username").value;
+		var password = document.getElementById("password").value;
+		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
+		var address = document.getElementById("address").value;
+		
+		$.ajax({
+			type: "post",
+			url: "/project4/user?cmd=join",
+			data: {
+				username: username,
+				password: password,
+				email: email,
+				address: address
+			}, success: function(resp){
+				console.log("데이터 전송 완료", resp);
+				alert('회원가입 완료');
+				// 로그인 화면으로 페이지 이동
+				window.location.href = "/project4/user/loginForm.jsp";
+			}, error: function(xhr, status, error){
+				console.log("데이터 전송 에러", error);
+			}
+		});
+	}
+	
+	// username 중복확인
 	function usernameCheck() {
 		// DB에서 확인 후 아이디가 중복이 아니면 isChecking = true로 변경
 		var username = $("#username").val();
@@ -155,15 +195,20 @@
 		});
 	}
 
-	var email;
-
+	// 비밀번호 입력데이터 받아오기 > 회원가입 완료 버튼 클릭시, 미입력 상태면 alert 주려고
+	function inputPwd(){
+		password = document.getElementById("password").value;
+	}
+	
+	// input 데이터와 dropdown를 합치려고
 	function emailCombine() {
 		var inputEmail = document.getElementById("inputEmail").value;
 		var domain = document.getElementById("domain").value;
 		//var email = inputEmail + domain;			// var로 email에 데이터를 전달하면 전역변수로 설정한 var email과 다른 메모릴에 저장돼서 다른 함수에서 사용 불가
-		email = inputEmail + domain; // 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
+		email = inputEmail + domain; 					// 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
 	}
 
+	// email 중복확인
 	function emailCheck() {
 		console.log('email : ' + email); // emailCombine() 에서 email 을 받아옴
 
@@ -174,7 +219,7 @@
 			contentType : "text/plain; charset=utf-8",
 			dataType : "text" // 서버에서 받을 데이터 타입
 		}).done(function(data) {
-			if (email == undefined) {
+			if (email == undefined || data === "") {
 				console.log('공란 : data : ' + data);
 				console.log('공란 : email : ' + email);
 				emailChecking = false;					// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
