@@ -41,31 +41,36 @@ public class UserService {
 		return result;	
 	}
 
-	public User 회원이메일(String email) {			// 이메일로 아이디 찾기 1
+	public User 회원이메일(String email) {						// 이메일로 아이디 찾기 1
 		return userDao.userInfo(email);
 	}
 
-	public int 유저네임찾기(String email) {			// 이메일로 아이디 찾기 2
+	public int 유저네임찾기(String email) {						// 이메일로 아이디 찾기 2
 		int result = userDao.findByEmail(email);
 		return result;
 	}
 
-	public User 회원패스워드(PasswordReqDto dto) {		// 비밀번호 찾기 1
+	public User 회원패스워드(PasswordReqDto dto) {	// 비밀번호 찾기 1
 		System.out.println("UserService dto : " + dto);
 		return userDao.userInfo2(dto);
 	}
 
-	public int 비밀번호찾기(PasswordReqDto dto) {			// 비밀번호 찾기 2
+	public int 비밀번호찾기(PasswordReqDto dto) {		// 비밀번호 찾기 2
 		int result = userDao.findByUsernameAndEmail(dto);
 		return result;
 	}
 	
-	public User 로그찾기(LogReqDto dto) {		// 로그인 체크 1
+	public User 로그찾기(LogReqDto dto) {						// 로그인 체크 1
 		return userDao.findByLog(dto);
 	}
 
-	public int 로그인체크(LogReqDto dto) {		// 로그인 체크 2
+	public int 로그인체크(LogReqDto dto) {						// 로그인 체크 2
 		int result = userDao.userInfo3(dto);
+		return result;
+	}
+
+	public int 유저이메일중복체크(String email) {				// 이메일 중복 여부 확인
+		int result = userDao.findByEmail(email);
 		return result;
 	}
 	

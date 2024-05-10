@@ -28,19 +28,19 @@
 				<input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required/>
 			</div>	
 			
-			<!-- ajax -->
-			<div><font id="checkLog" size = "2"></font></div>
 		</div>
+		<!-- ajax -->
+		<p><font id="checkLog" size = "2"></font></p>
+		
 		<!-- 아이디 기억하기   -->
 		<!-- 		<div class="form-group form-check">
 			<label class="form-check-label"> 
 				<input class="form-check-input" type="checkbox"> Remember me
 			</label>
 		</div> -->
-		<br>
 		
+		<br>
 		<div>
-			<%--<button type="submit" class="mr-auto btn btn-primary" style="width: 25%">로그인 하기</button> --%>
    			 <button type="button" onclick="logCheck();" id="login" class="mr-auto btn btn-primary" style="width: 25%">로그인 하기</button>
 		</div>
 		<br>
@@ -51,14 +51,6 @@
 	<div onclick="searchUsername()" style="cursor: pointer;">아이디 찾기</div> ㅣ 
 	<div onclick="searchPassword()" style="cursor: pointer;">비밀번호 찾기</div>
 </div>
-		<%--
-		<div>
-			<button type="button" class="btn btn-info" onclick="searchUsername()">아이디 찾기</button>&nbsp;
-			<button type="button" class="btn btn-info" onclick="searchPassword()">비밀번호 찾기</button>
-		</div>
-	</form>
-</div>
-		 --%>
 		 
 <script src="/project4/js/userInfo.js"></script>
 

@@ -13,7 +13,8 @@ import com.cos.blog.domain.user.dto.PasswordReqDto;
 
 public class UserDao {
 	
-	public int save(JoinReqDto dto) {		// 회원가입
+	// 회원가입
+	public int save(JoinReqDto dto) {		
 		String sql = "INSERT INTO user(username, password, email, address, userRole, createDate) VALUES(?,?,?,?,'USER', now())";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -33,7 +34,8 @@ public class UserDao {
 		return -1;
 	}
 	
-	public User findByUsernameAndPassword(LoginReqDto dto) {		// 로그인
+	// 로그인
+	public User findByUsernameAndPassword(LoginReqDto dto) {		
 		String sql = "SELECT id, username, email, address FROM user WHERE username =? AND password =?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
@@ -63,7 +65,8 @@ public class UserDao {
 		return null;
 	}
 
-	public int findByUsername(String username) {		// 유저네임 중복 체크
+	// 유저네임 중복 체크
+	public int findByUsername(String username) {		
 		String sql = "SELECT * FROM user WHERE username =?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -85,7 +88,8 @@ public class UserDao {
 		return -1;			// DB에 해당 유저네임이 없다
 	}
 
-	public User findById(int id) {	// 유저 찾기
+	// 유저 찾기
+	public User findById(int id) {	
 		String sql = "SELECT * FROM user WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;				// 외부로부터 injection 공격 방어
@@ -113,7 +117,8 @@ public class UserDao {
 		return null;	
 	}
 
-	public int update(User user) {		// 회원정보 수정
+	// 회원정보 수정
+	public int update(User user) {	
 		String sql = "UPDATE user SET password =?, email =?, address =? WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -136,7 +141,8 @@ public class UserDao {
 		return -1;
 	}
 
-	public int findByEmail(String email) {		// 이메일로 아이디 찾기
+	// 아이디 찾기 2 - 이메일로 아이디 찾기
+	public int findByEmail(String email) {	
 		String sql = "SELECT username FROM user WHERE email = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -148,17 +154,18 @@ public class UserDao {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				return 1;				// 확인한 email이 DB에 있을 때
+				return 1;						// 확인한 email이 DB에 있을 때 (중복 되면)
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
 			DB.close(conn, pstmt, rs);
 		}
-		return -1;							// 확인한 email이 DB에 없을 떄
+		return -1;							// 확인한 email이 DB에 없을 때 (중복 안 되면)
 	}
 
-	public User userInfo(String email) {			// 이메일로 유저정보 가져오기
+	// 아이디 찾기 1 - 이메일로 유저정보 가져오기
+	public User userInfo(String email) {			
 		String sql = "SELECT * FROM user WHERE email = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -184,7 +191,8 @@ public class UserDao {
 		return null;
 	}
 
-	public User userInfo2(PasswordReqDto dto) {		// 유저네임과 이메일로 유저정보 가져오기2
+	// 비밀번호 찾기 - 유저네임과 이메일로 유저정보 가져오기2
+	public User userInfo2(PasswordReqDto dto) {		
 		String sql = "SELECT * FROM user WHERE username = ? AND email =?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -211,6 +219,7 @@ public class UserDao {
 		return null;
 	}
 
+	// 로그인 처리 1 - 유저네임 확인 (미사용)
 	public int findByUsernameAndEmail(PasswordReqDto dto) {
 		String sql = "SELECT username FROM user WHERE username = ? AND email = ?";
 		Connection conn = DB.getConnection();
@@ -234,6 +243,7 @@ public class UserDao {
 		return -1;					// 확인한 username과 email이 DB에 없을 떄
 	}
 
+	// 로그인 처리 2 - 유저네임과 비밀번호 확인 (미사용)
 	public User findByLog(LogReqDto dto) {
 		String sql = "SELECT username, password FROM user WHERE username =? AND password =?";
 		Connection conn = DB.getConnection();
@@ -260,6 +270,7 @@ public class UserDao {
 		return null;
 	}
 
+	// 로그인 처리 - 유저네임과 비밀번호 일치 여부
 	public int userInfo3(LogReqDto dto) {
 		String sql = "SELECT username, password FROM user WHERE username =? AND password =?";
 		Connection conn = DB.getConnection();

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.user.User;
+import com.cos.blog.domain.user.dto.EmailReqDto;
 import com.cos.blog.domain.user.dto.JoinReqDto;
 import com.cos.blog.domain.user.dto.LogReqDto;
 import com.cos.blog.domain.user.dto.LoginReqDto;
@@ -196,7 +197,7 @@ public class UserController extends HttpServlet {
 		// ====================================================	
 		// 											회원 유저네임 찾기
 		// ====================================================		
-		}else if(cmd.equals("emailCheck")) {		// 유저네임 찾기
+		}else if(cmd.equals("userCheck")) {		
 			// ajax에서 보내는 username 데이터가 text 타입이라서 버퍼로 받아야함 (파라미터로 받을 수 없기 때문에)
 			String email = request.getParameter("email");
 			User user = userService.회원이메일(email);
@@ -276,8 +277,31 @@ public class UserController extends HttpServlet {
 			
 			String responseData = gson.toJson(commonRespDto);
 			Script.responseData(response, responseData);
-		}
 		
-		
+		// ====================================================	
+		// 											이메일 중복 체크
+		// ====================================================	
+		}else if(cmd.equals("emailCheck")) {	
+
+			BufferedReader br = request.getReader();	// 클라이언트로부터의 HTTP POST 요청으로부터 첫 번째 줄을 읽어와서 email 변수에 저장
+			String email = br.readLine();
+			
+			System.out.println("email : " + email);
+			
+			int result = userService.유저이메일중복체크(email);
+			PrintWriter out = response.getWriter();			// PrintWriter : 문자 데이터를 출력하기 위한 클래스
+																							// response.getWriter() : HTML, JSON, XML 또는 기타 텍스트 데이터를 클라이언트에게 전송
+			
+			System.out.println("UserController/result : " + result);
+			if(result == 1	) {				// result가 1 (중복)이면
+				out.print("ok");				// println을 하면 칸 띄우기 때문에 일치여부 확인 불가
+			}else if (result == -1){		// result가 -1 (신규)이면 
+				out.print("fail");				// "fail"
+			} else {
+				out.print("error");		
+			}
+			out.flush();
+			
 	}
+}
 }

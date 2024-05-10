@@ -30,19 +30,19 @@
 	
 		<br>
 		<div>
-			<button type="button" class="btn btn-primary" onclick="emailCheck(${email})">아이디 찾기</button>
+			<button type="button" class="btn btn-primary" onclick="userCheck(${email})">아이디 찾기</button>
 			<button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
 		</div>
 </div>	
 <script>
 
 	// 이메일로 유저네임 찾기
-	function emailCheck(){
+	function userCheck(){
 		var email = $("#email").val();
 		
 		$.ajax({
 			type: "post",
-			url: "/project4/user?cmd=emailCheck&email=" + email,
+			url: "/project4/user?cmd=userCheck&email=" + email,
 			data: email,
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
