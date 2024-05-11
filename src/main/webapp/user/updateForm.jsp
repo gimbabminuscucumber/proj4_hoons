@@ -6,7 +6,11 @@
 <br>
 <br>
 <h1 style="text-align: center">
-	<div style="color: #077BFF;">User Infomation</div>
+	<!-- <div style="color: #077BFF;">User Infomation</div> -->
+	<div class="d-flex justify-content-center">
+		<img src="images/icons/schedule2.png" alt="Logo" style="width:50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">회원정보 수정</div>
+	</div>
 </h1>
 <br>
 <br>
@@ -50,7 +54,7 @@
 		</div>
 		<!-- ajax -->
 		<p><font id="checkEmail" size="2"></font></p>
-		회원가입시, 이메일이 도메인은 없이 저장됨
+		<p>DB에 저장된 domain 가져오기</p> 
 
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
@@ -69,8 +73,8 @@
 		</div>
 
 		<br>
-		<button type="button" class="btn btn-primary" style="width: 128px" onclick="updateSuccess()">수정 완료</button>
 		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
+		<button type="button" class="btn btn-primary" style="width: 128px" onclick="updateSuccess()">수정 완료</button>
 	</form>
 </div>
  

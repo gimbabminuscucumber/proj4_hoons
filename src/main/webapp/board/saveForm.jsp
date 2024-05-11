@@ -8,15 +8,23 @@
 - 단점 : 모듈 분리가 안됨, 모든 파일에서 세션 체크를 해야 함
 - 해결 방법 : 필터에 .jsp로 접근하는 모든 접근을 막으면 됨
 -->
+<br>
+<br>
+<h1 style="text-align: center">
+	<div class="d-flex justify-content-center">
+		<img src="images/icons/text.png" alt="Logo" style="width:50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">글쓰기</div>
+	</div>
+</h1>
+<br>
 
-<div class="container">
+<div class="container" style="width: 60%">
 	<form action="/project4/board?cmd=save" method="POST" name="saveForm">
 		<input type="hidden" name="userId" value="${sessionScope.principal.id }">
 		
 		<div class="form-group">
-		    <label for="category">Category:</label> 
-		    <br>
-		    <select name="category" class="form-control">
+		    <select name="category" class="custom-select">
+		        <option selected disabled>Category</option>
 		        <option value="0">카테고리 없음</option>
 		        <option value="1">IT 개발</option>
 		        <option value="2">퍼포먼스 마케팅</option>
@@ -25,12 +33,10 @@
 
 
 		<div class="form-group">
-			<label for="title">Title:</label> 
 			<input type="text" class="form-control" placeholder="제목을 입력하세요" id="title" name="title" >
 		</div>
 
 		<div class="form-group">
-			<label for="content">Content:</label>
 			<textarea id="summernote" class="form-control" rows="5" name="content" ></textarea>
 		</div>
 

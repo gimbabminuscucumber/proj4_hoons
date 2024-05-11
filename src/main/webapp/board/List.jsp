@@ -7,9 +7,9 @@
 
 	<!-- 왼쪽 섹션 -->
 	<div class="section">
-		<br> <br>
-		<div class="card m-2"
-			style="width: 180px; height: 100px; background-image: url('/project4/images/bluesky.png'); background-size: cover; background-position: center;">
+		<br>
+		<br>
+		<div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/bluesky.png'); background-size: cover; background-position: center;">
 			<div class="card-body" style="height: 100%; width: 100%;"></div>
 		</div>
 

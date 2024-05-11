@@ -6,7 +6,10 @@
 <br>
 <br>
 <h1 style="text-align: center">
-	<div style="color: #077BFF;">Insert Infomation</div>
+	<div class="d-flex justify-content-center">
+		<img src="images/icons/star.png" alt="Logo" style="width:50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">회원가입</div>
+	</div>
 </h1>
 <br>
 <br>
@@ -25,9 +28,7 @@
 			</div>
 		</div>
 		<!-- ajax -->
-		<p>
-			<font id="checkId" size="2"></font>
-		</p>
+		<p><font id="checkId" size="2"></font></p>
 
 		<div class="form-group insert-input-container">
 			<div class="material-icons-input" style="width: 419px">
@@ -69,16 +70,10 @@
 			</div>
 		</div>
 
-		<!-- 아이디 기억하기   -->
-		<!-- 		<div class="form-group form-check">
-			<label class="form-check-label"> 
-				<input class="form-check-input" type="checkbox"> Remember me
-			</label>
-		</div> -->
 		<br>
 
-		<button type="button" class="btn btn-primary" style="width: 128px" onclick="joinSuccess()">회원가입 완료</button>
 		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
+		<button type="button" class="btn btn-primary" style="width: 128px" onclick="joinSuccess()">회원가입 완료</button>
 	</form>
 
 </div>

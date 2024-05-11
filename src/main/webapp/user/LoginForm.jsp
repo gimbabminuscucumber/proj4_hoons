@@ -5,7 +5,10 @@
 <br>
 <br>
 <h1 style="text-align: center">
-	<div style="color: #077BFF;">훈이네(이미지)</div>
+	<div class="d-flex justify-content-center">
+		<img src="images/icons/check.png" alt="Logo" style="width:50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">로그인</div>
+	</div>
 </h1>
 <br>
 <br>
@@ -32,12 +35,10 @@
 		<!-- ajax -->
 		<p><font id="checkLog" size = "2"></font></p>
 		
-		<!-- 아이디 기억하기   -->
-		<!-- 		<div class="form-group form-check">
-			<label class="form-check-label"> 
-				<input class="form-check-input" type="checkbox"> Remember me
-			</label>
-		</div> -->
+		<div class="custom-control custom-switch">
+			<input type="checkbox" class="custom-control-input" id="switch1" name="example">
+			<label class="custom-control-label" for="switch1">아이디 기억하기</label>
+		</div>
 		
 		<br>
 		<div>

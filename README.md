@@ -12,7 +12,8 @@
 - git
 
 ## 프로젝트 설명
-- 어떤 목적 때문에 만들었고, 어떤 기술을 왜 사용했는지 설명
+- '훈이네'는 친구가 운영하는 마트를 위한 홈페이지입니다.
+	물건을 포장 및 구매를 하거나 프로모션 등을 확인할 수 있습니다.
 
 ## MySQL 데이터베이스 생성 및 사용자 생성
 
@@ -45,21 +46,20 @@ CREATE TABLE board(
     content longtext,
     readCount int default 0,
     createDate timestamp,
-    foreign key (userId) references user (id)
+    category int,
+    foreign key (userId) references user (id),
+    category int
 ) engine=InnoDB default charset=utf8;
 
 CREATE TABLE reply(
-    id int primary key auto_increment,
+    replyId int primary key auto_increment,
     userId int,
     boardId int,
     content varchar(300) not null,
+    count varchar(300),
     createDate timestamp,
     foreign key (userId) references user (id) on delete set null,
     foreign key (boardId) references board (id) on delete cascade
 ) engine=InnoDB default charset=utf8;
 
-CREATE TABLE category(
-		ctgrId int,
-    boardId int
-) engine=InnoDB default charset=utf8;
 ```
