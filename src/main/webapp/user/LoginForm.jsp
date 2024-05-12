@@ -36,13 +36,13 @@
 		<p><font id="checkLog" size = "2"></font></p>
 		
 		<div class="custom-control custom-switch">
-			<input type="checkbox" class="custom-control-input" id="switch1" name="example">
-			<label class="custom-control-label" for="switch1">아이디 기억하기</label>
+			<input type="checkbox" class="custom-control-input" id="remember" name="remember" onclick="rememberUser()">
+			<label class="custom-control-label" for="remember">아이디 기억하기</label>
 		</div>
 		
 		<br>
 		<div>
-   			 <button type="button" onclick="logCheck();" id="login" class="mr-auto btn btn-primary" style="width: 25%">로그인 하기</button>
+   			 <button type="button" onclick="logCheck();" id="login" class="mr-auto btn btn-primary" style="width: 280px">로그인 하기</button>
 		</div>
 		<br>
 	</form>
@@ -55,6 +55,11 @@
 		 
 <script src="/project4/js/userInfo.js"></script>
 
+<script>
+	function rememberUser(){
+		console.log();	
+	}
+</script>
 </body>
 <style>
     .material-icons-input {								/* input 될 아이콘 칸 */

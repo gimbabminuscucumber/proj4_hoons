@@ -41,6 +41,11 @@ function logCheck() {
 			$("#checkLog").attr('color', 'red');
 		}else if(data.statusCode == 1){
 			document.getElementsByName("loginSuccess")[0].submit();
+			
+			// 유저네임 기억하기 로직
+			username = data.username;
+			localStorage.setItem("rememberUser", username);
+			console.log("userInfo.js/로그인성공/username : " + username);
 		}else if(data.statusCode == 0){
 			$("#checkLog").html('아이디 또는 비밀번호를 입력해주세요.');
 			$("#checkLog").attr('color', 'red');
