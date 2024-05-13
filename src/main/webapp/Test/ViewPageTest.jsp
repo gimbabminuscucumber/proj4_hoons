@@ -13,7 +13,6 @@
 <br>
 <br>
 
-
 <div class="container" style="text-align: center">
 
 	<form action="/project4/user?cmd=login" method="post"  name="loginSuccess">
@@ -35,9 +34,9 @@
 		<!-- ajax -->
 		<p><font id="checkLog" size = "2"></font></p>
 		
-		<div class="custom-control custom-switch">
-			<input type="checkbox" class="custom-control-input" id="remember" name="remember" onclick="rememberUser()">
-			<label class="custom-control-label" for="remember">유저네임 기억하기</label>
+		<div class="custom-control custom-switch" >
+			<input type="checkbox" class="custom-control-input" id="remember" name="remember" style="cursor: pointer" onchange="rememberUsername()">
+			<label class="custom-control-label" for="remember" style="cursor: pointer">유저네임 기억하기</label>
 		</div>
 		
 		<br>
@@ -56,51 +55,35 @@
 <script src="/project4/js/userInfo.js"></script>
 
 <script>
-/*
-	// 유저네임 기억하기
-	function rememberUser(){
-		var checkbox = document.getElementById("remember");
-		var username = document.getElementById("username").value;
+	
+	function rememberUsername(){
+		var checkbox = document.getElementById("remember");			// .value가 없으니까 checkbox는 boolean 타입으로 사용 가능(true, false)
 		
-		// 체크박스가 체크되어 있으면, username을 로컬 스토리지에 저장
-		if(checkbox.checked){
-			localStorage.setItem("rememberUser", username);
-			console.log("username : " + username);
-		}else{
-			// 체크박스가 체크되어 있지 않으면, username으로 받은 데이터를 삭제
-			localStorage.removeItem("rememberUser");
+		if(!checkbox.checked){																	// 체크박스 체크되어 있지 않으면 localStorage에 저장된 unsername 삭제
+			localStorage.removeItem("rememberUsername");
+			console.log('removeItem/저장 삭제 : ' + localStorage.removeItem("rememberUsername"));
 		}
 	}
-	*/
-	console.log("userInfo.js에서 받아온 username : " + username);
-	// 페이지가 로드될 때 실행되는 함수
+
+	 // 페이지가 로드될 때 실행되는 함수
+	 // - 페이지 로드될 때, checkbox가 true이면 locaStorage에 저장된 데이터를 가져오기
+	 // - localStorage는 로그인 성공했을 때만 데이터 저장 (logCheck() 함수에서 처리)
 	window.onload = function(){
 		var checkbox = document.getElementById("remember");
-		var username = document.getElementById("username").value;
-		var rememberUser = localStorage.getItem("rememberUser");		// "rememberUser"에 저장 돼 있는 username을 var rememberUser에 저장
-		
-		if(!checkbox.checked){
-			localStorage.removeItem("rememberUser");
-		}
-		
-		// 로컬 스토리지에 유저네임이 있는지 확인
-		if(rememberUser){
-			username.value = rememberUser;												// 웹에서 입력받은 username.value와 localStorage에 저장된 username이 같은지 확인
-			// 체크박스 체크 상태로
-			document.getElementById("remember").checked = true;	
-		}
+	 	var rememberUsername = localStorage.getItem("rememberUsername");
+	 	var username = document.getElementById("username");		 // 왜 .value를 안쓰지?
 
-		/*
-		if(document.getElementById("remember").checked){							// 유저네임 기억하기를 클릭했으면 
-			if(rememberUser = username.value){												// 웹에서 입력받은 username.value와 localStorage에 저장된 username 비교
-				document.getElementById("username").value(rememberUser);	// true면, id="username"에  localStorage에 저장된 rememberUser을 값으로 입력
-			}else{																										// false면, 
-				localStorage.removeItem("rememberUser");									// localStorage에 저장된 rememberUser 삭제
-			}
-		}
-		*/
-		
+	 	if(checkbox.checked){	
+	 		 document.getElementById("username").value(localStorage.getItem("rememberUsername"));
+	 	}		
+	 	
+	 	if(rememberUsername){																// localStorage에 username이 있으면
+	 		username.value = rememberUsername;									// 웹에서 입력받은 username과 localStorage의 username을 비교
+	 		document.getElementById("remember").checked = true;		// '유저네임 기억하기' 를 체크로 표시
+	 	}
+	 	
 	}
+		 
 </script>
 
 </body>

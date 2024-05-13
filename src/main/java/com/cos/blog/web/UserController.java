@@ -274,7 +274,6 @@ public class UserController extends HttpServlet {
 			CommonRespDto<User> commonRespDto = new CommonRespDto<>();
 			
 			int result = userService.로그인체크(dto);
-			System.out.println("result : " + result);		// 있으면 1, 없으면 -1
 			
 			if(result == 1) {												// 유저 정보와 일치하면
 				commonRespDto.setStatusCode(1);

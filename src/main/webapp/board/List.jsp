@@ -37,9 +37,10 @@
 		<!-- - 검색 버튼 누르면 파라미터 3개가 controller로 감 (cmd, page, keyword) -->
 		<div class="m-2">
 			<form class="form-inline d-flex justify-content-end" action="/project4/board">
+				제품 볼 수 있게 / 쿠팡 같이  &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="hidden" name="cmd" value="search" /> <!-- <form>태그가 /project4/board?cmd=search 로 감 -->
 				<input type="hidden" name="page" value="0" /> 
-				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search">
+				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 30%">
 				<button class="btn btn-primary m-1">검색</button>
 			</form>
 		</div>
@@ -55,6 +56,7 @@
 		<c:if test="${empty boards }">
 			<div>&nbsp; 작성된 게시글이 없습니다.</div>
 		</c:if>
+		
 		<c:forEach var="board" items="${boards }">
 			<div class="card m-2">
 				<div class="card-body">
@@ -69,14 +71,10 @@
 					<div style="color: grey" class=d-flex>
 						<div class="mr-auto">
 							<!-- 게시글 검색시, '카테고리 없음'으로만 나옴 >> 별도 테이블 만들기 -->
-							<c:if test="${board.category == 0 }">
-								<a href="#"><i>카테고리 없음</i></a> ·&nbsp;</c:if>
-							<c:if test="${board.category == 1 }">
-								<a href="#"><i>IT 개발</i></a> ·&nbsp;</c:if>
-							<c:if test="${board.category == 2 }">
-								<a href="#"><i>퍼포먼스 마케팅</i></a> ·&nbsp;</c:if>
-							<i><fmt:formatDate pattern="yyyy-MM-dd"
-									value="${board.createDate}"></fmt:formatDate></i>
+							<c:if test="${board.category == 0 }"><a href="#"><i>카테고리 없음</i></a> ·&nbsp;</c:if>
+							<c:if test="${board.category == 1 }"><a href="#"><i>IT 개발</i></a> ·&nbsp;</c:if>
+							<c:if test="${board.category == 2 }"><a href="#"><i>퍼포먼스 마케팅</i></a> ·&nbsp;</c:if>
+							<i><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></i>
 						</div>
 					</div>
 					<%-- <div>
