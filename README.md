@@ -32,6 +32,7 @@ create database blog;
 CREATE TABLE user(
     id int primary key auto_increment,
     username varchar(100) not null unique,
+    nickName varchar(100),
     password varchar(100) not null,
     email varchar(100) not null,
     address varchar(100),
@@ -60,6 +61,20 @@ CREATE TABLE reply(
     createDate timestamp,
     foreign key (userId) references user (id) on delete set null,
     foreign key (boardId) references board (id) on delete cascade
+) engine=InnoDB default charset=utf8;
+
+CREATE TABLE product(
+    id int primary key auto_increment,
+    userId int,
+    price int not null,
+    score int default 0,
+    weightId int,
+    categoryId int,
+    name varchar(100) not null,
+    img varchar(100),
+    content longtext,
+    createDate timestamp,
+    foreign key (userId) references user (id)
 ) engine=InnoDB default charset=utf8;
 
 ```

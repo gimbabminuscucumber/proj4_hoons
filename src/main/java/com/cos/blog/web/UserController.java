@@ -45,7 +45,7 @@ public class UserController extends HttpServlet {
 		UserService userService = new UserService(); 
 		
 		// ====================================================	
-		// 													로그인 1 (미사용)
+		// 													로그인 1
 		// ====================================================		
 		// http://localhost:8080/project4/user?cmd=loginForm
 		if(cmd.equals("loginForm")) {
@@ -55,7 +55,7 @@ public class UserController extends HttpServlet {
 			//response.sendRedirect("user/loginForm.jsp");	// filter 사용으로 인해 sendRedirect() 사용불가
 			
 		// ====================================================	
-		// 													로그인 2 (미사용)
+		// 													로그인 2
 		// ====================================================				
 		}else if(cmd.equals("login")) {
 			// 1. http에서 데이터를 받기
@@ -107,18 +107,22 @@ public class UserController extends HttpServlet {
 			
 			// 버퍼로 데이터 받기
 	        String username = request.getParameter("username");
+	        String nickName = request.getParameter("nickName");
 	        String password = request.getParameter("password");
 	        String email = request.getParameter("email");
 	        String address = request.getParameter("address");
 			
-			System.out.println("UserController/join/email : " + email);
+	        System.out.println("UserController/nickName000 : " + nickName);
 
-			// 2. dto로 오브젝트 만들어 데이터 넣기
+	        // 2. dto로 오브젝트 만들어 데이터 넣기
 			JoinReqDto dto = new JoinReqDto();
 			dto.setUsername(username);
+			dto.setNickName(nickName);
 			dto.setPassword(password);
 			dto.setEmail(email);
 			dto.setAddress(address);
+			
+			System.out.println("UserController/nickName111 : " + nickName);
 			
 			// Test
 			System.out.println("UserController.회원가입 : " + dto);
@@ -182,6 +186,7 @@ public class UserController extends HttpServlet {
 			
 			// 1. 수정할 유저 정보 가져오기
 			int id = Integer.parseInt(request.getParameter("id"));		// 왜 파라미터의 변수 값을 쌍따옴표로 감싸지?
+			String nickName = request.getParameter("nickName");
 			String password = request.getParameter("password");
 			String email = request.getParameter("email");
 			String address = request.getParameter("address");
@@ -189,6 +194,7 @@ public class UserController extends HttpServlet {
 			// 2. 유저 객체에 수정된 데이터 넣기
 			User user = new User();
 			user.setId(id);
+			user.setNickName(nickName);
 			user.setPassword(password);
 			user.setEmail(email);
 			user.setAddress(address);
@@ -311,6 +317,29 @@ public class UserController extends HttpServlet {
 			}
 			out.flush();
 			
+		// ====================================================	
+		// 											닉네임 중복 체크
+		// ====================================================	
+		}else if(cmd.equals("nickNameCheck")) {
+			
+			BufferedReader br = request.getReader();
+			String nickName = br.readLine();
+			
+			System.out.println("UserController/nickName : " + nickName);
+			
+			int result = userService.닉네임중복체크(nickName);
+			PrintWriter out = response.getWriter();
+			
+			System.out.println("UserController/result : " + result);
+			
+			if(result == 1) {
+				out.print("ok");
+			}else if(result == -1) {
+				out.print("fail");
+			}else {
+				out.print("error");
+			}
+			out.flush();
+		}
 	}
-}
 }

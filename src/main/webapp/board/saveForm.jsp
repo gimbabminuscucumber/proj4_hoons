@@ -17,6 +17,7 @@
 	</div>
 </h1>
 <br>
+<br>
 
 <div class="container" style="width: 60%">
 	<form action="/project4/board?cmd=save" method="POST" name="saveForm">

@@ -47,6 +47,7 @@
 						<li class="nav-item"><a class="nav-link" href="#">로그인 된 상태</a></li>
 						<li class="nav-item"><a class="nav-link" href="#">1111</a></li>
 						<li class="nav-item"><a class="nav-link" href="#">2222</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
 					</ul>
 	
@@ -54,17 +55,20 @@
 						1. 드롭다운 칸이 짤림
 						2. 드롭다운 링크 클릭 안됨 
 					-->
-	                <ul class="navbar-nav ml-auto" style="cursor:pointer">
-	                    <li class="d-flex dropdown" data-toggle="dropdown">
-	                    	<img src="images/user.png" alt="Logo" style="width:40px; heigh:1px">
-							<a class="nav-link" href="#">${sessionScope.principal.username}</a>
-							<div class="dropdown-menu ">
-								<a class="dropdown-item" href="<%=request.getContextPath()%>/board?cmd=saveForm">글쓰기</a>
-								<a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=updateForm&id=${sessionScope.principal.id}">회원정보</a>
-								<a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a>
-								<a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=logout">1234567890</a>
-							</div>
-						</li>
+					<ul class="navbar-nav ml-auto" style="cursor:pointer">
+					    <div class="dropdown">
+					        <li class="d-flex" data-toggle="dropdown">
+					            <img src="images/user.png" alt="Logo" style="width:40px; heigh:1px">
+					            <a class="nav-link" href="#">${sessionScope.principal.nickName}</a>
+					        </li>
+					        <div class="dropdown-menu ">
+					            <a class="dropdown-item" href="<%=request.getContextPath()%>/board?cmd=saveForm">글쓰기</a>
+					            <a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=updateForm&id=${sessionScope.principal.id}">회원정보</a>
+					            <a class="dropdown-item" href="#">장바구니</a>
+					            <a class="dropdown-item" href="#">구매내역</a>
+					            <a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a>
+					        </div>
+					    </div>
 					</ul>
 					<!-- 드롭다운 -->
 					<!-- 
@@ -88,6 +92,7 @@
 					<ul class="navbar-nav">
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=joinForm">회원가입</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=menu">메뉴</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">페이지 테스트</a></li>
 					</ul>
 				</div>

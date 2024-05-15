@@ -18,6 +18,7 @@
 <div class="container" style="text-align: center">
 	<!-- UserController의 cmd.equals("join") 으로 전달 onsubmit : submit 되면 무조건 실행되는 함수-->
 	<form action="/project4/user?cmd=join" method="post" name="join">
+		
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
 				<span class="material-icons">person_outline</span> 
@@ -29,6 +30,18 @@
 		</div>
 		<!-- ajax -->
 		<p><font id="checkId" size="2"></font></p>
+
+		<div class="form-group d-flex insert-input-container">
+			<div class="material-icons-input" style="width: 338px">
+				<span class="material-icons">face</span> 
+				<input type="text" name="nickName" id="nickName" class="form-control" placeholder="Enter NickName" required />
+			</div>
+			<div>
+				<button type="button" class="btn btn-info" onclick="nickNameCheck()">중복확인</button>
+			</div>
+		</div>
+		<!-- ajax -->
+		<p><font id="checkNickName" size="2"></font></p>
 
 		<div class="form-group insert-input-container">
 			<div class="material-icons-input" style="width: 419px">
@@ -81,44 +94,68 @@
 <script>
 	var userChecking = false;
 	var emailChecking = false;
-	var isChecking = false;
+	var isChecking = false;	
+	var nickNameChecking = false;
 
-	// 중복확인 체크 및 미입력 데이터 체크
+	// ====================================================	
+	// 							중복확인 체크 및 미입력 데이터 체크
+	// ====================================================	
 	function joinSuccess() {				
 		var username = document.getElementById("username").value;
+		var nickName = document.getElementById("nickName").value;
 		var password = document.getElementById("password").value;
 		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
 		var address = document.getElementById("address").value;
 
 		if (userChecking == false) {
-			alert("아이디 중복확인을 하세요");
+			alert('아이디 중복확인을 하세요');
 			isChecking = false;
 		} else if(password === ''){
 			console.log('password : ' + password);
-			alert("비밀번호를 입력하세요");
+			alert('비밀번호를 입력하세요');
 		} else if (emailChecking == false) {
 			console.log('password : ' + password);
-			alert("이메일 중복확인을 하세요");
+			alert('이메일 중복확인을 하세요');
 			isChecking = false;
-		} else if(userChecking == true && emailChecking == true) {
+		} else if(nickName === ''){
+			console.log('nickName : ' + nickName);
+			alert('닉네임을 입력하세요');
+		} else if(nickNameChecking == false){
+			console.log('nickName : ' + nickName);
+			alert('닉네임 중복확인을 하세요');
+		} else if(userChecking == true && emailChecking == true && nickNameChecking == true) {
 			isChecking = true;
-			//document.join.submit();
+			console.log('joinForm/username000 : ' + username);
+			console.log('joinForm/nickName000 : ' + nickName);
+			console.log('joinForm/password000 : ' + password);
+			console.log('joinForm/email000 : ' + email);
+			console.log('joinForm/address000 : ' + address);
 			finalCheck();
 		}
 	}	
 
-	// submit
+	// ====================================================	
+	// 												submit
+	// ====================================================	
 	function finalCheck(){
 		var username = document.getElementById("username").value;
+		var nickName = document.getElementById("nickName").value;
 		var password = document.getElementById("password").value;
 		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
 		var address = document.getElementById("address").value;
+		
+		console.log('joinForm/username111 : ' + username);
+		console.log('joinForm/nickName111 : ' + nickName);
+		console.log('joinForm/password111 : ' + password);
+		console.log('joinForm/email111 : ' + email);
+		console.log('joinForm/address111 : ' + address);
 		
 		$.ajax({
 			type: "post",
 			url: "/project4/user?cmd=join",
 			data: {
 				username: username,
+				nickName: nickName,
 				password: password,
 				email: email,
 				address: address
@@ -133,7 +170,9 @@
 		});
 	}
 	
-	// username 중복확인
+	// ====================================================	
+	// 										username 중복확인
+	// ====================================================	
 	function usernameCheck() {
 		// DB에서 확인 후 아이디가 중복이 아니면 isChecking = true로 변경
 		var username = $("#username").val();
@@ -195,10 +234,12 @@
 		//var email = inputEmail + domain;			// var로 email에 데이터를 전달하면 전역변수로 설정한 var email과 다른 메모릴에 저장돼서 다른 함수에서 사용 불가
 		email = inputEmail + domain; 					// 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
 	}
-
-	// email 중복확인
+	
+	// ====================================================	
+	// 											email 중복확인
+	// ====================================================	
 	function emailCheck() {
-		console.log('email : ' + email); // emailCombine() 에서 email 을 받아옴
+		console.log('email : ' + email); 					// emailCombine() 에서 email 을 받아옴
 
 		$.ajax({
 			type : "post",
@@ -235,7 +276,40 @@
 		})
 	}
 
-	// 주소 API 실행 함수
+	// ====================================================	
+	// 											닉네임 중복확인
+	// ====================================================	
+	function nickNameCheck(){
+		
+		var nickName = document.getElementById("nickName").value;
+		console.log('nickName : ' + nickName);
+		
+		$.ajax({
+			type: "post",
+			url : "/project4/user?cmd=nickNameCheck",
+			data : nickName,
+			contentType : "text/plain; charset=utf-8",
+			dataType : "text" 
+		}).done(function(data){
+			if(nickName === "" ){
+				nickNameChecking = false;
+				$("#checkNickName").html('닉네임을 입력해주세요.');
+				$("#checkNickName").attr('color', 'red');
+			}else if(data === 'ok'){
+				nickNameChecking = false;
+				$("#checkNickName").html('해당 닉네임은 사용 중입니다.');
+				$("#checkNickName").attr('color', 'red');
+			}else{
+				nickNameChecking = true;
+				$("#checkNickName").html('해당 닉네임은 사용가능합니다.');
+				$("#checkNickName").attr('color', 'blue');
+			}
+		});
+	}
+	
+	// ====================================================	
+	// 											주소 API 실행 함수
+	// ====================================================			
 	function goPopup() {
 		console.log("goPopup()");
 		var pop = window.open("/project4/user/jusoPopup.jsp", "pop", "width=570,height=420, scrollbars=yes, resizable=yes");

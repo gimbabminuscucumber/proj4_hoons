@@ -75,6 +75,11 @@ public class UserService {
 		int result = userDao.findByEmail(email);
 		return result;
 	}
+
+	public int 닉네임중복체크(String nickName) {			// 닉네임 중복 여부 확인
+		int result = userDao.findByNickName(nickName);
+		return result;
+	}
 	
 	
 

@@ -1,17 +1,3 @@
-/*
-function addReply(data){
-	
-	var replyItem = `<li id="reply-${data.id}" class="media">`;
-	replyItem += `<img onerror="#" src="/project4/images/user.png" style="height: 45px " alt="" class="img-circle"></img>`;
-	replyItem += `<div class="media-body">`;
-	replyItem += `<strong class="text-primary">${data.userId}</strong>`;
-	replyItem += `<p>${data.content}</p>작성시간(크기 작게 / 회색) <fmt: formatDate pattern="yyyy-MM-dd" value=""></fmt: formatDate></div>`;
-	replyItem += `<div class="m-2">`;
-	replyItem += `<i onclick="deleteReply(${data.id})" class="material-icons">delete</i></div></li><br>`;
-	
-	$("#reply__list").prepend(replyItem);
-}
-*/
 
 // 댓글 삭제
 function deleteReply(id){

@@ -13,7 +13,6 @@
 <br>
 <br>
 
-
 <div class="container" style="text-align: center">
 
 	<form action="/project4/user?cmd=login" method="post"  name="loginSuccess">
@@ -35,9 +34,9 @@
 		<!-- ajax -->
 		<p><font id="checkLog" size = "2"></font></p>
 		
-		<div class="custom-control custom-switch">
-			<input type="checkbox" class="custom-control-input" id="remember" name="remember" onclick="rememberUser()">
-			<label class="custom-control-label" for="remember">아이디 기억하기</label>
+		<div class="custom-control custom-switch" >
+			<input type="checkbox" class="custom-control-input" id="remember" name="remember" style="cursor: pointer" onchange="rememberUsername()">
+			<label class="custom-control-label" for="remember" style="cursor: pointer">유저네임 기억하기</label>
 		</div>
 		
 		<br>
@@ -56,10 +55,37 @@
 <script src="/project4/js/userInfo.js"></script>
 
 <script>
-	function rememberUser(){
-		console.log();	
+	
+	function rememberUsername(){
+		var checkbox = document.getElementById("remember");			// .value가 없으니까 checkbox는 boolean 타입으로 사용 가능(true, false)
+		
+		if(!checkbox.checked){																	// 체크박스 체크되어 있지 않으면 localStorage에 저장된 unsername 삭제
+			localStorage.removeItem("rememberUsername");
+			console.log('removeItem/저장 삭제 : ' + localStorage.removeItem("rememberUsername"));
+		}
 	}
+
+	 // 페이지가 로드될 때 실행되는 함수
+	 // - 페이지 로드될 때, checkbox가 true이면 locaStorage에 저장된 데이터를 가져오기
+	 // - localStorage는 로그인 성공했을 때만 데이터 저장 (logCheck() 함수에서 처리)
+	window.onload = function(){
+		var checkbox = document.getElementById("remember");
+	 	var rememberUsername = localStorage.getItem("rememberUsername");
+	 	var username = document.getElementById("username");		 // 왜 .value를 안쓰지?
+
+	 	if(checkbox.checked){	
+	 		 document.getElementById("username").value(localStorage.getItem("rememberUsername"));
+	 	}		
+	 	
+	 	if(rememberUsername){																// localStorage에 username이 있으면
+	 		username.value = rememberUsername;									// 웹에서 입력받은 username과 localStorage의 username을 비교
+	 		document.getElementById("remember").checked = true;		// '유저네임 기억하기' 를 체크로 표시
+	 	}
+	 	
+	}
+		 
 </script>
+
 </body>
 <style>
     .material-icons-input {								/* input 될 아이콘 칸 */
