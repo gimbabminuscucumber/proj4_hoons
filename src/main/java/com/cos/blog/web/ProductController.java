@@ -106,9 +106,7 @@ public class ProductController extends HttpServlet{
 				int result = productService.제품등록(dto);
 				
 				if(result == 1) {	// 정상 입력 완료
-					//response.sendRedirect("index.jsp");
-					RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
-					dis.forward(request, response);	
+					response.sendRedirect("index.jsp");
 				}else {					// 정상 입력 실패
 					Script.back(response, "상품 등록 실패");
 				}

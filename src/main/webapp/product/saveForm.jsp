@@ -110,6 +110,7 @@ function nullCheck(){
 	}else if(weightCheckbox.checked){			// '무게 선택' 입력을 선택하면
 		weightCombine();
 	}else {
+		console.log('weight  : ' + weight);
 		document.save.submit();
 	}
 }
@@ -124,7 +125,7 @@ function weightCombine(){
 	
 	if(isNaN(inputPrice)){					// inputPrice가 true면 (문자열이 있으면)
 		alert('무게당 금액은 숫자로만 입력하세요');
-	}else if(weight !== ''){					// inputWeight와 inputPrice가 공란이면	
+	}else if(weight == ''){					// inputWeight와 inputPrice가 공란이면	
 		alert('무게를 선택하고 금액을 입력하세요');
 	}
 	

@@ -1,5 +1,6 @@
 package com.cos.blog.domain.product;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +14,7 @@ import com.cos.blog.domain.product.dto.SaveReqDto;
 
 public class ProductDao {
 
-	public int save(SaveReqDto dto) {			// 제품 작성
+	public int save(SaveReqDto dto) throws IOException {			// 제품 작성
 
 		// 이미지 파일 경로 저장
 		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
@@ -25,6 +26,7 @@ public class ProductDao {
 		String sql = "INSERT INTO product(userId, price, categoryId, weight, name, img, content, createDate) VALUES(?,?,?,?,?,?,?, now())";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getUserId());
@@ -47,19 +49,17 @@ public class ProductDao {
 	
 	
 	// 이미지 파일 업로드 및 경로 변환 메소드
-	public String uploadImage(InputStream fileInputStream, String fileName) {
-		String uploadPath = "/Users/gimdong-eun/Desktop/STS/Workspace2_JSP/project4/src/main/webapp/images/productImg/";		// 업로드한 이미지 파일을 저장할 위치
-		Path path = Paths.get(uploadPath + fileName);
-
-		try {
-			Files.copy(fileInputStream, path);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return uploadPath + fileName;
-	}
+	public String uploadImage(InputStream fileInputStream, String fileName) throws IOException {
+        String uploadPath = "/Users/gimdong-eun/Desktop/STS/Workspace2_JSP/project4/src/main/webapp/images/productImg/";
+        Path path = Paths.get(uploadPath + fileName);
 	
+	if (Files.exists(path)) {		// 이미 파일이 존재하는지 확인
+        Files.delete(path);			// 파일이 이미 존재하면 삭제
+    }
+
+    Files.copy(fileInputStream, path);	// 파일 복사
+    return path.toString();
+}
 	
 	// 페이징 처리
 	public int count() {
