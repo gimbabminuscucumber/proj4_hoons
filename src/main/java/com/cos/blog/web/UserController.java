@@ -112,8 +112,6 @@ public class UserController extends HttpServlet {
 	        String email = request.getParameter("email");
 	        String address = request.getParameter("address");
 			
-	        System.out.println("UserController/nickName000 : " + nickName);
-
 	        // 2. dto로 오브젝트 만들어 데이터 넣기
 			JoinReqDto dto = new JoinReqDto();
 			dto.setUsername(username);
@@ -122,15 +120,11 @@ public class UserController extends HttpServlet {
 			dto.setEmail(email);
 			dto.setAddress(address);
 			
-			System.out.println("UserController/nickName111 : " + nickName);
-			
 			// Test
 			System.out.println("UserController.회원가입 : " + dto);
 			
 			// 3. Service에 오브젝트 담기 (Service : 전달받은 데이터 처리 / 가공은 다른 곳에서 처리)
 			int result = userService.회원가입(dto);
-			
-			System.out.println("UserController/join/result : " + result);		// 회원가입이 완료돼도, alert로 "회원가입 실패"가 뜬다
 			
 			if(result == 1) {
 				response.sendRedirect("user/loginForm.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가하지만 loginForm 접근은 허용했기에 가능

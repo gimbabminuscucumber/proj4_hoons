@@ -15,7 +15,6 @@ public class Product {
 	private int id;
 	private int userId;			
 	private int price;				// 가격	
-	private int score;				// 별점
 	private int categoryId;		// 카테고리		(foreign key)
 	private String weight;		// 무게
 	private String name;			// 이름

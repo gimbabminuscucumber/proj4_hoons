@@ -18,39 +18,39 @@ public class ProductDao {
 		// 이미지 파일 경로 저장
 		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
 		if(imagePath == null) {
+			System.out.println("ProductDao/save/imagePath : "  + imagePath);
 			return -1;	// 이미지 업로드 실패 시 처리
 		}
 		
-		String sql = "INSERT INTO product(userId, price, score, categoryId, weight, name, img, content, createDate) VALUES(?,?,?,?,?,?,?,?, now())";
+		String sql = "INSERT INTO product(userId, price, categoryId, weight, name, img, content, createDate) VALUES(?,?,?,?,?,?,?, now())";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getUserId());
 			pstmt.setInt(2, dto.getPrice());
-			pstmt.setInt(3, dto.getScore());
-			pstmt.setInt(4, dto.getCategoryId());
-			pstmt.setString(5, dto.getWeight());
-			pstmt.setString(6, dto.getName());
-			pstmt.setString(7, imagePath);		// 이미지 경로 저장
-//			pstmt.setString(7, dto.getImg());	// 
-			pstmt.setString(8, dto.getContent());
+			pstmt.setInt(3, dto.getCategoryId());
+			pstmt.setString(4, dto.getWeight());
+			pstmt.setString(5, dto.getName());
+			pstmt.setString(6, imagePath);		// 이미지 경로 저장
+//			pstmt.setString(6, dto.getImg());	// 
+			pstmt.setString(7, dto.getContent());
 			int result = pstmt.executeUpdate();
 			return result;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			System.out.println("ProductDao/save/imagePath : " + imagePath);
 			DB.close(conn, pstmt);
 		}
 		return -1;
 	}
 	
+	
 	// 이미지 파일 업로드 및 경로 변환 메소드
 	public String uploadImage(InputStream fileInputStream, String fileName) {
-		String uploadPath = "/images/menu/";
+		String uploadPath = "/Users/gimdong-eun/Desktop/STS/Workspace2_JSP/project4/src/main/webapp/images/productImg/";		// 업로드한 이미지 파일을 저장할 위치
 		Path path = Paths.get(uploadPath + fileName);
-		
+
 		try {
 			Files.copy(fileInputStream, path);
 		}catch(Exception e) {

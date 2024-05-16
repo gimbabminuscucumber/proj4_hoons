@@ -13,15 +13,16 @@
 <br>
 <br>
 
+
 <div class="container" style="text-align: center">
-	<form action="/project4/product?cmd=save" method="POST" name="save"  enctype="multipart/form-data" >
-		<input type="hidden" name="userId" value="${sessionScope.principal.id }">
+	<form action="/project4/product?cmd=save" method="POST" name="save"  enctype="multipart/form-data">
+		<input type="hidden" name="userId" id="userId" value="${sessionScope.principal.id }">
 		
 		<div class="form-group" >
 			<div class="material-icons-input" style="width: 421px">
 			    <span class="material-icons">local_grocery_store</span>
 			    <input type="text" name="name" id="name" class="form-control" placeholder="상품명을 입력하세요"  required/>
-			</div>	
+			</div>
 		</div>
 		
 		<div class="form-group">
@@ -41,15 +42,18 @@
 		<div class="form-group" >
 			<div class="material-icons-input" style="width: 421px">
 			    <span class="material-icons">monetization_on</span>
-			    <input type="text" name="price" id="price" class="form-control" placeholder="금액을 입력하세요 (숫자만 입력)" required/>
+			    <input type="text" name="price" id="price" class="form-control" placeholder="상품 금액을 입력하세요 (숫자만 입력)" required/>
 			</div>	
 		</div>
 
- 		<div class="form-group insert-input-container">
+		<div style="padding-right: 303px">
+			<p><input type="checkbox" id="weightCheckbox" onchange="abledOrNot()"> '무게 선택' 입력</p>  <!-- input 창 두개를 개별로 disabled 하지말고 한꺼번에 처리하기 -->
+		</div>
+ 		<div class="form-group insert-input-container" >
  			<div class="material-icons-input">
 				<span class="material-icons">fitness_center</span>
 				<div>
-					<select id="inputWeight" class="custom-select" style="width: 155px; padding-left: 40px;" onchange="weightCombine()" >
+					<select id="inputWeight" class="custom-select" style="width: 155px; padding-left: 40px;" onchange="weightCombine()"  disabled>
 						<option selected disabled>무게 선택</option>
 						<option value="g당">g당</option>
 						<option value="kg당">kg당</option>
@@ -58,16 +62,14 @@
 			</div>
 		    <div class="material-icons-input" style="width: 266px">
 		        <span class="material-icons">attach_money</span>
-		        <input type="text"  name="weightId"  id="inputPrice" class="form-control"  placeholder="무게당 금액 (숫자만 입력)" oninput="weightCombine()"  required />
+		        <input type="text" id="inputPrice" class="form-control"  placeholder="무게당 금액 (숫자만 입력)" onchange="weightCombine()"  disabled>
 		    </div>
 		</div> 
-		<p style="padding-left: 230px; color: grey"><strong>'무게 선택'</strong>은 선택 사항입니다.</p>
 		
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 421px">
 				<span class="material-icons">add_a_photo</span>
 				<input type="file"  class="form-control" name="img"  id="fileInput" accept="image/*" >
-				<!-- <input type="text"  name="img" id="img" class="form-control" placeholder="제품 사진을 등록하세요"  required /> -->
 			</div>
 		</div>
 
@@ -88,25 +90,65 @@
 <!-- <script src="/project4/js/productInfo.js"></script> -->
 <script>
 function nullCheck(){
- 	//var category = document.getElementById("category").value;
-	//var category = document.save.category.value;
- 	//console.log('category : ' + category);				// category : 문자열
+
+	var userId = document.getElementById("userId").value;
+	var name = document.getElementById("name").value;
+    var category = document.getElementById("category").value;
+    var price = document.getElementById("price").value;
+    var content = document.getElementById("content").value;
+    var img = document.getElementById("fileInput").value;
+	var weight = weight;
 	
-	var price = document.getElementById("price").value;
-	//console.log('문자열 확인 : ' + isNaN(price));		// price가 숫자면 false, 그 외는 true
- 	
-	if(document.save.name.value == "" ){
+	if(document.save.name === '' ){
 		alert('상품명을 입력하세요');
-	}else if(document.save.category.value === '카테고리'){
+	}else if(document.save.category === '카테고리'){
 		alert('카테고리를 선택하세요');
-	}else if(document.save.price.value == ""){
+	}else if(document.save.price === ''){
 		alert('상품 금액을 입력하세요');
-	}else if (isNaN(price)) {							// 숫자면 false
+	}else if (isNaN(price)) {					// }else if (isNaN(price)) {
 	    alert('상품 금액은 숫자로만 입력하세요');
+	}else if(weightCheckbox.checked){			// '무게 선택' 입력을 선택하면
+		weightCombine();
 	}else {
 		document.save.submit();
 	}
 }
+
+// ====================================================	
+//												weight 조합
+//====================================================	
+function weightCombine(){
+	var inputWeight = document.getElementById("inputWeight").value;
+	var inputPrice = document.getElementById("inputPrice").value;
+	weight = inputWeight + inputPrice;
+	
+	if(isNaN(inputPrice)){					// inputPrice가 true면 (문자열이 있으면)
+		alert('무게당 금액은 숫자로만 입력하세요');
+	}else if(weight !== ''){					// inputWeight와 inputPrice가 공란이면	
+		alert('무게를 선택하고 금액을 입력하세요');
+	}
+	
+}
+
+// ====================================================	
+// 										'무게 선택' 체크박스
+// ====================================================	
+// - 체크 시, 입력가능
+function abledOrNot(){
+	var weightCheckbox = document.getElementById("weightCheckbox");
+	var inputWeight = document.getElementById("inputWeight");
+	var inputPrice = document.getElementById("inputPrice");
+	
+	if(weightCheckbox.checked){
+		inputPrice.disabled = false;
+		inputWeight.disabled = false;
+	}else{
+		inputPrice.disabled = true;
+		inputWeight.disabled = true;
+	}
+}
+
+
 </script>
 
 

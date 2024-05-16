@@ -68,7 +68,7 @@ CREATE TABLE product(
     userId int,
     price int not null,
     score int default 0,
-    weightId int,
+    weight varchar(100),
     categoryId int,
     name varchar(100) not null,
     img varchar(100),

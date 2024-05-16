@@ -19,29 +19,35 @@
 	<!-- UserController의 cmd.equals("join") 으로 전달 onsubmit : submit 되면 무조건 실행되는 함수-->
 	<form action="/project4/user?cmd=join" method="post" name="join">
 		
-		<div class="form-group d-flex insert-input-container">
-			<div class="material-icons-input" style="width: 338px">
-				<span class="material-icons">person_outline</span> 
-				<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required />
+		<div class="form-group">
+			<div class="d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">person_outline</span> 
+					<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="usernameCheck()">중복확인</button>
+				</div>
 			</div>
-			<div>
-				<button type="button" class="btn btn-info" onclick="usernameCheck()">중복확인</button>
-			</div>
+			<!-- ajax -->
+			<div><font id="checkId" size="2"></font></div>
 		</div>
-		<!-- ajax -->
-		<p><font id="checkId" size="2"></font></p>
+			
 
-		<div class="form-group d-flex insert-input-container">
-			<div class="material-icons-input" style="width: 338px">
-				<span class="material-icons">face</span> 
-				<input type="text" name="nickName" id="nickName" class="form-control" placeholder="Enter NickName" required />
+		<div class="form-group">
+			<div class= "d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">face</span> 
+					<input type="text" name="nickName" id="nickName" class="form-control" placeholder="Enter NickName" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="nickNameCheck()">중복확인</button>
+				</div>
 			</div>
-			<div>
-				<button type="button" class="btn btn-info" onclick="nickNameCheck()">중복확인</button>
-			</div>
+			<!-- ajax -->
+			<div><font id="checkNickName" size="2"></font></div>
 		</div>
-		<!-- ajax -->
-		<p><font id="checkNickName" size="2"></font></p>
+		
 
 		<div class="form-group insert-input-container">
 			<div class="material-icons-input" style="width: 419px">
@@ -49,6 +55,7 @@
 				<input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"  oninput="inputPwd()">
 			</div>
 		</div>
+
 
 		<div class="form-group insert-input-container">
 			<div class="material-icons-input" style="width: 183px">
@@ -125,11 +132,6 @@
 			alert('닉네임 중복확인을 하세요');
 		} else if(userChecking == true && emailChecking == true && nickNameChecking == true) {
 			isChecking = true;
-			console.log('joinForm/username000 : ' + username);
-			console.log('joinForm/nickName000 : ' + nickName);
-			console.log('joinForm/password000 : ' + password);
-			console.log('joinForm/email000 : ' + email);
-			console.log('joinForm/address000 : ' + address);
 			finalCheck();
 		}
 	}	
@@ -143,12 +145,6 @@
 		var password = document.getElementById("password").value;
 		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
 		var address = document.getElementById("address").value;
-		
-		console.log('joinForm/username111 : ' + username);
-		console.log('joinForm/nickName111 : ' + nickName);
-		console.log('joinForm/password111 : ' + password);
-		console.log('joinForm/email111 : ' + email);
-		console.log('joinForm/address111 : ' + address);
 		
 		$.ajax({
 			type: "post",
@@ -239,14 +235,16 @@
 	// 											email 중복확인
 	// ====================================================	
 	function emailCheck() {
-		console.log('email : ' + email); 					// emailCombine() 에서 email 을 받아옴
+		var inputEmail = document.getElementById("inputEmail").value;
 
+		//console.log('email : ' + email); 					// emailCombine() 에서 email 을 받아옴
+		
 		$.ajax({
 			type : "post",
 			url : "/project4/user?cmd=emailCheck",
-			data : email, // email 데이터를 객체 형태로 전달
+			data : email, 												// email 데이터를 객체 형태로 전달
 			contentType : "text/plain; charset=utf-8",
-			dataType : "text" // 서버에서 받을 데이터 타입
+			dataType : "text"										// 서버에서 받을 데이터 타입
 		}).done(function(data) {
 			if (email == undefined || data === "") {
 				console.log('공란 : data : ' + data);
@@ -260,7 +258,7 @@
 				emailChecking = false;
 				$("#checkEmail").html('동일한 이메일로 가입한 내역이 있습니다.');
 				$("#checkEmail").attr('color', 'red');
-			} else if (email.indexOf('@example.com') !== -1) {
+			} else if (email.indexOf('@example.com') !== -1) {		// 해당 문자열이 포함되어있으면
 				console.log('오류 : data : ' + data);
 				console.log('오류 : email : ' + email);
 				emailChecking = false;

@@ -29,10 +29,9 @@
 			    <span class="material-icons">lock_outline</span>
 				<input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required/>
 			</div>	
-			
+			<!-- ajax -->
+			<div><font id="checkLog" size = "2"></font></div>
 		</div>
-		<!-- ajax -->
-		<p><font id="checkLog" size = "2"></font></p>
 		
 		<div class="custom-control custom-switch" >
 			<input type="checkbox" class="custom-control-input" id="remember" name="remember" style="cursor: pointer" onchange="rememberUsername()">
