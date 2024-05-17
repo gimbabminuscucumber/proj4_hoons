@@ -2,8 +2,8 @@ package com.cos.blog.web;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.ProductService;
 import com.cos.blog.util.Script;
+import com.google.gson.Gson;
 
 
 
@@ -135,6 +137,24 @@ public class ProductController extends HttpServlet{
 				*/
 				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
 				dis.forward(request, response);	
+			
+			// ====================================================	
+			// 												제품 삭제
+			// ====================================================
+			}else if(cmd.equals("delete")) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				int result = productService.상품삭제(id);
+				CommonRespDto<String> commonRespDto = new CommonRespDto<>();
+				commonRespDto.setStatusCode(result);
+				commonRespDto.setData("성공");
+				
+				Gson gson = new Gson();
+				String respData = gson.toJson(commonRespDto);
+				System.out.println("respData : " + respData);
+				
+				PrintWriter out = response.getWriter();
+				out.print(respData);
+				out.flush();
 			}
 			
 			

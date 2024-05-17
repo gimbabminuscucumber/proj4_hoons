@@ -20,15 +20,20 @@ public class ProductService {
 		return productDao.save(dto);
 	}
 
-//	public List<DetailRespDto> 상품목록(int page) {
-//		return productDao.findAll(page);
-//	}
+	/*
+	public List<DetailRespDto> 상품목록(int page) {
+		return productDao.findAll(page);
+	}
+	 */
 	public List<DetailRespDto> 상품목록() {
 		return productDao.findAll();
 	}
-
 	public int 상품개수() {
 		return productDao.count();
+	}
+
+	public int 상품삭제(int id) {
+		return productDao.deleteById(id);
 	}
 
 

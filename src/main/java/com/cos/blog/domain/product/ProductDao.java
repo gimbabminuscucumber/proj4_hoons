@@ -108,7 +108,7 @@ public class ProductDao {
  		return -1; 
 	}
 
-/*
+	/*
 	public List<DetailRespDto> findAll(int page) {
 		String sql = "SELECT * FROM product ORDER BY id DESC LIMIT ?,4"; 
 		Connection conn = DB.getConnection();
@@ -144,7 +144,7 @@ public class ProductDao {
 		}
 		return null;
 	}
-*/	
+	 */	
 	public List<DetailRespDto> findAll() {
 		String sql = "SELECT * FROM product"; 
 		Connection conn = DB.getConnection();
@@ -178,6 +178,25 @@ public class ProductDao {
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
+	}
+
+
+	public int deleteById(int id) {
+		String sql = "DELETE FROM product WHERE id = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
 	}
 	
 }

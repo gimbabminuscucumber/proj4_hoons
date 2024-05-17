@@ -49,6 +49,7 @@
 
         <div class="row">
             <c:forEach var="product" items="${products}" varStatus="status">
+            	<input type="hidden" name="id" value="${product.id }">
                 <div class="col-md-3">
                     <div class="card m-2">
                         <img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: auto;">
@@ -65,7 +66,11 @@
 									</c:choose>
                             	</div>
                            	</div>
-                            <p><strong>${product.price}원</strong></p>
+                           	<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
+                   			<div class="d-flex justify-content-end" >
+	                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
+	                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
+							</div>				                   			
                         </div>
                     </div>
                 </div>
@@ -79,6 +84,8 @@
     <!-- 중앙 섹션 종료 -->
 
 </section>
+
+<script src="/project4/js/productInfo.js"></script>
 
 <style>
 .container {

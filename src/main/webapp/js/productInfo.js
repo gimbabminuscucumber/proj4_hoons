@@ -23,3 +23,20 @@ function uploadImage() {
    	});
 }
 
+function deleteById(id){
+	
+	$.ajax({
+		type: "post",
+		url: "/project4/product?cmd=delete&id="+id,
+		dataType: "json"		
+	}).done(function(result){
+		if(result.statusCode == 1){
+			console.log(result);
+			location.reload();
+			alert("상품을 삭제하였습니다.");
+			$("#product-" + id).remove();
+		}else{
+			alert("상품 삭제에 실패하였습니다.");
+		}
+	});
+}
