@@ -104,7 +104,7 @@ public class BoardController extends HttpServlet {
 
 			// 페이지 계산
 			int boardCount = boardService.글개수();
-			int lastPage = (boardCount -1)/4;
+			int lastPage = (boardCount -1)/5;
 			request.setAttribute("lastPage", lastPage);
 			
 			// 페이지 진척도
@@ -212,7 +212,7 @@ public class BoardController extends HttpServlet {
 			
 			// 페이지 계산
 			int boardCount = boardService.글개수(keyword);
-			int lastPage = (boardCount -1)/4;
+			int lastPage = (boardCount -1)/5;
 			request.setAttribute("lastPage", lastPage);
 			
 			// 페이지 진척도
@@ -221,27 +221,6 @@ public class BoardController extends HttpServlet {
 			
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);	
-
-		// ====================================================	
-		// 												메뉴 보기
-		// ====================================================	
-		}else if(cmd.equals("menu")) {
-//			int page = Integer.parseInt(request.getParameter("page"));
-//			//List<DetailRespDto> boards = boardService.글목록보기(page);	// 메뉴 리스트로 바꾸기
-//			//request.setAttribute("boards", boards);										// 메뉴 불러오기
-//
-//			// 페이지 계산
-//			int boardCount = boardService.글개수();
-//			int lastPage = (boardCount -1)/4;
-//			request.setAttribute("lastPage", lastPage);
-//			
-//			// 페이지 진척도
-//			double currentPercent = (double)page/(lastPage)*100;		// 진척도별 바 게이지
-//			request.setAttribute("currentPercent", currentPercent);	
-//			
-			RequestDispatcher dis = request.getRequestDispatcher("board/menu.jsp");
-			dis.forward(request, response);	
-			
 		}
 			
 	}

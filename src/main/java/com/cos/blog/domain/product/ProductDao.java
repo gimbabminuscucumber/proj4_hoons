@@ -8,8 +8,11 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cos.blog.config.DB;
+import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
 
 public class ProductDao {
@@ -104,7 +107,77 @@ public class ProductDao {
 		}
  		return -1; 
 	}
-	
 
+/*
+	public List<DetailRespDto> findAll(int page) {
+		String sql = "SELECT * FROM product ORDER BY id DESC LIMIT ?,4"; 
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<DetailRespDto>products = new ArrayList<>();
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, page*4);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("id"))
+						.userId(rs.getInt("userId"))
+						.price(rs.getInt("price"))
+						.categoryId(rs.getInt("categoryId"))
+						.weight(rs.getString("weight"))
+						.name(rs.getString("name"))
+						.img(rs.getString("img"))
+						.content(rs.getString("content"))
+						.createDate(rs.getTimestamp("createDate"))
+						.build();
+				products.add(dto);
+			}
+			return products;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+*/	
+	public List<DetailRespDto> findAll() {
+		String sql = "SELECT * FROM product"; 
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<DetailRespDto>products = new ArrayList<>();
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("id"))
+						.userId(rs.getInt("userId"))
+						.price(rs.getInt("price"))
+						.categoryId(rs.getInt("categoryId"))
+						.weight(rs.getString("weight"))
+						.name(rs.getString("name"))
+						.img(rs.getString("img"))
+						.content(rs.getString("content"))
+						.createDate(rs.getTimestamp("createDate"))
+						.build();
+				products.add(dto);
+			}
+			return products;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
 	
 }

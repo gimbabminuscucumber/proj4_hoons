@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.ProductService;
@@ -110,7 +112,31 @@ public class ProductController extends HttpServlet{
 				}else {					// 정상 입력 실패
 					Script.back(response, "상품 등록 실패");
 				}
+			
+			// ====================================================	
+			// 												제품 목록
+			// ====================================================	
+			}else if(cmd.equals("list")) {
+				//int page = Integer.parseInt(request.getParameter("page"));
+				//List<DetailRespDto> products = productService.상품목록(page);
+				List<DetailRespDto> products = productService.상품목록();
+				request.setAttribute("products", products);
 				
+				System.out.println("ProductController/list/products : " + products);
+				/*
+				// 페이지 계산
+				int productCount = productService.상품개수();
+				int lastPage = (productCount -1)/4;
+				request.setAttribute("lastPage", lastPage);
+				
+				// 페이지 진척도
+				double currentPercent = (double)page/(lastPage)*100;		// 진척도별 바 게이지
+				request.setAttribute("currentPercent", currentPercent);	
+				*/
+				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
+				dis.forward(request, response);	
 			}
+			
+			
 	}
 }

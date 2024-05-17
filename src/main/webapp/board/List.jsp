@@ -14,7 +14,6 @@
 		</div>
 
 		<div class="card m-2" style="width: 180px">
-
 				<div class="list-group">
 					<a href="#" class="list-group-item list-group-item-action">First item</a>
 					<a href="#" class="list-group-item list-group-item-action">Second item</a>
@@ -24,9 +23,7 @@
 					<a href="#" class="list-group-item list-group-item-action">Sixth item</a>
 					<a href="#" class="list-group-item list-group-item-action">Seventh item</a>
 				</div>
-
 		</div>
-
 	</div>
 	<!-- 왼쪽 섹션 종료 -->
 
@@ -102,17 +99,13 @@
 			<c:choose>
 				<c:when test="${empty param.keyword }">
 					<%-- <c:set> : 변수 사용 --%>
-					<c:set var="pagePrev"
-						value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
-					<c:set var="pageNext"
-						value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
+					<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
 				</c:when>
 
 				<c:otherwise>
-					<c:set var="pagePrev"
-						value="/project4/board?cmd=search&page=${param.page-1 }&keyword=${param.keyword }"></c:set>
-					<c:set var="pageNext"
-						value="/project4/board?cmd=search&page=${param.page+1 }&keyword=${param.keyword }"></c:set>
+					<c:set var="pagePrev" value="/project4/board?cmd=search&page=${param.page-1 }&keyword=${param.keyword }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=search&page=${param.page+1 }&keyword=${param.keyword }"></c:set>
 				</c:otherwise>
 			</c:choose>
 
@@ -122,8 +115,7 @@
 					<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
 				</c:when>
 				<c:otherwise>
-					<li class="page-item"><a class="page-link"
-						href="${pageScope.pagePrev }">Previous</a></li>
+					<li class="page-item"><a class="page-link" href="${pageScope.pagePrev }">Previous</a></li>
 					<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
 				</c:otherwise>
 			</c:choose>
@@ -133,8 +125,7 @@
 					<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
 				</c:when>
 				<c:otherwise>
-					<li class="page-item"><a class="page-link"
-						href="${pageScope.pageNext }">Next</a></li>
+					<li class="page-item"><a class="page-link" href="${pageScope.pageNext }">Next</a></li>
 					<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
 				</c:otherwise>
 			</c:choose>

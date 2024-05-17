@@ -33,28 +33,16 @@
 		</button>
 		
 		<c:choose>
-			<c:when test="${sessionScope.principal != null }">
+			<c:when test="${sessionScope.principal != null }"><!-- 로그인 상태 -->
 				<div class="collapse navbar-collapse" id="collapsibleNavbar">
-					<!-- 
-					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=saveForm">글쓰기</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=updateForm&id=${sessionScope.principal.id}">회원정보</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
-					</ul>
-					 -->
 					 	
 					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="#">로그인 된 상태</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">1111</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">2222</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list">상품 목록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
 					</ul>
 	
-					<!-- 
-						1. 드롭다운 칸이 짤림
-						2. 드롭다운 링크 클릭 안됨 
-					-->
+					<!-- 드롭다운 -->
 					<ul class="navbar-nav ml-auto" style="cursor:pointer">
 					    <div class="dropdown">
 					        <li class="d-flex" data-toggle="dropdown">
@@ -70,34 +58,20 @@
 					        </div>
 					    </div>
 					</ul>
-					<!-- 드롭다운 -->
-					<!-- 
-						<div class="dropdown">
-							<div data-toggle="dropdown"  style="cursor:pointer">
-								<img src="images/user.png" alt="Logo" style="width:25px;">&nbsp;
-								<a style="color: white">${sessionScope.principal.username}</a>    
-								<div class="dropdown-menu">
-									<a class="dropdown-item" href="<%=request.getContextPath()%>/board?cmd=saveForm">글쓰기</a>
-									<a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=updateForm&id=${sessionScope.principal.id}">회원정보</a>
-									<a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a>
-								</div>
-							</div>
-						</div>
-					 -->	
 						
 				</div>
 			</c:when>
-			<c:otherwise>
+			
+			<c:otherwise><!-- 비로그인 상태 -->
 				<div class="collapse navbar-collapse" id="collapsibleNavbar">
 					<ul class="navbar-nav">
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=joinForm">회원가입</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=menu">메뉴</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">페이지 테스트</a></li>
 					</ul>
 				</div>
 			</c:otherwise>
+			
 		</c:choose>
-
 	</nav>
 	<br>

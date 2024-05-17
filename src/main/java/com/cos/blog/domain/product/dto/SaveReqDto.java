@@ -8,7 +8,6 @@ import lombok.Data;
 public class SaveReqDto {
 	private int userId;
 	private int price;
-	private int score;
 	private int categoryId;
 	private String weight;
 	private String name;

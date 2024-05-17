@@ -137,7 +137,7 @@ public class BoardDao {
 
 	// Board 테이블 + User 테이블 = 조인된 데이터
 	public List<DetailRespDto> findAll(int page) {		// 게시글 목록 + 페이지 처리
-		String sql = "SELECT * FROM board b INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC LIMIT ?, 4";
+		String sql = "SELECT * FROM board b INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC LIMIT ?, 5";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
 		ResultSet rs = null;
@@ -145,7 +145,7 @@ public class BoardDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, page*4);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
+			pstmt.setInt(1, page*5);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
 			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
 			
 			while(rs.next()) {								// 커서를 이동하는 함수 (board에 데이터가 한 행씩 담기면 커서가 이동해서 그 다음 행의 데이터를 담음)
@@ -227,7 +227,7 @@ public class BoardDao {
 
 	//public DetailRespDto findByKeyword(String keyword, int page) {
 	public List<DetailRespDto> findByKeyword(String keyword, int page) {
-		String sql = "SELECT * FROM board b INNER JOIN user u ON b.userId = u.id WHERE b.title LIKE ? OR b.content LIKE ? ORDER BY b.id DESC LIMIT ?, 4";
+		String sql = "SELECT * FROM board b INNER JOIN user u ON b.userId = u.id WHERE b.title LIKE ? OR b.content LIKE ? ORDER BY b.id DESC LIMIT ?, 5";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
 		ResultSet rs = null;
@@ -237,7 +237,7 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%"+keyword+"%");
 			pstmt.setString(2, "%"+keyword+"%");		// b.content의 물음표도 써야함
-			pstmt.setInt(3, page*4);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
+			pstmt.setInt(3, page*5);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
 			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
 			
 			while(rs.next()) {								// 커서를 이동하는 함수 (board에 데이터가 한 행씩 담기면 커서가 이동해서 그 다음 행의 데이터를 담음)

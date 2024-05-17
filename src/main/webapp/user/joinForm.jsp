@@ -223,7 +223,9 @@
 		password = document.getElementById("password").value;
 	}
 	
-	// input 데이터와 dropdown를 합치려고
+	// ====================================================	
+	//												emailCombine 조합
+	//====================================================	
 	function emailCombine() {
 		var inputEmail = document.getElementById("inputEmail").value;
 		var domain = document.getElementById("domain").value;
