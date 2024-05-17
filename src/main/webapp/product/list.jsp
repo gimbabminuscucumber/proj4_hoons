@@ -52,11 +52,11 @@
             	<input type="hidden" name="id" value="${product.id }">
                 <div class="col-md-3">
                     <div class="card m-2">
-                        <img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: auto;">
+                        <a href="/project4/product?cmd=detail&id=${product.id }"><img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: auto;"></a>
                         <div class="card-body">
                             <div class="d-flex">
 	                            <div>
-	                            	<h5><strong>${product.name}</strong></h5>
+	                            	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.name}</strong></a></h5>
 	                            </div>
                             	<div>
 									<c:choose>

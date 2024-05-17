@@ -36,6 +36,10 @@ public class ProductService {
 		return productDao.deleteById(id);
 	}
 
+	public DetailRespDto 상품상세보기(int id) {
+		return productDao.findById(id);
+	}
+
 
 
 }

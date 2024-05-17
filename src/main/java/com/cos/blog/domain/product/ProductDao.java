@@ -198,5 +198,38 @@ public class ProductDao {
 		}
 		return -1;
 	}
+
+
+	public DetailRespDto findById(int id) {
+		String sql = "SELECT * FROM product WHERE id =?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				DetailRespDto dto = new DetailRespDto();
+				dto.setId(rs.getInt("id"));
+				dto.setUserId(rs.getInt("userId"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setCategoryId(rs.getInt("categoryId"));
+				dto.setName(rs.getString("name"));
+				dto.setWeight(rs.getString("weight"));
+				dto.setContent(rs.getString("content"));
+				dto.setImg(rs.getString("img"));
+				dto.setCreateDate(rs.getTimestamp("createDate"));
+				return dto;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
 	
 }

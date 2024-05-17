@@ -155,8 +155,22 @@ public class ProductController extends HttpServlet{
 				PrintWriter out = response.getWriter();
 				out.print(respData);
 				out.flush();
+
+			// ====================================================	
+			// 												제품 삭제
+			// ====================================================
+			}else if(cmd.equals("detail")) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				DetailRespDto products = productService.상품상세보기(id);
+				
+				if(products == null){
+					Script.back(response, "상품을 불러올 수 없습니다.");
+				}else {
+					request.setAttribute("products", products);
+					RequestDispatcher dis = request.getRequestDispatcher("product/detail.jsp");
+					dis.forward(request, response);	
+				}
 			}
-			
 			
 	}
 }
