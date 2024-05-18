@@ -21,6 +21,7 @@ public class DetailRespDto {
 	private String name;
 	private String content;
 	private Timestamp createDate;
+	private int count;
 	private String img;
     
     

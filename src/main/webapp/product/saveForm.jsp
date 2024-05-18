@@ -17,7 +17,7 @@
 <div class="container" style="text-align: center">
 	<form action="/project4/product?cmd=save" method="POST" name="save"  enctype="multipart/form-data">
 		<input type="hidden" name="userId" id="userId" value="${sessionScope.principal.id }">
-		
+		${sessionScope.principal.id +1}
 		<div class="form-group" >
 			<div class="material-icons-input" style="width: 421px">
 			    <span class="material-icons">local_grocery_store</span>

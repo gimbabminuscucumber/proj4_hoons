@@ -20,6 +20,7 @@ public class Product {
 	private String name;			// 이름
 	private String img;			// 사진				(대용량 업로드는 어떤 자료형을 쓰나?)
 	private String content;		// 설명
+	private int count;				// 구매된 개수
 	private Timestamp createDate;
 	
 	// 이름(name)에 <script> 코드 방어

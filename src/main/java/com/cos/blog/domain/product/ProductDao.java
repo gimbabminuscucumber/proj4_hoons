@@ -37,8 +37,8 @@ public class ProductDao {
 			pstmt.setInt(3, dto.getCategoryId());
 			pstmt.setString(4, dto.getWeight());
 			pstmt.setString(5, dto.getName());
+//			pstmt.setString(6, dto.getImg());	
 			pstmt.setString(6, imagePath);		// 이미지 경로 저장
-//			pstmt.setString(6, dto.getImg());	// 
 			pstmt.setString(7, dto.getContent());
 			int result = pstmt.executeUpdate();
 			return result;
@@ -145,6 +145,8 @@ public class ProductDao {
 		return null;
 	}
 	 */	
+	
+	// 상품 리스트
 	public List<DetailRespDto> findAll() {
 		String sql = "SELECT * FROM product"; 
 		Connection conn = DB.getConnection();
@@ -163,6 +165,7 @@ public class ProductDao {
 						.userId(rs.getInt("userId"))
 						.price(rs.getInt("price"))
 						.categoryId(rs.getInt("categoryId"))
+						.count(rs.getInt("count"))
 						.weight(rs.getString("weight"))
 						.name(rs.getString("name"))
 						.img(rs.getString("img"))
@@ -180,7 +183,7 @@ public class ProductDao {
 		return null;
 	}
 
-
+	// 상품 삭제
 	public int deleteById(int id) {
 		String sql = "DELETE FROM product WHERE id = ?";
 		Connection conn = DB.getConnection();
@@ -199,7 +202,7 @@ public class ProductDao {
 		return -1;
 	}
 
-
+	// 상품 찾기
 	public DetailRespDto findById(int id) {
 		String sql = "SELECT * FROM product WHERE id =?";
 		Connection conn = DB.getConnection();
@@ -217,6 +220,7 @@ public class ProductDao {
 				dto.setUserId(rs.getInt("userId"));
 				dto.setPrice(rs.getInt("price"));
 				dto.setCategoryId(rs.getInt("categoryId"));
+				dto.setCount(rs.getInt("count"));
 				dto.setName(rs.getString("name"));
 				dto.setWeight(rs.getString("weight"));
 				dto.setContent(rs.getString("content"));
@@ -230,6 +234,26 @@ public class ProductDao {
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
+	}
+
+	// 구매 횟수
+	public int updateProductCount(int productId, int quantity) {
+	    String sql = "UPDATE product SET count = count + ? WHERE id = ?";
+	    Connection conn = DB.getConnection();
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, quantity);
+	        pstmt.setInt(2, productId);
+	        int result = pstmt.executeUpdate();
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt);
+	    }
+	    return -1;
 	}
 	
 }

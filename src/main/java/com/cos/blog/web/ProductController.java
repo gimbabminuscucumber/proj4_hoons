@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.cos.blog.domain.common.dto.CommonRespDto;
+import com.cos.blog.domain.product.ProductDao;
 import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
@@ -31,10 +32,10 @@ import com.google.gson.Gson;
 @WebServlet("/product")
 // 이미지 파일 업로드를 위해 멀티파트 구성 설정을 위한 어노테이션
 @MultipartConfig(
-	    location = "/tmp", // 파일이 저장될 임시 디렉터리
-	    fileSizeThreshold = 1024 * 1024, // 파일 크기 임계값 설정
-	    maxFileSize = 1024 * 1024 * 5, // 최대 파일 크기 설정
-	    maxRequestSize = 1024 * 1024 * 5 * 5 // 요청 전체 크기 설정
+	    location = "/webapp/images/productImg", 	// 파일이 저장될 임시 디렉터리
+	    fileSizeThreshold = 1024 * 1024, 					// 파일 크기 임계값 설정
+	    maxFileSize = 1024 * 1024 * 5, 							// 최대 파일 크기 설정
+	    maxRequestSize = 1024 * 1024 * 5 * 5 			// 요청 전체 크기 설정
 	)
 public class ProductController extends HttpServlet{
 		private static final long serialVersionUID = 1L;
@@ -54,6 +55,7 @@ public class ProductController extends HttpServlet{
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String cmd = request.getParameter("cmd");
 			ProductService productService = new ProductService();
+			ProductDao productDao = new ProductDao();
 			HttpSession session = request.getSession();							// 세션 불러오기
 			
 			// ====================================================	
@@ -62,6 +64,8 @@ public class ProductController extends HttpServlet{
 			// http://localhost:8080/project4/board?cmd=saveForm
 			if(cmd.equals("saveForm")) {
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
+				
+				System.out.println("ProductController/saveForm/principal : " + principal);
 				
 				if(principal != null) {
 					RequestDispatcher dis = request.getRequestDispatcher("product/saveForm.jsp");
@@ -86,10 +90,10 @@ public class ProductController extends HttpServlet{
 				
 				// 이미지 파일 업로드
 	            Part imgPart = request.getPart("img");
-	            System.out.println("ProductController/save/imgPart : " + imgPart);
 	            String imgFileName = Paths.get(imgPart.getSubmittedFileName()).getFileName().toString();
-	            System.out.println("ProductController/save/imgFileName : " + imgFileName);
 	            InputStream imgInputStream = imgPart.getInputStream();
+	            System.out.println("ProductController/save/imgPart : " + imgPart);
+	            System.out.println("ProductController/save/imgFileName : " + imgFileName);
 	            System.out.println("ProductController/save/imgInputStream : " + imgInputStream);
 	            
 				SaveReqDto dto = new SaveReqDto();
@@ -157,20 +161,46 @@ public class ProductController extends HttpServlet{
 				out.flush();
 
 			// ====================================================	
-			// 												제품 삭제
+			// 												제품 상세
 			// ====================================================
 			}else if(cmd.equals("detail")) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				DetailRespDto products = productService.상품상세보기(id);
+				System.out.println("ProductController/detail/products : " + products);
 				
-				if(products == null){
-					Script.back(response, "상품을 불러올 수 없습니다.");
+				if(products == null) {
+					Script.back(response, "상품을 찾을 수 없습니다.");
 				}else {
 					request.setAttribute("products", products);
 					RequestDispatcher dis = request.getRequestDispatcher("product/detail.jsp");
 					dis.forward(request, response);	
 				}
+				
+			// ====================================================	
+			// 												구매하기
+			// ====================================================	
+			}else if(cmd.equals("buyProduct")) {
+			    int userId = Integer.parseInt(request.getParameter("userId"));
+			    int productId = Integer.parseInt(request.getParameter("productId"));
+			    int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+			    int result = productService.제품구매(productId, quantity);
+
+			    if (result == 1) {
+			        DetailRespDto product = productService.상품상세보기(productId);
+			        CommonRespDto<DetailRespDto> responseDto = new CommonRespDto<>();
+			        responseDto.setStatusCode(1);
+			        responseDto.setData(product);
+			        
+			        String jsonResponse = new Gson().toJson(responseDto);
+			        response.setContentType("application/json; charset=UTF-8");
+			        
+			        PrintWriter out = response.getWriter();
+			        out.print(jsonResponse);
+			        out.flush();
+			    } else {
+			        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "구매 실패");
+			    }
 			}
-			
 	}
 }

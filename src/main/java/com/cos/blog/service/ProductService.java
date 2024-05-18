@@ -40,6 +40,9 @@ public class ProductService {
 		return productDao.findById(id);
 	}
 
+	public int 제품구매(int productId, int quantity) {
+	    return productDao.updateProductCount(productId, quantity);
+	}
 
 
 }
