@@ -12,7 +12,6 @@
     <c:if test="${products.categoryId == 0}">육류</c:if>
     <c:if test="${products.categoryId == 1}">과일</c:if>
     <c:if test="${products.categoryId == 2}">야채</c:if>
-    <p>${products.img }</p>
     
     <div class="container">
         <div class="row">
@@ -27,14 +26,16 @@
                 <h2>${products.name}</h2>
                 <p><span id="purchase">${products.count }</span></p>
                 <p class="price"><fmt:formatNumber type="number" pattern="#,##0" value="${products.price}"/>원</p>
-                <p>${products.content}</p>
-                
+                <c:if test="${products.content == null}"></c:if>
+                <c:if test="${products.content != null}"> <p>${products.content}</p></c:if>
+               
                 <div class="form-group">
                     <button type="button" class="btn btn-light" onclick="minus()">-</button>
                     <input type="text" class="btn btn" id="quantity" value="1" min="1" style="width:50px">
                     <button type="button" class="btn btn-light" onclick="plus()">+</button>
                 </div>
                 <div class="form-group"><p>총 금액: <span id="totalPrice"></span>원</p></div>
+               
                 <button type="button" class="btn btn-outline-danger">♡</button>
                 <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
                 <button type="button" class="btn btn-primary" onclick="buyProduct()">구매하기</button>

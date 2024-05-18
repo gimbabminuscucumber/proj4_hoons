@@ -71,7 +71,7 @@ CREATE TABLE product(
     weight varchar(100),
     categoryId int,
     name varchar(100) not null,
-    img varchar(100),
+    img longtext,
     content longtext,
     createDate timestamp,
     foreign key (userId) references user (id)

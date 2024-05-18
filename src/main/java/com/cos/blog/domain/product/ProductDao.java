@@ -21,8 +21,8 @@ public class ProductDao {
 
 		// 이미지 파일 경로 저장
 		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
+		System.out.println("ProductDao/save/imagePath : "  + imagePath);
 		if(imagePath == null) {
-			System.out.println("ProductDao/save/imagePath : "  + imagePath);
 			return -1;	// 이미지 업로드 실패 시 처리
 		}
 		
@@ -38,8 +38,11 @@ public class ProductDao {
 			pstmt.setString(4, dto.getWeight());
 			pstmt.setString(5, dto.getName());
 //			pstmt.setString(6, dto.getImg());	
-			pstmt.setString(6, imagePath);		// 이미지 경로 저장
+			pstmt.setString(6, dto.getImgFileName());		// 이미지 경로 저장
 			pstmt.setString(7, dto.getContent());
+			
+			System.out.println("ProductDao/save/pstmt : " + pstmt);
+			
 			int result = pstmt.executeUpdate();
 			return result;
 		}catch(Exception e) {
@@ -53,16 +56,17 @@ public class ProductDao {
 	
 	// 이미지 파일 업로드 및 경로 변환 메소드
 	public String uploadImage(InputStream fileInputStream, String fileName) throws IOException {
-        String uploadPath = "/Users/gimdong-eun/Desktop/STS/Workspace2_JSP/project4/src/main/webapp/images/productImg/";
-        Path path = Paths.get(uploadPath + fileName);
-	
-	if (Files.exists(path)) {		// 이미 파일이 존재하는지 확인
-        Files.delete(path);			// 파일이 이미 존재하면 삭제
-    }
+	    String uploadPath = "/Users/gimdong-eun/Desktop/STS/Workspace2_JSP/project4/src/main/webapp/images/productImg/";
+	    Path path = Paths.get(uploadPath + fileName);
+	    Files.createDirectories(path.getParent()); // 디렉토리가 존재하지 않으면 생성
 
-    Files.copy(fileInputStream, path);	// 파일 복사
-    return path.toString();
-}
+	    if (Files.exists(path)) {   	// 이미 파일이 존재하는지 확인
+	        Files.delete(path);      	// 파일이 이미 존재하면 삭제
+	    }
+
+	    Files.copy(fileInputStream, path); // 파일 복사
+	    return path.toString();
+	}
 	
 	// 페이징 처리
 	public int count() {

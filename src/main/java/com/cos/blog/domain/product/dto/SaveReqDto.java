@@ -9,12 +9,12 @@ public class SaveReqDto {
 	private int userId;
 	private int price;
 	private int categoryId;
-	private String weight;
 	private String name;
-//	private String img;
 	private String content;
+	private String weight;
 		
+//	private String img;
     private InputStream imgInputStream;
     private String imgFileName;
-	
+    
 }

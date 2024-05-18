@@ -9,10 +9,11 @@
 	<div class="section">
 		<br>
 		<br>
-		<div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/bluesky.png'); background-size: cover; background-position: center;">
-			<div class="card-body" style="height: 100%; width: 100%;"></div>
+		<div class="card m-2">
+			<div class="card-header">
+				<i class="mtrl-select">카테고리</i>
+			</div>
 		</div>
-
 		<div class="card m-2" style="width: 180px">
 				<div class="list-group">
 					<a href="#" class="list-group-item list-group-item-action">First item</a>

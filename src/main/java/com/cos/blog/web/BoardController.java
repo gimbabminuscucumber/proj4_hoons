@@ -75,17 +75,12 @@ public class BoardController extends HttpServlet {
 			String content = request.getParameter("content");
 			int category = Integer.parseInt(request.getParameter("category"));	// categoryId 추가
 			
-			System.out.println("BoardController/save/category : " + category);
-			
-//			System.out.println("BoardController/userId : " + userId);
-//			System.out.println("BoardController/title : " + title);
-//			System.out.println("BoardController/content: " + content);
-			
 			SaveReqDto dto = new SaveReqDto();
 			dto.setUserId(userId);
 			dto.setTitle(title);
 			dto.setContent(content);
 			dto.setCategory(category);			// categoryId 추가
+			
 			int result = boardService.글쓰기(dto);
 			
 			if(result == 1) {	// 정상 입력 완료

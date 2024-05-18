@@ -3,6 +3,8 @@ package com.cos.blog.web;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -17,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.cos.blog.domain.common.dto.CommonRespDto;
-import com.cos.blog.domain.product.ProductDao;
 import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
@@ -32,7 +33,6 @@ import com.google.gson.Gson;
 @WebServlet("/product")
 // 이미지 파일 업로드를 위해 멀티파트 구성 설정을 위한 어노테이션
 @MultipartConfig(
-	    location = "/webapp/images/productImg", 	// 파일이 저장될 임시 디렉터리
 	    fileSizeThreshold = 1024 * 1024, 					// 파일 크기 임계값 설정
 	    maxFileSize = 1024 * 1024 * 5, 							// 최대 파일 크기 설정
 	    maxRequestSize = 1024 * 1024 * 5 * 5 			// 요청 전체 크기 설정
@@ -55,7 +55,6 @@ public class ProductController extends HttpServlet{
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String cmd = request.getParameter("cmd");
 			ProductService productService = new ProductService();
-			ProductDao productDao = new ProductDao();
 			HttpSession session = request.getSession();							// 세션 불러오기
 			
 			// ====================================================	
@@ -64,9 +63,7 @@ public class ProductController extends HttpServlet{
 			// http://localhost:8080/project4/board?cmd=saveForm
 			if(cmd.equals("saveForm")) {
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
-				
-				System.out.println("ProductController/saveForm/principal : " + principal);
-				
+				request.setAttribute("principal", principal);
 				if(principal != null) {
 					RequestDispatcher dis = request.getRequestDispatcher("product/saveForm.jsp");
 					dis.forward(request, response);	
@@ -79,22 +76,34 @@ public class ProductController extends HttpServlet{
 			// 												제품 등록 2
 			// ====================================================	
 			}else if(cmd.equals("save")) {
-				int userId = Integer.parseInt(request.getParameter("userId"));		// saveForm 에서 hidden으로 받아온 userId
+				// 일반적인 form 태그에 심어둔 hidden 값을 가져오는 방법
+				int userId = Integer.parseInt(request.getParameter("userId"));
+
+				// Multipart form data에서 일반 폼 필드 데이터를 추출하는 방법
+				//int userId = Integer.parseInt(request.getPart("userId").getInputStream().toString());
 				int price = Integer.parseInt(request.getParameter("price"));
 				int categoryId = Integer.parseInt(request.getParameter("category"));
-				String weight = request.getParameter("weight");
 				String name = request.getParameter("name");
 				String content = request.getParameter("content");
+				String weight = request.getParameter("weight");
+				
+				// 1. 이미지 파일 업로드
 //				String img = request.getParameter("img");
+				Part imgPart = request.getPart("img");
+				String imgFileName = Paths.get(imgPart.getSubmittedFileName()).getFileName().toString();
+				InputStream imgInputStream = imgPart.getInputStream();
 				
-				
-				// 이미지 파일 업로드
-	            Part imgPart = request.getPart("img");
-	            String imgFileName = Paths.get(imgPart.getSubmittedFileName()).getFileName().toString();
-	            InputStream imgInputStream = imgPart.getInputStream();
-	            System.out.println("ProductController/save/imgPart : " + imgPart);
-	            System.out.println("ProductController/save/imgFileName : " + imgFileName);
-	            System.out.println("ProductController/save/imgInputStream : " + imgInputStream);
+				// 2. 파일 이름에 타임스탬프 추가
+				String timestamp = String.valueOf(System.currentTimeMillis());
+				String newImgFileName = timestamp + "_" + imgFileName;
+				System.out.println("ProductController/save/newImgFileName : " + newImgFileName);
+	            
+				// 3. 파일 저장 경로 설정
+				String uploadPath = getServletContext().getRealPath("/images/productImg");
+				Path filePath = Paths.get(uploadPath, newImgFileName);
+
+				// 4. 파일 저장
+				Files.copy(imgInputStream, filePath);
 	            
 				SaveReqDto dto = new SaveReqDto();
 				dto.setUserId(userId);
@@ -106,7 +115,8 @@ public class ProductController extends HttpServlet{
 //				dto.setImg(img);
 				
 				// 이미지 파일 업로드
-	            dto.setImgFileName(imgFileName);
+//	            dto.setImgFileName(imgFileName);				// 수정전
+	            dto.setImgFileName(newImgFileName);		// 수정후
 	            dto.setImgInputStream(imgInputStream);
 				
 	            System.out.println("ProductController/save/dto : " + dto);
@@ -127,8 +137,6 @@ public class ProductController extends HttpServlet{
 				//List<DetailRespDto> products = productService.상품목록(page);
 				List<DetailRespDto> products = productService.상품목록();
 				request.setAttribute("products", products);
-				
-				System.out.println("ProductController/list/products : " + products);
 				/*
 				// 페이지 계산
 				int productCount = productService.상품개수();

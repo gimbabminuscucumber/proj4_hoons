@@ -4,21 +4,64 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../layout/header.jsp"%>
 
+<!-- 상단 배너 -->
+<section class="container" style="width: 1100px">
+	<div id="demo" class="carousel slide" data-ride="carousel" >
+		<ul class="carousel-indicators">
+			<li data-target="#demo" data-slide-to="0" class="active"></li>
+			<li data-target="#demo" data-slide-to="1"></li>
+			<li data-target="#demo" data-slide-to="2"></li>
+		</ul>
+		<div class="carousel-inner">
+			<!-- 배너 1 -->
+			<div class="carousel-item active">
+				<img src="/project4/images/banner/포르미.png" alt="배너 1" width="1000" height="500">
+				<div class="carousel-caption">
+				</div>   
+			</div>
+			
+			<!-- 배너 2 -->
+			<div class="carousel-item">
+			<img src="/project4/images/banner/카페인신현리.png" alt="배너 2" width="1000" height="500">
+				<div class="carousel-caption">
+				</div>   
+			</div>
+			
+			<!-- 배너 3 -->
+			<div class="carousel-item">
+				<img src="/project4/images/banner/산양유프로틴.png" alt="배너 3" width="1000" height="500">
+				<div class="carousel-caption">
+				</div>   
+			</div>
+		</div>
+	</div>
+</section>
+
 <section class="container">
 
     <!-- 왼쪽 섹션 -->
     <div class="section left">
         <br>
         <br>
-        <div class="card m-2" style="width: 180px; height: 100px; background-image: url('/project4/images/bluesky.png'); background-size: cover; background-position: center;">
-            <div class="card-body" style="height: 100%; width: 100%;"></div>
-        </div>
-
+		<div class="card m-2">
+			<div class="card-header">
+				<i class="mtrl-select">카테고리</i>
+			</div>
+		</div>
         <div class="card m-2" style="width: 180px">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">육류</a>
-                <a href="#" class="list-group-item list-group-item-action">과일</a>
-                <a href="#" class="list-group-item list-group-item-action">야채</a>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong>육류</strong></div>
+               		<div style="color:grey">&nbsp;meat</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong>과일</strong></div>
+               		<div style="color:grey">&nbsp;fruit</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong>야채</strong></div>
+               		<div style="color:grey">&nbsp;vegetable</div>
+               	</div>
             </div>
         </div>
     </div>
@@ -26,6 +69,7 @@
 
     <!-- 중앙 섹션 -->
     <div class="section center">
+    
         <!-- 검색창 -->
         <div class="m-2">
             <form class="form-inline d-flex justify-content-end" action="/project4/board">
@@ -42,7 +86,6 @@
 				<i class="mtrl-select">모든 상품</i>
 			</div>
 		</div>
-
         <c:if test="${empty products}">
             <div>&nbsp; 등록된 상품이 없습니다.</div>
         </c:if>
@@ -52,21 +95,17 @@
             	<input type="hidden" name="id" value="${product.id }">
                 <div class="col-md-3">
                     <div class="card m-2">
-                        <a href="/project4/product?cmd=detail&id=${product.id }"><img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: auto;"></a>
+                        <a href="/project4/product?cmd=detail&id=${product.id }">
+                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 125px;">
+                        </a>
                         <div class="card-body">
-                            <div class="d-flex">
-	                            <div>
-	                            	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.name}</strong></a></h5>
-	                            </div>
-                            	<div>
-									<c:choose>
-										<c:when test="${product.categoryId == 0}">&nbsp;l 육류</c:when>
-										<c:when test="${product.categoryId == 1}">&nbsp;l 과일</c:when>
-										<c:when test="${product.categoryId == 2}">&nbsp;l 야채</c:when>
-									</c:choose>
-                            	</div>
-                           	</div>
-                           	<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
+							<c:choose>
+								<c:when test="${product.categoryId == 0}">육류</c:when>
+								<c:when test="${product.categoryId == 1}">과일</c:when>
+								<c:when test="${product.categoryId == 2}">야채</c:when>
+							</c:choose>
+                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.name}</strong></a></h5>
+                       		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
                    			<div class="d-flex justify-content-end" >
 	                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
 	                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
@@ -75,7 +114,7 @@
                     </div>
                 </div>
 
-                <c:if test="${status.index % 5 == 4}">
+                <c:if test="${status.index % 4 == 4}">
                     </div><div class="row">
                 </c:if>
             </c:forEach>
@@ -105,4 +144,11 @@
 .section.center {
     flex: 9;
 }
+
+/*상단 배너*/
+.carousel-inner img{
+	width: 100%;
+	height: 150px
+}
+
 </style>
