@@ -83,7 +83,7 @@ public class ProductController extends HttpServlet{
 				//int userId = Integer.parseInt(request.getPart("userId").getInputStream().toString());
 				int price = Integer.parseInt(request.getParameter("price"));
 				int categoryId = Integer.parseInt(request.getParameter("category"));
-				String name = request.getParameter("name");
+				String brand = request.getParameter("brand");
 				String content = request.getParameter("content");
 				String weight = request.getParameter("weight");
 				
@@ -110,7 +110,7 @@ public class ProductController extends HttpServlet{
 				dto.setPrice(price);
 				dto.setCategoryId(categoryId);
 				dto.setWeight(weight);
-				dto.setName(name);
+				dto.setBrand(brand);
 				dto.setContent(content);
 //				dto.setImg(img);
 				
@@ -124,7 +124,7 @@ public class ProductController extends HttpServlet{
 				int result = productService.제품등록(dto);
 				
 				if(result == 1) {	// 정상 입력 완료
-					response.sendRedirect("index.jsp");
+					response.sendRedirect("/project4/product/list.jsp");
 				}else {					// 정상 입력 실패
 					Script.back(response, "상품 등록 실패");
 				}

@@ -26,7 +26,7 @@ public class ProductDao {
 			return -1;	// 이미지 업로드 실패 시 처리
 		}
 		
-		String sql = "INSERT INTO product(userId, price, categoryId, weight, name, img, content, createDate) VALUES(?,?,?,?,?,?,?, now())";
+		String sql = "INSERT INTO product(userId, price, categoryId, weight, brand, img, content, createDate) VALUES(?,?,?,?,?,?,?, now())";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		
@@ -36,7 +36,7 @@ public class ProductDao {
 			pstmt.setInt(2, dto.getPrice());
 			pstmt.setInt(3, dto.getCategoryId());
 			pstmt.setString(4, dto.getWeight());
-			pstmt.setString(5, dto.getName());
+			pstmt.setString(5, dto.getBrand());
 //			pstmt.setString(6, dto.getImg());	
 			pstmt.setString(6, dto.getImgFileName());		// 이미지 경로 저장
 			pstmt.setString(7, dto.getContent());
@@ -171,7 +171,7 @@ public class ProductDao {
 						.categoryId(rs.getInt("categoryId"))
 						.count(rs.getInt("count"))
 						.weight(rs.getString("weight"))
-						.name(rs.getString("name"))
+						.brand(rs.getString("brand"))
 						.img(rs.getString("img"))
 						.content(rs.getString("content"))
 						.createDate(rs.getTimestamp("createDate"))
@@ -225,7 +225,7 @@ public class ProductDao {
 				dto.setPrice(rs.getInt("price"));
 				dto.setCategoryId(rs.getInt("categoryId"));
 				dto.setCount(rs.getInt("count"));
-				dto.setName(rs.getString("name"));
+				dto.setBrand(rs.getString("brand"));
 				dto.setWeight(rs.getString("weight"));
 				dto.setContent(rs.getString("content"));
 				dto.setImg(rs.getString("img"));

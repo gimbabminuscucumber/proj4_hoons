@@ -18,7 +18,7 @@ public class DetailRespDto {
 	private int price;
 	private int categoryId;
 	private String weight;
-	private String name;
+	private String brand;
 	private String content;
 	private Timestamp createDate;
 	private int count;
@@ -29,7 +29,7 @@ public class DetailRespDto {
 	// - lucy filter로도 방어 가능 (더 궁극적임)
 	// - lucy filter 사용시 라이브러리 필요
 	public String getName() {
-		return name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		return content.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 	}
     
 }

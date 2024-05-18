@@ -20,10 +20,17 @@
 		<div class="form-group" >
 			<div class="material-icons-input" style="width: 421px">
 			    <span class="material-icons">local_grocery_store</span>
-			    <input type="text" name="name" id="name" class="form-control" placeholder="상품명을 입력하세요"  required/>
+			    <input type="text" name="brand" id="brand" class="form-control" placeholder="브랜드를 입력하세요"  required/>
 			</div>
 		</div>
 		
+		<div class="form-group" >
+			<div class="material-icons-input" style="width: 421px">
+			    <span class="material-icons">textsms</span>
+			    <input type="text" name="content" id="content" class="form-control" placeholder="제품에 대해 설명해주세요" required/>
+			</div>	
+		</div>
+
 		<div class="form-group">
 			<div class="material-icons-input" style="width: 421px">
 				<span class="material-icons">local_offer</span>
@@ -52,12 +59,6 @@
 			</div>
 		</div>
 
-		<div class="form-group" >
-			<div class="material-icons-input" style="width: 421px">
-			    <span class="material-icons">textsms</span>
-			    <input type="text" name="content" id="content" class="form-control" placeholder="제품에 대해 설명해주세요" required/>
-			</div>	
-		</div>
 		
 		<div style="padding-right: 303px">
 			<p><input type="checkbox" id="weightCheckbox" onchange="abledOrNot()"> '무게 선택' 입력</p>  <!-- input 창 두개를 개별로 disabled 하지말고 한꺼번에 처리하기 -->
@@ -96,7 +97,7 @@
 	function nullCheck(){
 	
 		var userId = document.getElementById("userId").value;
-		var name = document.getElementById("name").value;
+		var brand = document.getElementById("brand").value;
 	    var category = document.getElementById("category").value;
 	    var price = document.getElementById("price").value;
 	    var img = document.getElementById("fileInput").value;
@@ -105,8 +106,10 @@
 	    
 	    
 	    // submit 조건
-		if(name === '' ){										// 상품명이 공란이면
-			alert('상품명을 입력하세요');
+		if(brand === '' ){									// 브랜드명이 공란이면
+			alert('브랜드명을 입력하세요');
+		}else if(content === ''){
+			alert('제품 설명을 작성하세요');	
 		}else if(category === '카테고리'){			// 카테고리가 선택이 안되면('카테고리')
 			alert('카테고리를 선택하세요');
 		}else if(price === ''){								// 상품 가격이 공란이면
@@ -115,8 +118,6 @@
 		    alert('상품 금액은 숫자로만 입력하세요');
 		}else if(img === ''){								// img가 공란이면
 			alert('상품 이미지를 등록하세요');
-		}else if(content === ''){
-			alert('제품 설명을 작성하세요');	
 		}else{
 			document.save.submit();
 		}

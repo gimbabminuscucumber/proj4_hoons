@@ -50,8 +50,9 @@
 		</div>
         <div class="card m-2" style="width: 180px">
             <div class="list-group">
+            
                	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong>육류</strong></div>
+               		<div><strong>정육</strong></div>
                		<div style="color:grey">&nbsp;meat</div>
                	</div>
                	<div class="list-group-item list-group-item-action d-flex">
@@ -60,6 +61,14 @@
                	</div>
                	<div class="list-group-item list-group-item-action d-flex">
                		<div><strong>야채</strong></div>
+               		<div style="color:grey">&nbsp;vegetable</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong>과자/간식</strong></div>
+               		<div style="color:grey">&nbsp;vegetable</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong>밀키트</strong></div>
                		<div style="color:grey">&nbsp;vegetable</div>
                	</div>
             </div>
@@ -96,15 +105,17 @@
                 <div class="col-md-3">
                     <div class="card m-2">
                         <a href="/project4/product?cmd=detail&id=${product.id }">
-                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 125px;">
+                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
                         </a>
                         <div class="card-body">
 							<c:choose>
-								<c:when test="${product.categoryId == 0}">육류</c:when>
+								<c:when test="${product.categoryId == 0}">정육</c:when>
 								<c:when test="${product.categoryId == 1}">과일</c:when>
 								<c:when test="${product.categoryId == 2}">야채</c:when>
+								<c:when test="${product.categoryId == 3}">과자/간식</c:when>
+								<c:when test="${product.categoryId == 4}">밀키트</c:when>
 							</c:choose>
-                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.name}</strong></a></h5>
+                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></h5>
                        		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
                    			<div class="d-flex justify-content-end" >
 	                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;

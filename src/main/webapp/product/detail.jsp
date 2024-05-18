@@ -12,6 +12,8 @@
     <c:if test="${products.categoryId == 0}">육류</c:if>
     <c:if test="${products.categoryId == 1}">과일</c:if>
     <c:if test="${products.categoryId == 2}">야채</c:if>
+    <c:if test="${products.categoryId == 3}">과자/간식</c:if>
+    <c:if test="${products.categoryId == 4}">밀키트</c:if>
     
     <div class="container">
         <div class="row">
@@ -23,7 +25,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h2>${products.name}</h2>
+                <h2>${products.brand}</h2>
                 <p><span id="purchase">${products.count }</span></p>
                 <p class="price"><fmt:formatNumber type="number" pattern="#,##0" value="${products.price}"/>원</p>
                 <c:if test="${products.content == null}"></c:if>

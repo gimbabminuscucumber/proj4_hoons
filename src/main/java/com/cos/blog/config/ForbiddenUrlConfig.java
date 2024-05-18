@@ -31,7 +31,8 @@ public class ForbiddenUrlConfig implements Filter{
 				request.getRequestURI().equals("/project4/user/jusoPopup.jsp") || 
 				request.getRequestURI().equals("/project4/user/searchUsername.jsp") || 
 				request.getRequestURI().equals("/project4/user/searchPassword.jsp") ||
-				request.getRequestURI().equals("/project4/user/loginForm.jsp")
+				request.getRequestURI().equals("/project4/user/loginForm.jsp") ||
+				request.getRequestURI().equals("/project4/product/list.jsp")
 			){
 			chain.doFilter(request, response);
 		}else {

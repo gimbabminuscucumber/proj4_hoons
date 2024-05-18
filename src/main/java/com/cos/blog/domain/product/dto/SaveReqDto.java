@@ -9,7 +9,7 @@ public class SaveReqDto {
 	private int userId;
 	private int price;
 	private int categoryId;
-	private String name;
+	private String brand;
 	private String content;
 	private String weight;
 		
