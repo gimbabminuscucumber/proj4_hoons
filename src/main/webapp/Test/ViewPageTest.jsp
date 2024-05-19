@@ -1,358 +1,187 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../layout/header.jsp"%>
 
-
-<br>
-<br>
-<h1 style="text-align: center">
-	<div class="d-flex justify-content-center">
-		<img src="images/icons/star.png" alt="Logo" style="width:50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">회원가입</div>
-	</div>
-</h1>
-<br>
-<br>
-
-
-<div class="container" style="text-align: center">
-	<!-- UserController의 cmd.equals("join") 으로 전달 onsubmit : submit 되면 무조건 실행되는 함수-->
-	<form action="/project4/user?cmd=join" method="post" name="join">
-		
-		<div class="form-group">
-			<div class="d-flex insert-input-container">
-				<div class="material-icons-input" style="width: 338px">
-					<span class="material-icons">person_outline</span> 
-					<input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required />
-				</div>
-				<div>
-					<button type="button" class="btn btn-info" onclick="usernameCheck()">중복확인</button>
-				</div>
+<!-- 상단 배너 -->
+<section class="container" style="width: 1100px">
+	<div id="demo" class="carousel slide" data-ride="carousel" >
+		<ul class="carousel-indicators">
+			<li data-target="#demo" data-slide-to="0" class="active"></li>
+			<li data-target="#demo" data-slide-to="1"></li>
+			<li data-target="#demo" data-slide-to="2"></li>
+		</ul>
+		<div class="carousel-inner">
+			<!-- 배너 1 -->
+			<div class="carousel-item active">
+				<img src="/project4/images/banner/포르미.png" alt="배너 1" width="1000" height="500">
+				<div class="carousel-caption">
+				</div>   
 			</div>
-			<!-- ajax -->
-			<div><font id="checkId" size="2"></font></div>
-		</div>
 			
-
-		<div class="form-group">
-			<div class= "d-flex insert-input-container">
-				<div class="material-icons-input" style="width: 338px">
-					<span class="material-icons">face</span> 
-					<input type="text" name="nickName" id="nickName" class="form-control" placeholder="Enter NickName" required />
-				</div>
-				<div>
-					<button type="button" class="btn btn-info" onclick="nickNameCheck()">중복확인</button>
-				</div>
+			<!-- 배너 2 -->
+			<div class="carousel-item">
+			<img src="/project4/images/banner/카페인신현리.png" alt="배너 2" width="1000" height="500">
+				<div class="carousel-caption">
+				</div>   
 			</div>
-			<!-- ajax -->
-			<div><font id="checkNickName" size="2"></font></div>
-		</div>
-		
-
-		<div class="form-group insert-input-container">
-			<div class="material-icons-input" style="width: 419px">
-				<span class="material-icons">lock_outline</span> 
-				<input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"  oninput="inputPwd()">
+			
+			<!-- 배너 3 -->
+			<div class="carousel-item">
+				<img src="/project4/images/banner/산양유프로틴.png" alt="배너 3" width="1000" height="500">
+				<div class="carousel-caption">
+				</div>   
 			</div>
 		</div>
-
-
-	<div class="form-group">
-		<div class="insert-input-container">
-			<div class="material-icons-input" style="width: 183px">
-				<span class="material-icons">personal_video</span> 
-				<input type="text" name="email" id="inputEmail" class="form-control" placeholder="Enter Email" oninput="emailCombine()"  required /> 
-				<!-- oninput(): 입력 필드의 값이 변경될 때마다 발생. 사용자가 입력을 하면 즉시 발생 -->
-			</div>
-
- 			<div class="email domain dropdown">
-				<select id="domain" class="custom-select" style="width: 155px" onchange="emailCombine()" >
-				<!-- onchange(): 입력 필드의 값이 변경되고 사용자가 입력을 완료하고 필드를 떠날 때 발생 -->
-					<option selected disabled>@example.com</option>
-					<option value="@naver.com">@naver.com</option>
-					<option value="@gmail.com">@gmail.com</option>
-					<option value="@nate.com">@nate.com</option>
-					<option value="@daum.net">@daum.net</option>
-				</select>
-			</div>
-			<button type="button" id="domain" class="btn btn-info" onclick="emailCheck()">중복확인</button>
-		</div>
-		<!-- ajax -->
-		<div><font id="checkEmail" size="2"></font></div>
 	</div>
+</section>
 
+<section class="container">
 
-		<div class="form-group d-flex insert-input-container">
-			<div class="material-icons-input" style="width: 338px">
-				<span class="material-icons">home</span> 
-				<input type="text" name="address" id="address" class="form-control" placeholder="Enter Address"  readOnly required />
-			</div>
-			<div>
-				<button type="button" class="btn btn-info" onclick="goPopup();">주소검색</button>
-				<!-- type="button"을 설정하지 않으면 submit이 실행된다 -->
+    <!-- 왼쪽 섹션 -->
+    <div class="section left">
+        <br>
+        <br>
+		<div class="card m-2">
+			<div class="card-header">
+				<i class="mtrl-select">카테고리</i>
 			</div>
 		</div>
+        <div class="card m-2" style="width: 180px">
+            <div class="list-group">
+            
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong><a href="/project4/product?cmd=search&categoryId=0">정육</a></strong></div>
+               		<div style="color:grey">&nbsp;meat</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong><a href="/project4/product?cmd=search&categoryId=1">과일</a></strong></div>
+               		<div style="color:grey">&nbsp;fruit</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong><a href="/project4/product?cmd=search&categoryId=2">채소</a></strong></div>
+               		<div style="color:grey">&nbsp;vegetable</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong><a href="/project4/product?cmd=search&categoryId=4">과자/간식</a></strong></div>
+               		<div style="color:grey">&nbsp;snack</div>
+               	</div>
+               	<div class="list-group-item list-group-item-action d-flex">
+               		<div><strong><a href="/project4/product?cmd=search&categoryId=5">밀키트</a></strong></div>
+               		<div style="color:grey">&nbsp;mealkit</div>
+               	</div>
+            </div>
+        </div>
+    </div>
+    <!-- 왼쪽 섹션 종료 -->
 
-		<br>
-
-		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
-		<button type="button" class="btn btn-primary" style="width: 128px" onclick="joinSuccess()">회원가입 완료</button>
-	</form>
-
-</div>
-
-<script>
-	var userChecking = false;
-	var emailChecking = false;
-	var isChecking = false;	
-	var nickNameChecking = false;
-
-	// ====================================================	
-	// 							중복확인 체크 및 미입력 데이터 체크
-	// ====================================================	
-	function joinSuccess() {				
-		var username = document.getElementById("username").value;
-		var nickName = document.getElementById("nickName").value;
-		var password = document.getElementById("password").value;
-		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
-		var address = document.getElementById("address").value;
-
-		if (userChecking == false) {
-			alert('아이디 중복확인을 하세요');
-			isChecking = false;
-		} else if(nickName === ''){
-			console.log('nickName : ' + nickName);
-			alert('닉네임을 입력하세요');
-		} else if(nickNameChecking == false){
-			console.log('nickName : ' + nickName);
-			alert('닉네임 중복확인을 하세요');
-		} else if(password === ''){
-			console.log('password : ' + password);
-			alert('비밀번호를 입력하세요');
-		} else if (emailChecking == false) {
-			console.log('password : ' + password);
-			alert('이메일 중복확인을 하세요');
-			isChecking = false;
-		} else if(userChecking == true && emailChecking == true && nickNameChecking == true) {
-			isChecking = true;
-			finalCheck();
-		}
-	}	
-
-	// ====================================================	
-	// 												submit
-	// ====================================================	
-	function finalCheck(){
-		var username = document.getElementById("username").value;
-		var nickName = document.getElementById("nickName").value;
-		var password = document.getElementById("password").value;
-		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
-		var address = document.getElementById("address").value;
+    <!-- 중앙 섹션 -->
+    <div class="section center">
+    
+        <!-- 검색창 -->
+        <div class="m-2">
+            <form class="form-inline d-flex justify-content-end" action="/project4/product">
+                <input type="hidden" name="cmd" value="search" />
+                <input type="hidden" name="page" value="0" />
+                <input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 30%">
+                <button class="btn btn-primary m-1">검색</button>
+            </form>
+        </div>
 		
-		$.ajax({
-			type: "post",
-			url: "/project4/user?cmd=join",
-			data: {
-				username: username,
-				nickName: nickName,
-				password: password,
-				email: email,
-				address: address
-			}, success: function(resp){
-				console.log("데이터 전송 완료", resp);
-				alert('회원가입 완료');
-				// 로그인 화면으로 페이지 이동
-				window.location.href = "/project4/user/loginForm.jsp";
-			}, error: function(xhr, status, error){
-				console.log("데이터 전송 에러", error);
-			}
-		});
-	}
-	
-	// ====================================================	
-	// 										username 중복확인
-	// ====================================================	
-	function usernameCheck() {
-		// DB에서 확인 후 아이디가 중복이 아니면 isChecking = true로 변경
-		var username = $("#username").val();
-
-		/*
-		// type test (json과 text)
-		var a = "{\"result\" : \"a\"}";
-		var b = {result: "b"}
+		<!-- 상단 Nav -->
+		<div class="card m-2">
+			<div class="card-header">
+				<c:choose>
+					<c:when test="${empty param.keyword && empty param.categoryId }">
+						<i class="mtrl-select">모든 상품</i>
+					</c:when>
+					<c:when test="${!empty param.keyword }">
+						<i class="mtrl-select">'${param.keyword }' </i>로 검색한 결과
+					</c:when>
+					<c:when test="${!empty param.categoryId }">
+						<i class="mtrl-select">'${param.categoryId }' </i>
+							<c:choose>
+								<c:when test="${param.categoryId == 0}">정육</c:when>
+								<c:when test="${param.categoryId == 1}">과일</c:when>
+								<c:when test="${param.categoryId == 2}">채소</c:when>
+								<c:when test="${param.categoryId == 3}">과자/간식</c:when>
+								<c:when test="${param.categoryId == 4}">밀키트</c:when>
+							</c:choose>
+					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
+				</c:choose>
+			</div>
+		</div>
 		
-		console.log(a);				// text (결과값의 외형은 json 같지만 text type 이다)
-		console.log(b);				// json (데이터를 Java object로 다 바꿔줌 / key:value 로 엮인 json type이다)
-		console.log(b.result);		// json일 경우, Java object로 바꾸기 때문에 .result 같은 기능을 사용할 수 있음
-		 */
+		<!-- 상품 리스트 -->
+        <c:if test="${empty products}">
+            <div>&nbsp; 등록된 상품이 없습니다.</div>
+        </c:if>
 
-		$.ajax({
-			type : "POST",
-			url : "/project4/user?cmd=usernameCheck",
-			data : username,
-			contentType : "text/plain; charset=utf-8",
-			dataType : "text" // 응답받을 데이터 타입 ("json"은 Java object로 파싱해줌)
-		}).done(function(data) { // .done() : 통신이 끝나면 실행할 기능
-			if (username === '') { // 유저네임이 공란
-				console.log('공란 : data : ' + data);
-				console.log('공란 : username : ' + username);
+        <div class="row">
+            <c:forEach var="product" items="${products}" varStatus="status">
+            	<input type="hidden" name="id" value="${product.id }">
+                <div class="col-md-3">
+                    <div class="card m-2">
+                        <a href="/project4/product?cmd=detail&id=${product.id }">
+                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
+                        </a>
+                        <div class="card-body">
+							<c:choose>
+								<c:when test="${product.categoryId == 0}">정육</c:when>
+								<c:when test="${product.categoryId == 1}">과일</c:when>
+								<c:when test="${product.categoryId == 2}">채소</c:when>
+								<c:when test="${product.categoryId == 3}">과자/간식</c:when>
+								<c:when test="${product.categoryId == 4}">밀키트</c:when>
+							</c:choose>
+                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></h5>
+                       		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
+                   			<div class="d-flex justify-content-end" >
+	                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
+	                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
+							</div>				                   			
+                        </div>
+                    </div>
+                </div>
 
-				userChecking = false; // 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
-				//alert('유저네임을 입력해주세요.')
-				$("#checkId").html('유저네임을 입력해주세요.');
-				$("#checkId").attr('color', 'red');
-			} else if (data === 'ok') { // 유저네임이 중복 됨
-				console.log('중복 : data : ' + data);
-				console.log('중복 : username : ' + username);
+                <c:if test="${status.index % 4 == 4}">
+                    </div><div class="row">
+                </c:if>
+            </c:forEach>
+        </div>
+    </div>
+    <!-- 중앙 섹션 종료 -->
 
-				userChecking = false;
-				//alert('유저네임이 중복되었습니다.')
-				$("#checkId").html('유저네임이 중복되었습니다.');
-				$("#checkId").attr('color', 'red');
-			} else { // 유저네임이 중복 안 됨
-				console.log('신규 : data : ' + data);
-				console.log('신규 : username : ' + username);
+</section>
 
-				userChecking = true;
-				//alert('해당 유저네임은 사용가능합니다.')
-				$("#checkId").html('해당 유저네임은 사용가능합니다.');
-				$("#checkId").attr('color', 'blue');
-			}
-		});
-	}
-
-	// 비밀번호 입력데이터 받아오기 > 회원가입 완료 버튼 클릭시, 미입력 상태면 alert 주려고
-	function inputPwd(){
-		password = document.getElementById("password").value;
-	}
-	
-	// input 데이터와 dropdown를 합치려고
-	function emailCombine() {
-		var inputEmail = document.getElementById("inputEmail").value;
-		var domain = document.getElementById("domain").value;
-		//var email = inputEmail + domain;			// var로 email에 데이터를 전달하면 전역변수로 설정한 var email과 다른 메모릴에 저장돼서 다른 함수에서 사용 불가
-		email = inputEmail + domain; 					// 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
-	}
-	
-	// ====================================================	
-	// 											email 중복확인
-	// ====================================================	
-	function emailCheck() {
-		
-		$.ajax({
-			type : "post",
-			url : "/project4/user?cmd=emailCheck",
-			data : email, 												// email 데이터를 객체 형태로 전달
-			contentType : "text/plain; charset=utf-8",
-			dataType : "text"										// 서버에서 받을 데이터 타입
-		}).done(function(data) {
-			if (email == undefined || data === "") {
-				console.log('공란 : data : ' + data);
-				console.log('공란 : email : ' + email);
-				emailChecking = false;					// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
-				$("#checkEmail").html('이메일을 입력해주세요.');
-				$("#checkEmail").attr('color', 'red');
-			} else if (data === 'ok') {
-				console.log('중복 : data : ' + data);
-				console.log('중복 : email : ' + email);
-				emailChecking = false;
-				$("#checkEmail").html('동일한 이메일로 가입한 내역이 있습니다.');
-				$("#checkEmail").attr('color', 'red');
-			} else if (email.indexOf('@example.com') !== -1) {		// 해당 문자열이 포함되어있으면
-				console.log('오류 : data : ' + data);
-				console.log('오류 : email : ' + email);
-				emailChecking = false;
-				$("#checkEmail").html('도메인을 선택해주세요.');
-				$("#checkEmail").attr('color', 'red');
-			} else {
-				console.log('신규 : data : ' + data);
-				console.log('신규 : email : ' + email);
-				emailChecking = true;
-				$("#checkEmail").html('해당 이메일은 사용가능합니다.');
-				$("#checkEmail").attr('color', 'blue');
-			}
-		})
-	}
-
-	// ====================================================	
-	// 											닉네임 중복확인
-	// ====================================================	
-	function nickNameCheck(){
-		
-		var nickName = document.getElementById("nickName").value;
-		console.log('nickName : ' + nickName);
-		
-		$.ajax({
-			type: "post",
-			url : "/project4/user?cmd=nickNameCheck",
-			data : nickName,
-			contentType : "text/plain; charset=utf-8",
-			dataType : "text" 
-		}).done(function(data){
-			if(nickName === "" ){
-				nickNameChecking = false;
-				$("#checkNickName").html('닉네임을 입력해주세요.');
-				$("#checkNickName").attr('color', 'red');
-			}else if(data === 'ok'){
-				nickNameChecking = false;
-				$("#checkNickName").html('해당 닉네임은 사용 중입니다.');
-				$("#checkNickName").attr('color', 'red');
-			}else{
-				nickNameChecking = true;
-				$("#checkNickName").html('해당 닉네임은 사용가능합니다.');
-				$("#checkNickName").attr('color', 'blue');
-			}
-		});
-	}
-	
-	// ====================================================	
-	// 											주소 API 실행 함수
-	// ====================================================			
-	function goPopup() {
-		console.log("goPopup()");
-		var pop = window.open("/project4/user/jusoPopup.jsp", "pop", "width=570,height=420, scrollbars=yes, resizable=yes");
-	}
-
-	function jusoCallBack(roadFullAddr) {
-		var addressElement = document.querySelector("#address");
-		addressElement.value = roadFullAddr;
-	}
-</script>
-
-</body>
+<script src="/project4/js/productInfo.js"></script>
 
 <style>
-.material-icons-input { /* input 될 아이콘 칸 */
-	display: inline-block;
-	position: relative;
+.container {
+    display: flex;
+    /* justify-content: space-between; */
 }
 
-.material-icons-input input { /* 아이콘이 포함된 input 태그 */
+.section {
+    padding: 10px;
+    margin: 1px;
+}
+
+.section.left {
+    flex: 1;
+}
+
+.section.center {
+    flex: 9;
+}
+
+/*상단 배너*/
+.carousel-inner img{
 	width: 100%;
-	padding-left: 40px; /* 예시: 좀 더 넓은 여백을 주기 위해 padding-left 값 조정 */
+	height: 150px
 }
 
-.material-icons-input .material-icons { /* 아이콘 위치 */
-	position: absolute;
-	left: 5px; /* 아이콘을 왼쪽에 위치 */
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-/* 이메일 입력 칸과 버튼 간의 간격 조절 */
-.insert-input-container {
-	display: flex;
-	align-items: center; /* 세로 정렬을 위해 */
-	justify-content: center; /* 수평 정렬을 위해 */
-}
-
-.insert-input-container .form-control {
-	flex: 1; /* 입력 칸이 버튼의 크기에 따라 유동적으로 변할 수 있도록 */
-	margin-right: 5px; /* 버튼과의 간격 조절 */
-}
-
-.insert-input-container .btn {
-	flex-shrink: 0; /* 버튼이 입력 칸의 크기에 영향을 받지 않도록 */
-}
 </style>
-</html>

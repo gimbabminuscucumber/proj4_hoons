@@ -11,7 +11,7 @@
     
     <c:if test="${products.categoryId == 0}">육류</c:if>
     <c:if test="${products.categoryId == 1}">과일</c:if>
-    <c:if test="${products.categoryId == 2}">야채</c:if>
+    <c:if test="${products.categoryId == 2}">채소</c:if>
     <c:if test="${products.categoryId == 3}">과자/간식</c:if>
     <c:if test="${products.categoryId == 4}">밀키트</c:if>
     
@@ -40,7 +40,7 @@
                
                 <button type="button" class="btn btn-outline-danger">♡</button>
                 <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
-                <button type="button" class="btn btn-primary" onclick="buyProduct()">구매하기</button>
+                <button type="button" class="btn btn-primary" onclick="packProduct()">포장하기</button>
             </div>
         </div>
     </div>
@@ -72,8 +72,8 @@
         document.getElementById("totalPrice").innerText = price * quantity;
     }
 	
-	// 제품 구매 
-    function buyProduct() {
+	// 상품 포장 
+    function packProduct() {
         var quantity = $("#quantity").val();
         var userId = $("input[name='userId']").val();
         var productId = $("input[name='productId']").val();
@@ -86,20 +86,20 @@
 
         $.ajax({
             type: "POST",
-            url: "/project4/product?cmd=buyProduct",
+            url: "/project4/product?cmd=packProduct",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         }).done(function(result) {
             if (result) {
                 $("#purchase").text(result.data.count);
-                alert("구매가 완료되었습니다!");
+                alert("포장 주문이 완료되었습니다!");
             } else {
-                alert("구매 실패");
+                alert("포장 주문에 실패했습다");
             }
         }).fail(function(error) {
             console.log("Error: ", error);
-            alert("구매 중 오류가 발생했습니다.");
+            alert("포장 주문 중 오류가 발생했습니다.");
         });
     }
 

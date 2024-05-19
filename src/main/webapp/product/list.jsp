@@ -51,25 +51,30 @@
         <div class="card m-2" style="width: 180px">
             <div class="list-group">
             
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong>정육</strong></div>
-               		<div style="color:grey">&nbsp;meat</div>
+               	<div class="list-group-item list-group-item-action">
+               		<a href="/project4/product?cmd=search&categoryId=0" class="d-flex">
+               			<div><strong>정육</strong></div><div style="color:grey">&nbsp;meat</div>
+               		</a>	
                	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong>과일</strong></div>
-               		<div style="color:grey">&nbsp;fruit</div>
+               	<div class="list-group-item list-group-item-action">
+               		<a href="/project4/product?cmd=search&categoryId=1" class="d-flex">
+               			<div><strong>과일</strong></div><div style="color:grey">&nbsp;fruit</div>
+               		</a>	
                	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong>야채</strong></div>
-               		<div style="color:grey">&nbsp;vegetable</div>
+               	<div class="list-group-item list-group-item-action">
+               		<a href="/project4/product?cmd=search&categoryId=2" class="d-flex">
+               			<div><strong>채소</strong></div><div style="color:grey">&nbsp;vegetable</div>
+               		</a>	
                	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong>과자/간식</strong></div>
-               		<div style="color:grey">&nbsp;vegetable</div>
+               	<div class="list-group-item list-group-item-action">
+               		<a href="/project4/product?cmd=search&categoryId=3" class="d-flex">
+               			<div><strong>과자/간식</strong></div><div style="color:grey">&nbsp;snack</div>
+               		</a>	
                	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong>밀키트</strong></div>
-               		<div style="color:grey">&nbsp;vegetable</div>
+               	<div class="list-group-item list-group-item-actioon">
+               		<a href="/project4/product?cmd=search&categoryId=4" class="d-flex">
+               			<div><strong>밀키트</strong></div><div style="color:grey">&nbsp;mealkit</div>
+               		</a>	
                	</div>
             </div>
         </div>
@@ -81,49 +86,74 @@
     
         <!-- 검색창 -->
         <div class="m-2">
-            <form class="form-inline d-flex justify-content-end" action="/project4/board">
+            <form class="form-inline d-flex justify-content-end" action="/project4/product">
                 <input type="hidden" name="cmd" value="search" />
                 <input type="hidden" name="page" value="0" />
                 <input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 30%">
                 <button class="btn btn-primary m-1">검색</button>
             </form>
         </div>
-
-
+		
+		<!-- 상단 Nav -->
 		<div class="card m-2">
 			<div class="card-header">
-				<i class="mtrl-select">모든 상품</i>
+				<c:choose>
+					<c:when test="${empty param.keyword && empty param.categoryId }">
+						<i class="mtrl-select">모든 상품</i>
+					</c:when>
+					<c:when test="${!empty param.keyword }">
+						<i class="mtrl-select">'${param.keyword }' </i>로 검색한 결과
+					</c:when>
+					<c:when test="${!empty param.categoryId }">
+						<i class="mtrl-select">카테고리 >
+							<c:choose>
+								<c:when test="${param.categoryId == 0}">정육</c:when>
+								<c:when test="${param.categoryId == 1}">과일</c:when>
+								<c:when test="${param.categoryId == 2}">채소</c:when>
+								<c:when test="${param.categoryId == 3}">과자/간식</c:when>
+								<c:when test="${param.categoryId == 4}">밀키트</c:when>
+							</c:choose>
+						 </i>
+					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
+		
+		<!-- 상품 리스트 -->
         <c:if test="${empty products}">
-            <div>&nbsp; 등록된 상품이 없습니다.</div>
+            <div>&nbsp;&nbsp; 등록된 상품이 없습니다.</div>
         </c:if>
 
         <div class="row">
             <c:forEach var="product" items="${products}" varStatus="status">
-            	<input type="hidden" name="id" value="${product.id }">
-                <div class="col-md-3">
-                    <div class="card m-2">
-                        <a href="/project4/product?cmd=detail&id=${product.id }">
-                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
-                        </a>
-                        <div class="card-body">
-							<c:choose>
-								<c:when test="${product.categoryId == 0}">정육</c:when>
-								<c:when test="${product.categoryId == 1}">과일</c:when>
-								<c:when test="${product.categoryId == 2}">야채</c:when>
-								<c:when test="${product.categoryId == 3}">과자/간식</c:when>
-								<c:when test="${product.categoryId == 4}">밀키트</c:when>
-							</c:choose>
-                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></h5>
-                       		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
-                   			<div class="d-flex justify-content-end" >
-	                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
-	                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
-							</div>				                   			
-                        </div>
-                    </div>
-                </div>
+            	<c:if test="${empty param.categoryId || product.categoryId == param.categoryId}">
+	            	<input type="hidden" name="id" value="${product.id }">
+	                <div class="col-md-3">
+	                    <div class="card m-2">
+	                        <a href="/project4/product?cmd=detail&id=${product.id }">
+	                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
+	                        </a>
+	                        <div class="card-body">
+								<c:choose>
+									<c:when test="${product.categoryId == 0}">정육</c:when>
+									<c:when test="${product.categoryId == 1}">과일</c:when>
+									<c:when test="${product.categoryId == 2}">채소</c:when>
+									<c:when test="${product.categoryId == 3}">과자/간식</c:when>
+									<c:when test="${product.categoryId == 4}">밀키트</c:when>
+								</c:choose>
+	                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></h5>
+	                       		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
+	                   			<div class="d-flex justify-content-end" >
+		                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
+		                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
+								</div>				                   			
+	                        </div>
+	                    </div>
+	                </div>
+				</c:if>
 
                 <c:if test="${status.index % 4 == 4}">
                     </div><div class="row">

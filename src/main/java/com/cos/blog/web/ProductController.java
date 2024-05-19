@@ -185,14 +185,14 @@ public class ProductController extends HttpServlet{
 				}
 				
 			// ====================================================	
-			// 												구매하기
+			// 												포장하기
 			// ====================================================	
-			}else if(cmd.equals("buyProduct")) {
+			}else if(cmd.equals("packProduct")) {
 			    int userId = Integer.parseInt(request.getParameter("userId"));
 			    int productId = Integer.parseInt(request.getParameter("productId"));
 			    int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-			    int result = productService.제품구매(productId, quantity);
+			    int result = productService.제품포장(productId, quantity);
 
 			    if (result == 1) {
 			        DetailRespDto product = productService.상품상세보기(productId);
@@ -207,8 +207,32 @@ public class ProductController extends HttpServlet{
 			        out.print(jsonResponse);
 			        out.flush();
 			    } else {
-			        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "구매 실패");
+			        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "포장 실패");
 			    }
+			
+			// ====================================================	
+			// 						메인 페이지 검색 또는 카테고리 별 리스트
+			// ====================================================
+			}else if(cmd.equals("search")) {
+				String keyword = request.getParameter("keyword");
+				String categoryIdStr = request.getParameter("categoryId");
+				System.out.println("ProductController/search/categoryIdStr000 : " + categoryIdStr);
+				List<DetailRespDto> products;
+
+				if(categoryIdStr != null && !categoryIdStr.isEmpty()) {
+					int categoryId = Integer.parseInt(categoryIdStr);
+					products = productService.카테고리별상품목록(categoryId);
+					System.out.println("ProductController/search/categoryIdStr111 : " + categoryIdStr);
+					System.out.println("ProductController/search/products111 : " + products);
+				}else {
+					products = productService.상품검색(keyword);
+					System.out.println("ProductController/search/categoryIdStr222 : " + categoryIdStr);
+					System.out.println("ProductController/search/products222 : " + products);
+				}
+				
+				request.setAttribute("products", products);
+				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
+				dis.forward(request, response);	
 			}
 	}
 }

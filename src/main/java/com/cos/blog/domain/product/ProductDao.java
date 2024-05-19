@@ -152,7 +152,7 @@ public class ProductDao {
 	
 	// 상품 리스트
 	public List<DetailRespDto> findAll() {
-		String sql = "SELECT * FROM product"; 
+		String sql = "SELECT * FROM product ORDER BY id"; 
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -259,5 +259,87 @@ public class ProductDao {
 	    }
 	    return -1;
 	}
+
+	// 상품 포장
+	public int packProduct(int productId, int quantity) {
+		return 0;
+	}
+
+	// 상품 검색
+	public List<DetailRespDto> findByKeyword(String keyword) {
+		String sql = "SELECT * FROM product WHERE brand LIKE ? OR content LIKE ? ORDER BY id";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<DetailRespDto> products = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
+			pstmt.setString(2, "%"+keyword+"%");
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("id"))
+						.userId(rs.getInt("userId"))
+						.price(rs.getInt("price"))
+						.categoryId(rs.getInt("categoryId"))
+						.weight(rs.getString("weight"))
+						.brand(rs.getString("brand"))
+						.content(rs.getString("content"))
+						.createDate(rs.getTimestamp("createDate"))
+						.count(rs.getInt("count"))
+						.img(rs.getString("img"))
+						.build();
+				products.add(dto);
+			}
+			return products;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+
+	public List<DetailRespDto> findByCategory(int categoryId) {
+		String sql = "SELECT * FROM product WHERE categoryId = ? ORDER BY id";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<DetailRespDto> products = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, categoryId);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("id"))
+						.userId(rs.getInt("userId"))
+						.price(rs.getInt("price"))
+						.categoryId(rs.getInt("categoryId"))
+						.weight(rs.getString("weight"))
+						.brand(rs.getString("brand"))
+						.content(rs.getString("content"))
+						.createDate(rs.getTimestamp("createDate"))
+						.count(rs.getInt("count"))
+						.img(rs.getString("img"))
+						.build();
+				products.add(dto);
+			}
+			return products;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		
+		return null;
+	}
+
 	
 }

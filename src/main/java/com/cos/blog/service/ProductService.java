@@ -40,8 +40,17 @@ public class ProductService {
 		return productDao.findById(id);
 	}
 
-	public int 제품구매(int productId, int quantity) {
-	    return productDao.updateProductCount(productId, quantity);
+	public int 제품포장(int productId, int quantity) {
+		productDao.updateProductCount(productId, quantity);	// 구매 횟수
+		return productDao.packProduct(productId, quantity);		// 상품 포장
+	}
+
+	public List<DetailRespDto> 상품검색(String keyword) {
+		return productDao.findByKeyword(keyword);
+	}
+
+	public List<DetailRespDto> 카테고리별상품목록(int categoryId) {
+		return productDao.findByCategory(categoryId);
 	}
 
 

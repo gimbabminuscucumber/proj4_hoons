@@ -28,8 +28,11 @@ public class DetailRespDto {
 	// 상품 등록 시, 상품명(name)에 <script> 코드 방어
 	// - lucy filter로도 방어 가능 (더 궁극적임)
 	// - lucy filter 사용시 라이브러리 필요
-	public String getName() {
+	public String getContent() {
 		return content.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+	}
+	public String getBrand() {
+		return brand.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 	}
     
 }

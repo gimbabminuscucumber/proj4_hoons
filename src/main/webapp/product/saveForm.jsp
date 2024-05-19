@@ -37,9 +37,11 @@
 				<div>
 				    <select name="category" id="category" class="custom-select" style="padding-left: 40px;">
 				        <option selected disabled>카테고리</option>
-				        <option value=0>육류</option>
+				        <option value=0>정육</option>
 				        <option value=1>과일</option>
-				        <option value=2>야채</option>
+				        <option value=2>채소</option>
+				        <option value=3>과자/간식</option>
+				        <option value=4>밀키트</option>
 				    </select>
 				</div>
 			</div>
