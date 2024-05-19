@@ -115,9 +115,10 @@ public class BoardController extends HttpServlet {
 		}else if(cmd.equals("detail")) {			// 게시글 상세보기
 			int id = Integer.parseInt(request.getParameter("id"));	// 게시글 id 가져오기
 			DetailRespDto boards = boardService.글상세보기(id);			// board 테이블 + user 테이블 = 조인된 데이터 필요
-//			List<Reply> replys = replyService.댓글목록(id);					// 댓글 목록
+
 			List<ReplyRespDto> replys = replyService.댓글목록(id);		// 댓글 목록 + 유저의 username
 			int replyCount = replyService.댓글수(id);
+			
 			System.out.println("BoardController/detail/boards : " + boards);
 			if(boards == null) {
 				Script.back(response, "게시글을 불러올 수 없습니다.");

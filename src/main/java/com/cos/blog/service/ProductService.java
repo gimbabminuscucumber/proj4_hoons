@@ -37,7 +37,13 @@ public class ProductService {
 	}
 
 	public DetailRespDto 상품상세보기(int id) {
-		return productDao.findById(id);
+		int result = productDao.viewUp(id);		// 상품 상세보기하면 조회수 +1
+		
+		if(result == 1) {
+			return productDao.findById(id);
+		}else {
+			return null;
+		}
 	}
 
 	public int 제품포장(int productId, int quantity) {

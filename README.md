@@ -67,13 +67,14 @@ CREATE TABLE product(
     id int primary key auto_increment,
     userId int,
     price int not null,
-    score int default 0,
     weight varchar(100),
     categoryId int,
-    name varchar(100) not null,
+    brand longtext not null,
     img longtext,
     content longtext,
     createDate timestamp,
+    count int default 0,
+    view int default 0,
     foreign key (userId) references user (id)
 ) engine=InnoDB default charset=utf8;
 

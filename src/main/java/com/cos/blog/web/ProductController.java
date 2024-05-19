@@ -169,12 +169,11 @@ public class ProductController extends HttpServlet{
 				out.flush();
 
 			// ====================================================	
-			// 												제품 상세
+			// 												상품 상세
 			// ====================================================
 			}else if(cmd.equals("detail")) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				DetailRespDto products = productService.상품상세보기(id);
-				System.out.println("ProductController/detail/products : " + products);
 				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");
@@ -211,7 +210,7 @@ public class ProductController extends HttpServlet{
 			    }
 			
 			// ====================================================	
-			// 						메인 페이지 검색 또는 카테고리 별 리스트
+			// 							메인 페이지 검색 && 카테고리 별 리스트
 			// ====================================================
 			}else if(cmd.equals("search")) {
 				String keyword = request.getParameter("keyword");

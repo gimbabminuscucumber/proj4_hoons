@@ -89,6 +89,7 @@ public class ProductDao {
  		return -1; 
 	}
 
+	/*
 	// 페이징 처리 (search가 추가된 페이지) - 오버로딩 
 	public int count(String keyword) {
 		String sql = "SELECT count(*) FROM product WHERE name LIKE ?";	
@@ -112,7 +113,6 @@ public class ProductDao {
  		return -1; 
 	}
 
-	/*
 	public List<DetailRespDto> findAll(int page) {
 		String sql = "SELECT * FROM product ORDER BY id DESC LIMIT ?,4"; 
 		Connection conn = DB.getConnection();
@@ -157,7 +157,6 @@ public class ProductDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<DetailRespDto>products = new ArrayList<>();
-		
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -230,6 +229,7 @@ public class ProductDao {
 				dto.setContent(rs.getString("content"));
 				dto.setImg(rs.getString("img"));
 				dto.setCreateDate(rs.getTimestamp("createDate"));
+				dto.setView(rs.getInt("view"));
 				return dto;
 			}
 		}catch(Exception e) {
@@ -291,6 +291,7 @@ public class ProductDao {
 						.createDate(rs.getTimestamp("createDate"))
 						.count(rs.getInt("count"))
 						.img(rs.getString("img"))
+						.view(rs.getInt("view"))
 						.build();
 				products.add(dto);
 			}
@@ -303,7 +304,7 @@ public class ProductDao {
 		return null;
 	}
 
-
+	// 카테고리별 상품 목록
 	public List<DetailRespDto> findByCategory(int categoryId) {
 		String sql = "SELECT * FROM product WHERE categoryId = ? ORDER BY id";
 		Connection conn = DB.getConnection();
@@ -328,6 +329,7 @@ public class ProductDao {
 						.createDate(rs.getTimestamp("createDate"))
 						.count(rs.getInt("count"))
 						.img(rs.getString("img"))
+						.view(rs.getInt("view"))
 						.build();
 				products.add(dto);
 			}
@@ -337,9 +339,25 @@ public class ProductDao {
 		}finally {
 			DB.close(conn, pstmt, rs);
 		}
-		
 		return null;
 	}
 
+	// 상품 조회수
+	public int viewUp(int id) {
+		String sql = "UPDATE product SET view = view +1 WHERE id = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			return result; 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
 	
 }

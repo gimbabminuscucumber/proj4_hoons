@@ -7,43 +7,75 @@
 <div class="container">
     <br> 
     <br>
-    <h6 class="d-flex justify-content-end"> </h6>
-    
-    <c:if test="${products.categoryId == 0}">육류</c:if>
-    <c:if test="${products.categoryId == 1}">과일</c:if>
-    <c:if test="${products.categoryId == 2}">채소</c:if>
-    <c:if test="${products.categoryId == 3}">과자/간식</c:if>
-    <c:if test="${products.categoryId == 4}">밀키트</c:if>
-    
+    <p style="font-size: 15px; color: grey; padding-left:18px">
+	    카테고리 >  
+	    <c:if test="${products.categoryId == 0}">육류</c:if>
+	    <c:if test="${products.categoryId == 1}">과일</c:if>
+	    <c:if test="${products.categoryId == 2}">채소</c:if>
+	    <c:if test="${products.categoryId == 3}">과자/간식</c:if>
+	    <c:if test="${products.categoryId == 4}">밀키트</c:if>
+    </p>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                	<input type="hidden" name="userId" value="${sessionScope.principal.id }">
-                	<input type="hidden" name="productId" value="${products.id }">
+                	<input type="hidden" name="userId" id="userId" value="${sessionScope.principal.id }">
+                	<input type="hidden" name="id" id="id" value="${products.id }">
                    	<img src="/project4/images/productImg/${products.img }" alt="Product Image" style="width: 100%; max-width: 400px; height: auto;">
                 </div>
             </div>
             <div class="col-md-6">
+            	principal = ${sessionScope.principal.id }
+            	products = ${products.id }
                 <h2>${products.brand}</h2>
-                <p><span id="purchase">${products.count }</span></p>
-                <p class="price"><fmt:formatNumber type="number" pattern="#,##0" value="${products.price}"/>원</p>
+                <div>
+                	<c:if test="${products.content != null}"><p><h4>${products.content}</h4></p></c:if>
+                	<c:if test="${products.content == null}"><h4>하단 상세설명 참조</h4></c:if>
+                </div>
+                <p><span id="purchase">구매 횟수 : ${products.count }</span></p>
+                <h3 class="price"><fmt:formatNumber type="number" pattern="#,##0" value="${products.price}"/>원</h3>
+                <p>(weight : ${products.weight }원)</p>
                 <c:if test="${products.content == null}"></c:if>
-                <c:if test="${products.content != null}"> <p>${products.content}</p></c:if>
                
                 <div class="form-group">
                     <button type="button" class="btn btn-light" onclick="minus()">-</button>
                     <input type="text" class="btn btn" id="quantity" value="1" min="1" style="width:50px">
                     <button type="button" class="btn btn-light" onclick="plus()">+</button>
                 </div>
-                <div class="form-group"><p>총 금액: <span id="totalPrice"></span>원</p></div>
+                <div class="form-group"><p>총 금액: <span id="totalPrice">${buy.totalPrice }</span>원</p></div>
                
-                <button type="button" class="btn btn-outline-danger">♡</button>
                 <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
                 <button type="button" class="btn btn-primary" onclick="packProduct()">포장하기</button>
             </div>
         </div>
     </div>
+</div>
+<div class="container">
+<hr>
+<br>
+<br>
+<h5 class="bold-text">다른 고객들이 많이 본 상품</h5>
+
+
+
+<!-- 추가 Info -->
+<br>
+<br>
+  <ul class="nav nav-tabs nav-justified">
+    <li class="nav-item">
+      <a class="nav-link" href="#">상품상세정보</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">고객리뷰</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">배송/반품/교환 안내</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">추천상품</a>
+    </li>
+  </ul>
+
 </div>
 
 <script>
@@ -104,3 +136,20 @@
     }
 
 </script>
+
+<style>
+/* a태그 스타일*/
+/* a 태그 기본 색상을 검정색으로 설정 */
+a {
+    color: black;
+    text-decoration: none; /* 밑줄 없애기 */
+}
+
+/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
+a:hover {
+    color: #CB444A;
+    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+}
+
+
+</style>
