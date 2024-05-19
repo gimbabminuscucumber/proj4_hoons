@@ -76,11 +76,8 @@ public class ProductController extends HttpServlet{
 			// 												제품 등록 2
 			// ====================================================	
 			}else if(cmd.equals("save")) {
-				// 일반적인 form 태그에 심어둔 hidden 값을 가져오는 방법
+				
 				int userId = Integer.parseInt(request.getParameter("userId"));
-
-				// Multipart form data에서 일반 폼 필드 데이터를 추출하는 방법
-				//int userId = Integer.parseInt(request.getPart("userId").getInputStream().toString());
 				int price = Integer.parseInt(request.getParameter("price"));
 				int categoryId = Integer.parseInt(request.getParameter("category"));
 				String brand = request.getParameter("brand");
@@ -92,19 +89,28 @@ public class ProductController extends HttpServlet{
 				Part imgPart = request.getPart("img");
 				String imgFileName = Paths.get(imgPart.getSubmittedFileName()).getFileName().toString();
 				InputStream imgInputStream = imgPart.getInputStream();
-				
+				// explanation 추가
+	            Part explainPart = request.getPart("explanation");
+	            String explainFileName = Paths.get(explainPart.getSubmittedFileName()).getFileName().toString();
+	            InputStream explainInputStream = explainPart.getInputStream();
+	            
 				// 2. 파일 이름에 타임스탬프 추가
 				String timestamp = String.valueOf(System.currentTimeMillis());
 				String newImgFileName = timestamp + "_" + imgFileName;
-				System.out.println("ProductController/save/newImgFileName : " + newImgFileName);
-	            
+				// explanation 추가
+	            String newExplainFileName = timestamp + "_" + explainFileName;
+				
 				// 3. 파일 저장 경로 설정
 				String uploadPath = getServletContext().getRealPath("/images/productImg");
 				Path filePath = Paths.get(uploadPath, newImgFileName);
-
+				// explain 추가
+				 Path explainFilePath = Paths.get(uploadPath, newExplainFileName);
+				 
 				// 4. 파일 저장
 				Files.copy(imgInputStream, filePath);
-	            
+				// explanation 추가
+				Files.copy(explainInputStream, explainFilePath);
+				
 				SaveReqDto dto = new SaveReqDto();
 				dto.setUserId(userId);
 				dto.setPrice(price);
@@ -115,20 +121,23 @@ public class ProductController extends HttpServlet{
 //				dto.setImg(img);
 				
 				// 이미지 파일 업로드
-//	            dto.setImgFileName(imgFileName);				// 수정전
-	            dto.setImgFileName(newImgFileName);		// 수정후
+	            dto.setImgFileName(newImgFileName);
 	            dto.setImgInputStream(imgInputStream);
+				// explanation 추가
+	            dto.setExplainFileName(newExplainFileName);
+	            dto.setExplainInputStream(explainInputStream);
 				
 	            System.out.println("ProductController/save/dto : " + dto);
 	            
 				int result = productService.제품등록(dto);
 				
 				if(result == 1) {	// 정상 입력 완료
-					response.sendRedirect("/project4/product/list.jsp");
+					response.sendRedirect("/project4/product?cmd=list");
 				}else {					// 정상 입력 실패
 					Script.back(response, "상품 등록 실패");
 				}
-			
+				
+				
 			// ====================================================	
 			// 												제품 목록
 			// ====================================================	

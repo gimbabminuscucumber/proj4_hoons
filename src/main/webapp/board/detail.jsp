@@ -93,5 +93,4 @@
 
 <script src="/project4/js/boardDetail.js"></script>
 
-</body>
-</html>
+<%@ include file = "../layout/footer.jsp" %>

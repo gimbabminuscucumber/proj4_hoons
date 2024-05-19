@@ -1,187 +1,226 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../layout/header.jsp"%>
 
-<!-- 상단 배너 -->
-<section class="container" style="width: 1100px">
-	<div id="demo" class="carousel slide" data-ride="carousel" >
-		<ul class="carousel-indicators">
-			<li data-target="#demo" data-slide-to="0" class="active"></li>
-			<li data-target="#demo" data-slide-to="1"></li>
-			<li data-target="#demo" data-slide-to="2"></li>
-		</ul>
-		<div class="carousel-inner">
-			<!-- 배너 1 -->
-			<div class="carousel-item active">
-				<img src="/project4/images/banner/포르미.png" alt="배너 1" width="1000" height="500">
-				<div class="carousel-caption">
-				</div>   
-			</div>
-			
-			<!-- 배너 2 -->
-			<div class="carousel-item">
-			<img src="/project4/images/banner/카페인신현리.png" alt="배너 2" width="1000" height="500">
-				<div class="carousel-caption">
-				</div>   
-			</div>
-			
-			<!-- 배너 3 -->
-			<div class="carousel-item">
-				<img src="/project4/images/banner/산양유프로틴.png" alt="배너 3" width="1000" height="500">
-				<div class="carousel-caption">
-				</div>   
-			</div>
-		</div>
+<br>
+<br>
+<h1 style="text-align: center">
+	<div class="d-flex justify-content-center">
+		<img src="images/icons/paper.png" alt="Logo" style="width:50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">상품 등록</div>
 	</div>
-</section>
+</h1>
+<br>
+<br>
 
-<section class="container">
+<div class="container" style="text-align: center">
+	<form action="/project4/product?cmd=save" method="POST" name="save"  enctype="multipart/form-data">
+		<input type="hidden" name="userId" id="userId" value="${sessionScope.principal.id }">
 
-    <!-- 왼쪽 섹션 -->
-    <div class="section left">
-        <br>
-        <br>
-		<div class="card m-2">
-			<div class="card-header">
-				<i class="mtrl-select">카테고리</i>
-			</div>
-		</div>
-        <div class="card m-2" style="width: 180px">
-            <div class="list-group">
-            
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong><a href="/project4/product?cmd=search&categoryId=0">정육</a></strong></div>
-               		<div style="color:grey">&nbsp;meat</div>
-               	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong><a href="/project4/product?cmd=search&categoryId=1">과일</a></strong></div>
-               		<div style="color:grey">&nbsp;fruit</div>
-               	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong><a href="/project4/product?cmd=search&categoryId=2">채소</a></strong></div>
-               		<div style="color:grey">&nbsp;vegetable</div>
-               	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong><a href="/project4/product?cmd=search&categoryId=4">과자/간식</a></strong></div>
-               		<div style="color:grey">&nbsp;snack</div>
-               	</div>
-               	<div class="list-group-item list-group-item-action d-flex">
-               		<div><strong><a href="/project4/product?cmd=search&categoryId=5">밀키트</a></strong></div>
-               		<div style="color:grey">&nbsp;mealkit</div>
-               	</div>
-            </div>
-        </div>
-    </div>
-    <!-- 왼쪽 섹션 종료 -->
-
-    <!-- 중앙 섹션 -->
-    <div class="section center">
-    
-        <!-- 검색창 -->
-        <div class="m-2">
-            <form class="form-inline d-flex justify-content-end" action="/project4/product">
-                <input type="hidden" name="cmd" value="search" />
-                <input type="hidden" name="page" value="0" />
-                <input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 30%">
-                <button class="btn btn-primary m-1">검색</button>
-            </form>
-        </div>
-		
-		<!-- 상단 Nav -->
-		<div class="card m-2">
-			<div class="card-header">
-				<c:choose>
-					<c:when test="${empty param.keyword && empty param.categoryId }">
-						<i class="mtrl-select">모든 상품</i>
-					</c:when>
-					<c:when test="${!empty param.keyword }">
-						<i class="mtrl-select">'${param.keyword }' </i>로 검색한 결과
-					</c:when>
-					<c:when test="${!empty param.categoryId }">
-						<i class="mtrl-select">'${param.categoryId }' </i>
-							<c:choose>
-								<c:when test="${param.categoryId == 0}">정육</c:when>
-								<c:when test="${param.categoryId == 1}">과일</c:when>
-								<c:when test="${param.categoryId == 2}">채소</c:when>
-								<c:when test="${param.categoryId == 3}">과자/간식</c:when>
-								<c:when test="${param.categoryId == 4}">밀키트</c:when>
-							</c:choose>
-					</c:when>
-					<c:otherwise>
-						
-					</c:otherwise>
-				</c:choose>
+		<div class="form-group" >
+			<div class="material-icons-input" style="width: 421px">
+			    <span class="material-icons">local_grocery_store</span>
+			    <input type="text" name="brand" id="brand" class="form-control" placeholder="브랜드를 입력하세요"  required/>
 			</div>
 		</div>
 		
-		<!-- 상품 리스트 -->
-        <c:if test="${empty products}">
-            <div>&nbsp; 등록된 상품이 없습니다.</div>
-        </c:if>
+		<div class="form-group" >
+			<div class="material-icons-input" style="width: 421px">
+			    <span class="material-icons">textsms</span>
+			    <input type="text" name="content" id="content" class="form-control" placeholder="제품에 대해 설명해주세요" required/>
+			</div>	
+		</div>
 
-        <div class="row">
-            <c:forEach var="product" items="${products}" varStatus="status">
-            	<input type="hidden" name="id" value="${product.id }">
-                <div class="col-md-3">
-                    <div class="card m-2">
-                        <a href="/project4/product?cmd=detail&id=${product.id }">
-                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
-                        </a>
-                        <div class="card-body">
-							<c:choose>
-								<c:when test="${product.categoryId == 0}">정육</c:when>
-								<c:when test="${product.categoryId == 1}">과일</c:when>
-								<c:when test="${product.categoryId == 2}">채소</c:when>
-								<c:when test="${product.categoryId == 3}">과자/간식</c:when>
-								<c:when test="${product.categoryId == 4}">밀키트</c:when>
-							</c:choose>
-                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></h5>
-                       		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
-                   			<div class="d-flex justify-content-end" >
-	                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
-	                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
-							</div>				                   			
-                        </div>
-                    </div>
-                </div>
+		<div class="form-group">
+			<div class="material-icons-input" style="width: 421px">
+				<span class="material-icons">local_offer</span>
+				<div>
+				    <select name="category" id="category" class="custom-select" style="padding-left: 40px;">
+				        <option selected disabled>카테고리</option>
+				        <option value=0>정육</option>
+				        <option value=1>과일</option>
+				        <option value=2>채소</option>
+				        <option value=3>과자/간식</option>
+				        <option value=4>밀키트</option>
+				    </select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group" >
+			<div class="material-icons-input" style="width: 421px">
+			    <span class="material-icons">monetization_on</span>
+			    <input type="text" name="price" id="price" class="form-control" placeholder="상품 금액을 입력하세요 (숫자만 입력)" required/>
+			</div>	
+		</div>
 
-                <c:if test="${status.index % 4 == 4}">
-                    </div><div class="row">
-                </c:if>
-            </c:forEach>
-        </div>
-    </div>
-    <!-- 중앙 섹션 종료 -->
+		<!-- 메인 이미지 -->
+		<!-- ajax로 썸네일 이미지 영역인걸 표시 -->
+		<div class="form-group d-flex insert-input-container">
+			<div class="material-icons-input" style="width: 421px">
+				<span class="material-icons">panorama</span>
+				<input type="file"  class="form-control" name="img"  id="fileInput" accept="image/*" >
+			</div>
+		</div>
 
-</section>
+		<!-- 상품 상세설명 -->
+		<!-- ajax로 상품 상세설명 이미지 영역인걸 표시 -->
+		<div class="form-group d-flex insert-input-container">
+			<div class="material-icons-input" style="width: 421px">
+				<span class="material-icons">perm_media</span>
+				<input type="file" class="form-control" name="explain"  id="explain" accept="image/*" >
+			</div>
+		</div>
+		
+		<div style="padding-right: 303px">
+			<p><input type="checkbox" id="weightCheckbox" onchange="abledOrNot()"> '무게 선택' 입력</p>  <!-- input 창 두개를 개별로 disabled 하지말고 한꺼번에 처리하기 -->
+		</div>
+ 		<div class="form-group insert-input-container" >
+ 			<div class="material-icons-input">
+				<span class="material-icons">fitness_center</span>
+				<div>
+					<select id="inputWeight" class="custom-select" style="width: 155px; padding-left: 40px;" onchange="nullCheck()"  disabled>
+						<option selected disabled>무게 선택</option>
+						<option value="g당">g당</option>
+						<option value="kg당">kg당</option>
+					</select>
+				</div>
+			</div>
+		    <div class="material-icons-input" style="width: 266px">
+		        <span class="material-icons">attach_money</span>
+		        <input type="text" id="inputPrice" class="form-control"  placeholder="무게당 금액 (숫자만 입력)" onchange="nullCheck()"  disabled>
+		    </div>
+		</div> 
+		
+		<br>
+		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
+		<button type="button" class="btn btn-info" >미리보기</button>
+		<button type="button" class="btn btn-primary" style="width: 128px" onclick="nullCheck()">상품 등록</button>
+	</form>
+</div>
 
-<script src="/project4/js/productInfo.js"></script>
+
+<!-- <script src="/project4/js/productInfo.js"></script> -->
+<script>
+
+	// ====================================================	
+	// 											submit 조건
+	// ====================================================	
+	function nullCheck(){
+	
+		var userId = document.getElementById("userId").value;
+		var brand = document.getElementById("brand").value;
+	    var category = document.getElementById("category").value;
+	    var price = document.getElementById("price").value;
+	    var img = document.getElementById("fileInput").value;
+	    var content = document.getElementById("content").value;
+	    //var weight = document.getElementById("inputWeight").value + document.getElementById("inputPrice").value;
+	    
+	    
+	    // submit 조건
+		if(brand === '' ){									// 브랜드명이 공란이면
+			alert('브랜드명을 입력하세요');
+		}else if(content === ''){
+			alert('제품 설명을 작성하세요');	
+		}else if(category === '카테고리'){			// 카테고리가 선택이 안되면('카테고리')
+			alert('카테고리를 선택하세요');
+		}else if(price === ''){								// 상품 가격이 공란이면
+			alert('상품 금액을 입력하세요');
+		}else if (isNaN(price)) {						// 상품 가격이 문자열이면
+		    alert('상품 금액은 숫자로만 입력하세요');
+		}else if(img === ''){								// img가 공란이면
+			alert('상품 이미지를 등록하세요');
+		}else{
+			document.save.submit();
+		}
+	}
+	
+	// ** '무게 선택' 체크박스 선택 시, 데이터 전달
+
+	// ====================================================	
+	// 											'무게 선택' 조건사항
+	// ====================================================	
+	function weightCombine(){
+		var inputWeight = document.getElementById("inputWeight").value;
+		var inputPrice = document.getElementById("inputPrice").value;
+		weight = "";
+		
+		// '무게 선택' 체크박스 체크 시 
+		if(inputWeight === '무게 선택' && inputPrice === ''){		// 둘다 입력 안하면
+			alert('\'무게 선택\'과 \'무게당 금액\'을 입력하세요');
+		}else if(inputWeight !== '무게 선택' && inputPrice === ''){		// 무게 선택만 하면
+			alert('무게당 금액을 입력하세요');
+		}else if(inputWeight === '무게 선택' && inputPrice === ''){		// 무게당 금액이 공란이면
+			alert('무게당 금액을 입력하세요');
+			console.log('2222222222');
+		}else if(inputWeight === '무게 선택' && inputPrice !== ''){		// 무게당 금액만 입력하면
+			alert('무게를 선택하세요');
+		}else if(isNaN(inputPrice)){			// 무게당 금액이 문자열이면
+			alert('무게당 금액은 숫자로만 입력하세요');
+		}else {
+			weightPass = true;
+		}
+		weight = inputWeight + " : " + inputPrice;
+	}
+		
+		
+	// ====================================================	
+	// 								'무게 선택' 체크박스 입력란 활성화
+	// ====================================================	
+	// - 체크 시, 입력가능
+	function abledOrNot(){
+		var weightCheckbox = document.getElementById("weightCheckbox");
+		var inputWeight = document.getElementById("inputWeight");
+		var inputPrice = document.getElementById("inputPrice");
+		
+		if(weightCheckbox.checked){
+			inputPrice.disabled = false;
+			inputWeight.disabled = false;
+		}else{
+			inputPrice.disabled = true;
+			inputWeight.disabled = true;
+		}
+	}
+
+
+</script>
+
 
 <style>
-.container {
-    display: flex;
-    /* justify-content: space-between; */
-}
 
-.section {
-    padding: 10px;
-    margin: 1px;
-}
+    .material-icons-input {				/* input 될 아이콘 칸 */
+        display: inline-block;
+        position: relative;
+    }
+    .material-icons-input input {		/* 아이콘이 포함된 input 태그 */
+	    width: 100%;
+	    padding-left: 40px; 					/* 예시: 좀 더 넓은 여백을 주기 위해 padding-left 값 조정 */
+    }
+    .material-icons-input .material-icons {		/* 아이콘 위치 */
+        position: absolute;
+        left: 5px; 									/* 아이콘을 왼쪽에 위치 */
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .insert-input-container {			/* 이메일 입력 칸과 버튼 간의 간격 조절 */
+        display: flex;
+        align-items: center; 		
+        justify-content: center; 			/* 수평 정렬을 위해 */
+    }
 
-.section.left {
-    flex: 1;
-}
+    .insert-input-container .form-control {
+        flex: 1; 										/* 입력 칸이 버튼의 크기에 따라 유동적으로 변할 수 있도록 */
+        margin-right: 5px; 					/* 버튼과의 간격 조절 */
+    }
 
-.section.center {
-    flex: 9;
-}
-
-/*상단 배너*/
-.carousel-inner img{
-	width: 100%;
-	height: 150px
-}
-
+    .insert-input-container .btn {
+        flex-shrink: 0; 							/* 버튼이 입력 칸의 크기에 영향을 받지 않도록 */
+    }
+ 
+ 	/*챗gpt*/
+	.material-icons-input .custom-file-label {
+		padding-left: 40px; /* 아이콘을 피하기 위한 여백 */
+	}
+   
+    
 </style>

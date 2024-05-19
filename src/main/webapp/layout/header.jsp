@@ -39,6 +39,7 @@
 					<ul class="navbar-nav">
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list">상품 목록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
 					</ul>
 	
@@ -69,7 +70,7 @@
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list">상품 목록</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">페이지 테스트</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
 					</ul>
 				</div>
 			</c:otherwise>

@@ -54,10 +54,21 @@
 			</div>	
 		</div>
 
+		<!-- 메인 이미지 -->
+		<!-- ajax로 썸네일 이미지 영역인걸 표시 -->
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 421px">
-				<span class="material-icons">add_a_photo</span>
-				<input type="file"  class="form-control" name="img"  id="fileInput" accept="image/*" >
+				<span class="material-icons">panorama</span>
+				<input type="file"  class="form-control" name="img"  id="img" accept="image/*" >
+			</div>
+		</div>
+
+		<!-- 상품 상세설명 -->
+		<!-- ajax로 상품 상세설명 이미지 영역인걸 표시 -->
+		<div class="form-group d-flex insert-input-container">
+			<div class="material-icons-input" style="width: 421px">
+				<span class="material-icons">perm_media</span>
+				<input type="file"  class="form-control" name="explanation"  id="explanation" accept="image/*" >
 			</div>
 		</div>
 
@@ -100,15 +111,16 @@
 	
 		var userId = document.getElementById("userId").value;
 		var brand = document.getElementById("brand").value;
+	    var content = document.getElementById("content").value;
 	    var category = document.getElementById("category").value;
 	    var price = document.getElementById("price").value;
-	    var img = document.getElementById("fileInput").value;
-	    var content = document.getElementById("content").value;
+	    var img = document.getElementById("img").value;
+	    var explanation = document.getElementById("explanation").value;
 	    //var weight = document.getElementById("inputWeight").value + document.getElementById("inputPrice").value;
 	    
 	    
 	    // submit 조건
-		if(brand === '' ){									// 브랜드명이 공란이면
+		if(brand === '' ){									
 			alert('브랜드명을 입력하세요');
 		}else if(content === ''){
 			alert('제품 설명을 작성하세요');	
@@ -118,8 +130,10 @@
 			alert('상품 금액을 입력하세요');
 		}else if (isNaN(price)) {						// 상품 가격이 문자열이면
 		    alert('상품 금액은 숫자로만 입력하세요');
-		}else if(img === ''){								// img가 공란이면
-			alert('상품 이미지를 등록하세요');
+		}else if(img === ''){								
+			alert('상품 썸네일 이미지를 등록하세요');
+		}else if(explanation === ''){							
+			alert('상품 상세설명 이미지를 등록하세요');
 		}else{
 			document.save.submit();
 		}

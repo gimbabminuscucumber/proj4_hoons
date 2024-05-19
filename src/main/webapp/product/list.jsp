@@ -202,3 +202,4 @@ a:hover {
 
 
 </style>
+<%@ include file = "../layout/footer.jsp" %>

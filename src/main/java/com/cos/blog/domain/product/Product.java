@@ -23,6 +23,7 @@ public class Product {
 	private String img;			// 사진				(대용량 업로드는 어떤 자료형을 쓰나?)
 	private String content;		// 설명
 	private Timestamp createDate;
+	private String explain;		// 제품 상세설명
 	
 	// 이름(name)에 <script> 코드 방어
 	// - lucy filter로도 방어 가능 (더 궁극적임)

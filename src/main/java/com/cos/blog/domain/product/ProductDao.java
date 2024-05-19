@@ -17,16 +17,19 @@ import com.cos.blog.domain.product.dto.SaveReqDto;
 
 public class ProductDao {
 
-	public int save(SaveReqDto dto) throws IOException {			// 제품 작성
+	// 상품 등록
+	public int save(SaveReqDto dto) throws IOException {			
 
 		// 이미지 파일 경로 저장
 		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
+		String explainPath = uploadImage(dto.getExplainInputStream(), dto.getExplainFileName());
 		System.out.println("ProductDao/save/imagePath : "  + imagePath);
+		System.out.println("ProductDao/save/explainPath : "  + explainPath);
 		if(imagePath == null) {
 			return -1;	// 이미지 업로드 실패 시 처리
 		}
 		
-		String sql = "INSERT INTO product(userId, price, categoryId, weight, brand, img, content, createDate) VALUES(?,?,?,?,?,?,?, now())";
+		String sql = "INSERT INTO product(userId, price, categoryId, weight, brand, img, content, explanation, createDate) VALUES(?,?,?,?,?,?,?,?, now())";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		
@@ -38,10 +41,9 @@ public class ProductDao {
 			pstmt.setString(4, dto.getWeight());
 			pstmt.setString(5, dto.getBrand());
 //			pstmt.setString(6, dto.getImg());	
-			pstmt.setString(6, dto.getImgFileName());		// 이미지 경로 저장
-			pstmt.setString(7, dto.getContent());
-			
-			System.out.println("ProductDao/save/pstmt : " + pstmt);
+			pstmt.setString(6, dto.getImgFileName());// 이미지 경로 저장
+			pstmt.setString(7, dto.getContent());		// 간단 설명
+			pstmt.setString(8, dto.getExplainFileName());		// 제품 상세설명
 			
 			int result = pstmt.executeUpdate();
 			return result;
@@ -152,7 +154,7 @@ public class ProductDao {
 	
 	// 상품 리스트
 	public List<DetailRespDto> findAll() {
-		String sql = "SELECT * FROM product ORDER BY id"; 
+		String sql = "SELECT * FROM product ORDER BY id DESC"; 
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -231,6 +233,7 @@ public class ProductDao {
 				dto.setImg(rs.getString("img"));
 				dto.setCreateDate(rs.getTimestamp("createDate"));
 				dto.setView(rs.getInt("view"));
+				dto.setExplanation(rs.getString("explanation"));
 				return dto;
 			}
 		}catch(Exception e) {
@@ -268,7 +271,7 @@ public class ProductDao {
 
 	// 상품 검색
 	public List<DetailRespDto> findByKeyword(String keyword) {
-		String sql = "SELECT * FROM product WHERE brand LIKE ? OR content LIKE ? ORDER BY id";
+		String sql = "SELECT * FROM product WHERE brand LIKE ? OR content LIKE ? ORDER BY id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -293,6 +296,7 @@ public class ProductDao {
 						.count(rs.getInt("count"))
 						.img(rs.getString("img"))
 						.view(rs.getInt("view"))
+						.explanation(rs.getString("explanation"))
 						.build();
 				products.add(dto);
 			}
@@ -307,7 +311,7 @@ public class ProductDao {
 
 	// 카테고리별 상품 목록
 	public List<DetailRespDto> findByCategory(int categoryId) {
-		String sql = "SELECT * FROM product WHERE categoryId = ? ORDER BY id";
+		String sql = "SELECT * FROM product WHERE categoryId = ? ORDER BY id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -331,6 +335,7 @@ public class ProductDao {
 						.count(rs.getInt("count"))
 						.img(rs.getString("img"))
 						.view(rs.getInt("view"))
+						.explanation(rs.getString("explanation"))
 						.build();
 				products.add(dto);
 			}
@@ -386,6 +391,7 @@ public class ProductDao {
 						.content(rs.getString("content"))
 						.createDate(rs.getTimestamp("createDate"))
 						.view(rs.getInt("view"))
+						.explanation(rs.getString("explanation"))
 						.build();
 				suggests.add(dto);
 			}

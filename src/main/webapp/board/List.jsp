@@ -136,7 +136,6 @@
 	<!-- 중앙 섹션 종료 -->
 </section>
 
-</body>
 
 <style>
 .container {
@@ -156,4 +155,4 @@
 }
 </style>
 
-</html>
+<%@ include file = "../layout/footer.jsp" %>

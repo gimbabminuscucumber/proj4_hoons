@@ -78,21 +78,26 @@
 <!-- 추가 Info -->
 <br>
 <br>
-  <ul class="nav nav-tabs nav-justified">
-    <li class="nav-item">
-      <a class="nav-link" href="#">상품상세정보</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">고객리뷰</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">배송/반품/교환 안내</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">추천상품</a>
-    </li>
-  </ul>
 
+<ul class="nav nav-tabs nav-justified">
+	<li class="nav-item">
+		<a class="nav-link" href="#" onclick="scrollToDetail(event)">상품상세정보</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="#">고객리뷰</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="#">배송/반품/교환 안내</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="#">추천상품</a>
+	</li>
+</ul>
+
+<br>
+<br>
+<br>
+<img src="/project4/images/productImg/${products.explanation }" id="productDetail" alt="Product Detail" >
 </div>
 
 <script>
@@ -119,6 +124,12 @@
         var quantity = parseInt(document.getElementById("quantity").value);
         var price = parseInt(${product.price});
         document.getElementById("totalPrice").innerText = price * quantity;
+    }
+	
+    // 상세 정보로 스크롤
+    function scrollToDetail(event) {
+        event.preventDefault(); // 기본 동작 막기
+        document.getElementById('productDetail').scrollIntoView({behavior: 'smooth'});
     }
 	
 	// 상품 포장 
@@ -170,3 +181,5 @@ a:hover {
 
 
 </style>
+
+<%@ include file = "../layout/footer.jsp" %>

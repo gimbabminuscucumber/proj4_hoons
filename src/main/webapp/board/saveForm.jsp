@@ -65,5 +65,4 @@ function nullCheck(){			// 글쓰기 등록 클릭시, content가 null 이면 �
 	}
 }
 </script>
-</body>
-</html>
+<%@ include file = "../layout/footer.jsp" %>

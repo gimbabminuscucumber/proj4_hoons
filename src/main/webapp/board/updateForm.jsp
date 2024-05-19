@@ -52,5 +52,4 @@
 	console.log(selectedValue);
 </script>
  
- </body>
-</html>
+<%@ include file = "../layout/footer.jsp" %>

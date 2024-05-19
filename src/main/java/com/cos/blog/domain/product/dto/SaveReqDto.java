@@ -13,8 +13,11 @@ public class SaveReqDto {
 	private String content;
 	private String weight;
 		
-//	private String img;
+	// img
     private InputStream imgInputStream;
     private String imgFileName;
+	// explain
+    private InputStream explainInputStream;
+    private String explainFileName;
     
 }
