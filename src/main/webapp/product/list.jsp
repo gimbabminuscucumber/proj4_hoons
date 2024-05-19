@@ -137,15 +137,9 @@
 	                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
 	                        </a>
 	                        <div class="card-body">
-								<c:choose>
-									<c:when test="${product.categoryId == 0}">정육</c:when>
-									<c:when test="${product.categoryId == 1}">과일</c:when>
-									<c:when test="${product.categoryId == 2}">채소</c:when>
-									<c:when test="${product.categoryId == 3}">과자/간식</c:when>
-									<c:when test="${product.categoryId == 4}">밀키트</c:when>
-								</c:choose>
-	                           	<h5><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></h5>
-	                       		<p><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</p>
+	                           	<div><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></div>
+	                           	<p style="font-size: 13px; color: grey">${product.content }</p>
+	                       		<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</h5>
 	                   			<div class="d-flex justify-content-end" >
 		                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
 		                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
@@ -191,5 +185,19 @@
 	width: 100%;
 	height: 150px
 }
+
+/* a태그 스타일*/
+/* a 태그 기본 색상을 검정색으로 설정 */
+a {
+    color: black;
+    text-decoration: none; /* 밑줄 없애기 */
+}
+
+/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
+a:hover {
+    color: #CB444A;
+    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+}
+
 
 </style>

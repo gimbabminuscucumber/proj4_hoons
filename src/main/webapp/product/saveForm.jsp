@@ -150,7 +150,7 @@
 		}else {
 			weightPass = true;
 		}
-		weight = inputWeight + inputPrice;
+		weight = inputWeight + " : " + inputPrice;
 	}
 		
 		
