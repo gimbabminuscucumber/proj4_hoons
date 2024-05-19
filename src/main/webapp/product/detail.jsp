@@ -54,9 +54,26 @@
 <hr>
 <br>
 <br>
+
 <h5 class="bold-text">다른 고객들이 많이 본 상품</h5>
-
-
+	<br>
+        <div class="row">
+            <c:forEach var="suggest" items="${suggests}" varStatus="status">
+            	<input type="hidden" name="id" value="${suggest.id }">
+                <div class="col-md-3">
+                    <div class="card m-2">
+                        <a href="/project4/product?cmd=detail&id=${suggest.id }">
+                        	<img src="${pageContext.request.contextPath}/images/productImg/${suggest.img}" alt="Product Image" style="width: 100%; height: 152px;">
+                        </a>
+                        <div class="card-body">
+                           	<div><a href="/project4/product?cmd=detail&id=${suggest.id }"><strong>${suggest.brand}</strong></a></div>
+                           	<p style="font-size: 13px; color: grey">${suggest.content }</p>
+                       		<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${suggest.price}"/></strong>원</h5>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+		</div>
 
 <!-- 추가 Info -->
 <br>

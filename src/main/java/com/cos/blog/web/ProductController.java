@@ -151,6 +151,25 @@ public class ProductController extends HttpServlet{
 				dis.forward(request, response);	
 			
 			// ====================================================	
+			// 												상품 상세
+			// ====================================================
+			}else if(cmd.equals("detail")) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				DetailRespDto products = productService.상품상세보기(id);
+				List<DetailRespDto> suggests = productService.추천상품();
+				
+				System.out.println("ProductController/detail/suggests : "  + suggests);
+				
+				if(products == null) {
+					Script.back(response, "상품을 찾을 수 없습니다.");
+				}else {
+					request.setAttribute("products", products);
+					request.setAttribute("suggests", suggests);
+					RequestDispatcher dis = request.getRequestDispatcher("product/detail.jsp");
+					dis.forward(request, response);	
+				}
+				
+			// ====================================================	
 			// 												제품 삭제
 			// ====================================================
 			}else if(cmd.equals("delete")) {
@@ -168,21 +187,6 @@ public class ProductController extends HttpServlet{
 				out.print(respData);
 				out.flush();
 
-			// ====================================================	
-			// 												상품 상세
-			// ====================================================
-			}else if(cmd.equals("detail")) {
-				int id = Integer.parseInt(request.getParameter("id"));
-				DetailRespDto products = productService.상품상세보기(id);
-				
-				if(products == null) {
-					Script.back(response, "상품을 찾을 수 없습니다.");
-				}else {
-					request.setAttribute("products", products);
-					RequestDispatcher dis = request.getRequestDispatcher("product/detail.jsp");
-					dis.forward(request, response);	
-				}
-				
 			// ====================================================	
 			// 												포장하기
 			// ====================================================	

@@ -174,6 +174,7 @@ public class ProductDao {
 						.img(rs.getString("img"))
 						.content(rs.getString("content"))
 						.createDate(rs.getTimestamp("createDate"))
+						.view(rs.getInt("view"))
 						.build();
 				products.add(dto);
 			}
@@ -358,6 +359,43 @@ public class ProductDao {
 			DB.close(conn, pstmt);
 		}
 		return -1;
+	}
+
+	// 많이 본 상품
+	public List<DetailRespDto> findByView() {
+		String sql = "SELECT * FROM product ORDER BY view DESC LIMIT 4";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<DetailRespDto> suggests = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("id"))
+						.userId(rs.getInt("userId"))
+						.price(rs.getInt("price"))
+						.categoryId(rs.getInt("categoryId"))
+						.count(rs.getInt("count"))
+						.weight(rs.getString("weight"))
+						.brand(rs.getString("brand"))
+						.img(rs.getString("img"))
+						.content(rs.getString("content"))
+						.createDate(rs.getTimestamp("createDate"))
+						.view(rs.getInt("view"))
+						.build();
+				suggests.add(dto);
+			}
+			return suggests;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
 	}
 	
 }

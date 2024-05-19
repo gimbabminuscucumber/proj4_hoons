@@ -59,5 +59,9 @@ public class ProductService {
 		return productDao.findByCategory(categoryId);
 	}
 
+	public List<DetailRespDto> 추천상품() {
+		return productDao.findByView();
+	}
+
 
 }

@@ -150,7 +150,8 @@
 				</c:if>
 
                 <c:if test="${status.index % 4 == 4}">
-                    </div><div class="row">
+		</div>
+			<div class="row">
                 </c:if>
             </c:forEach>
         </div>
