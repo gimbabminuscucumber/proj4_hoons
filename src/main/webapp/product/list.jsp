@@ -93,7 +93,7 @@
                 <button class="btn btn-primary m-1">검색</button>
             </form>
         </div>
-		
+		principal.id = ${principal.id }
 		<!-- 상단 Nav -->
 		<div class="card m-2">
 			<div class="card-header">

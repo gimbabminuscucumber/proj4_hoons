@@ -28,7 +28,7 @@ public class ReplyService {
 		return replyDao.deleteById(id);
 	}
 
-//	public List<Reply> 댓글목록(int boardId) {					// 댓글 목록
+//	public List<Reply> 댓글목록(int boardId) {			// 댓글 목록
 //		return replyDao.findAll(boardId);
 //	}
 	

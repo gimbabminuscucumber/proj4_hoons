@@ -23,8 +23,6 @@ public class ProductDao {
 		// 이미지 파일 경로 저장
 		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
 		String explainPath = uploadImage(dto.getExplainInputStream(), dto.getExplainFileName());
-		System.out.println("ProductDao/save/imagePath : "  + imagePath);
-		System.out.println("ProductDao/save/explainPath : "  + explainPath);
 		if(imagePath == null) {
 			return -1;	// 이미지 업로드 실패 시 처리
 		}
@@ -262,11 +260,6 @@ public class ProductDao {
 	        DB.close(conn, pstmt);
 	    }
 	    return -1;
-	}
-
-	// 상품 포장
-	public int packProduct(int productId, int quantity) {
-		return 0;
 	}
 
 	// 상품 검색

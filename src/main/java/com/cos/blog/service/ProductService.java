@@ -46,11 +46,6 @@ public class ProductService {
 		}
 	}
 
-	public int 제품포장(int productId, int quantity) {
-		productDao.updateProductCount(productId, quantity);	// 구매 횟수
-		return productDao.packProduct(productId, quantity);		// 상품 포장
-	}
-
 	public List<DetailRespDto> 상품검색(String keyword) {
 		return productDao.findByKeyword(keyword);
 	}

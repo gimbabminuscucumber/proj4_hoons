@@ -1,5 +1,6 @@
 package com.cos.blog.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -18,10 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
+import com.cos.blog.service.BuyService;
 import com.cos.blog.service.ProductService;
 import com.cos.blog.util.Script;
 import com.google.gson.Gson;
@@ -55,6 +58,7 @@ public class ProductController extends HttpServlet{
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String cmd = request.getParameter("cmd");
 			ProductService productService = new ProductService();
+			BuyService buyService = new BuyService();
 			HttpSession session = request.getSession();							// 세션 불러오기
 			
 			// ====================================================	
@@ -142,6 +146,9 @@ public class ProductController extends HttpServlet{
 			// 												제품 목록
 			// ====================================================	
 			}else if(cmd.equals("list")) {
+				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
+				request.setAttribute("principal", principal);
+
 				//int page = Integer.parseInt(request.getParameter("page"));
 				//List<DetailRespDto> products = productService.상품목록(page);
 				List<DetailRespDto> products = productService.상품목록();
@@ -197,31 +204,44 @@ public class ProductController extends HttpServlet{
 				out.flush();
 
 			// ====================================================	
-			// 												포장하기
+			// 												상품 구매
 			// ====================================================	
-			}else if(cmd.equals("packProduct")) {
-			    int userId = Integer.parseInt(request.getParameter("userId"));
-			    int productId = Integer.parseInt(request.getParameter("productId"));
-			    int quantity = Integer.parseInt(request.getParameter("quantity"));
+			}else if(cmd.equals("buyProduct")) {
+				BufferedReader br = request.getReader();
+				Gson gson = new Gson();
+				BuyReqDto dto = gson.fromJson(br, BuyReqDto.class);
+				CommonRespDto<String> commonRespDto = new CommonRespDto<>();
+				
+				// userId, productId 값이 제대로 안들어올 때
+				if(dto.getUserId() == 0) {
+					commonRespDto.setStatusCode(-1);
+					commonRespDto.setData("로그인 후 진행해주세요.");
+					
+					String respData = gson.toJson(commonRespDto);
+					PrintWriter out = response.getWriter();
+					out.print(respData);
+					out.flush();
+					return;
+				}
 
-			    int result = productService.제품포장(productId, quantity);
+				// 상품 구매시, 구매번호 생성
+				String orderNum = buyService.구매번호();
+				dto.setOrderNum(orderNum);
 
-			    if (result == 1) {
-			        DetailRespDto product = productService.상품상세보기(productId);
-			        CommonRespDto<DetailRespDto> responseDto = new CommonRespDto<>();
-			        responseDto.setStatusCode(1);
-			        responseDto.setData(product);
-			        
-			        String jsonResponse = new Gson().toJson(responseDto);
-			        response.setContentType("application/json; charset=UTF-8");
-			        
-			        PrintWriter out = response.getWriter();
-			        out.print(jsonResponse);
-			        out.flush();
-			    } else {
-			        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "포장 실패");
-			    }
-			
+				int result = buyService.상품구매(dto);
+				if(result == 1) {
+					commonRespDto.setStatusCode(result);
+					commonRespDto.setData("구매가 완료되었습니다");
+				}else {
+					commonRespDto.setStatusCode(-1);
+					commonRespDto.setData("구매에 실패했습니다");
+				}
+				
+				String respData = gson.toJson(commonRespDto);
+				PrintWriter out = response.getWriter();
+				out.print(respData);
+				out.flush();
+				
 			// ====================================================	
 			// 							메인 페이지 검색 && 카테고리 별 리스트
 			// ====================================================
@@ -234,12 +254,8 @@ public class ProductController extends HttpServlet{
 				if(categoryIdStr != null && !categoryIdStr.isEmpty()) {
 					int categoryId = Integer.parseInt(categoryIdStr);
 					products = productService.카테고리별상품목록(categoryId);
-					System.out.println("ProductController/search/categoryIdStr111 : " + categoryIdStr);
-					System.out.println("ProductController/search/products111 : " + products);
 				}else {
 					products = productService.상품검색(keyword);
-					System.out.println("ProductController/search/categoryIdStr222 : " + categoryIdStr);
-					System.out.println("ProductController/search/products222 : " + products);
 				}
 				
 				request.setAttribute("products", products);

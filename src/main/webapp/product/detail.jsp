@@ -19,33 +19,34 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                	<input type="hidden" name="userId" id="userId" value="${sessionScope.principal.id }">
-                	<input type="hidden" name="id" id="id" value="${products.id }">
+                	<input type="hidden" name="userId" id="userId" value="${principal.id}">
+					<input type="hidden" name="productId" id="productId" value="${products.id}">
                    	<img src="/project4/images/productImg/${products.img }" alt="Product Image" style="width: 100%; max-width: 400px; height: auto;">
                 </div>
             </div>
             <div class="col-md-6">
-            	principal = ${sessionScope.principal.id }
-            	products = ${products.id }
                 <h2>${products.brand}</h2>
                 <div>
-                	<c:if test="${products.content != null}"><p><h4>${products.content}</h4></p></c:if>
+                	<c:if test="${products.content != null}"><h4>${products.content}</h4></c:if>
                 	<c:if test="${products.content == null}"><h4>하단 상세설명 참조</h4></c:if>
                 </div>
-                <p><span id="purchase">구매 횟수 : ${products.count }</span></p>
-                <h3 class="price"><fmt:formatNumber type="number" pattern="#,##0" value="${products.price}"/>원</h3>
+                <p><span id="purchase">리뷰 개수 : </span></p>
+                <h3 class="price" id="price"><fmt:formatNumber type="number" pattern="#,##0"  value="${products.price}"/>원</h3>
                 <p>(weight : ${products.weight }원)</p>
                 <c:if test="${products.content == null}"></c:if>
                
-                <div class="form-group">
-                    <button type="button" class="btn btn-light" onclick="minus()">-</button>
+                <div class="form-group d-flex" >
+                    <button type="button" class="btn btn-light" onclick="minus()" >-</button>
                     <input type="text" class="btn btn" id="quantity" value="1" min="1" style="width:50px">
                     <button type="button" class="btn btn-light" onclick="plus()">+</button>
                 </div>
-                <div class="form-group"><p>총 금액: <span id="totalPrice">${buy.totalPrice }</span>원</p></div>
-               
-                <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
-                <button type="button" class="btn btn-primary" onclick="packProduct()">포장하기</button>
+	                <div class="form-group" >
+	               		합계 : <span id="totalPrice" style="color: #CB444A; font-size:25px"><span>
+	                </div>
+               <div>
+	                <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
+	                <button type="button" class="btn btn-primary" onclick="buyProduct()">구매하기</button>
+               </div>
             </div>
         </div>
     </div>
@@ -59,7 +60,7 @@
 	<br>
         <div class="row">
             <c:forEach var="suggest" items="${suggests}" varStatus="status">
-            	<input type="hidden" name="id" value="${suggest.id }">
+            	<input type="hidden" name="suggestId" id="suggestId" value="${suggest.id }">
                 <div class="col-md-3">
                     <div class="card m-2">
                         <a href="/project4/product?cmd=detail&id=${suggest.id }">
@@ -97,7 +98,28 @@
 <br>
 <br>
 <br>
-<img src="/project4/images/productImg/${products.explanation }" id="productDetail" alt="Product Detail" >
+
+<!-- 상품상세정보 -->
+<c:if test="${empty  products.explanation}"></c:if>
+<c:if test="${!empty  products.explanation}">
+	<img src="/project4/images/productImg/${products.explanation }" id="productDetail" alt="Product Detail" >
+</c:if>
+
+<!-- 고객리뷰 -->
+<!-- 
+<h5 class="bold-text">포토 & 동영상 리뷰 ${reviews.img }</h5>
+<c:if test="${empty  reviews.img}"></c:if>
+	<img src="/project4/images/reviewImg/${reviews.img }" id="reviewImg" alt="Review Images" >
+<c:if test="${!empty  reviews.img}">
+ -->
+</c:if>
+<br>
+<br>
+
+
+<!-- 배송/반품/교환 안내 -->
+<!-- 추천상품 -->
+
 </div>
 
 <script>
@@ -119,12 +141,20 @@
         updateTotalPrice();
     }
 
+    // 초기 총 금액 설정
+    window.onload = function() {
+        updateTotalPrice();
+    };
+	
 	// 총 구매 금액
     function updateTotalPrice() {
-        var quantity = parseInt(document.getElementById("quantity").value);
-        var price = parseInt(${product.price});
-        document.getElementById("totalPrice").innerText = price * quantity;
-    }
+        var totalCount = parseInt(document.getElementById("quantity").value);		// quantity.value를 int로 파싱
+        var price = parseInt(${products.price});															// products.price를 int로 파싱
+        var totalPrice = price * totalCount;
+        var formattedPrice = new Intl.NumberFormat('ko-KR').format(totalPrice);	// 숫자를 1천 단위로 포맷팅
+
+        document.getElementById("totalPrice").innerText = formattedPrice + "원";			// price * quantity 연산값을 totaPrice의 innerText에 담기
+	}
 	
     // 상세 정보로 스크롤
     function scrollToDetail(event) {
@@ -132,37 +162,46 @@
         document.getElementById('productDetail').scrollIntoView({behavior: 'smooth'});
     }
 	
-	// 상품 포장 
-    function packProduct() {
-        var quantity = $("#quantity").val();
-        var userId = $("input[name='userId']").val();
+	// 구매하기
+    function buyProduct() {
+		
+        var userId = $("input[name='userId']").val();			// name이 userId인 input 요소의 val()를 var userId에 저장
         var productId = $("input[name='productId']").val();
+        var quantity = parseInt($("#quantity").val());
+        var price = parseInt(${products.price});
+        var totalPrice = price * quantity;
+       	
+        if (!userId || !productId || !quantity || !price || totalPrice <= 0) {
+            alert("유효한 값을 입력해주세요.");
+            return;
+        }
         
         var data = {
             userId: userId,
             productId: productId,
-            quantity: quantity
+            totalPrice: totalPrice,
+            totalCount: quantity
         };
-
+        
         $.ajax({
             type: "POST",
-            url: "/project4/product?cmd=packProduct",
+            url: "/project4/product?cmd=buyProduct",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         }).done(function(result) {
-            if (result) {
-                $("#purchase").text(result.data.count);
-                alert("포장 주문이 완료되었습니다!");
+    		if(result.statusCode == 1){
+                $("#purchase").text(result.data.count);		// count 값을 id가 "purchase"인 HTML 요소의 텍스트로 설정
+                alert("구매가 완료되었습니다!");
             } else {
-                alert("포장 주문에 실패했습다");
+                alert("구매에 실패했습니다");
             }
         }).fail(function(error) {
             console.log("Error: ", error);
-            alert("포장 주문 중 오류가 발생했습니다.");
+            alert("구매 중 오류가 발생했습니다.");
         });
-    }
 
+	}
 </script>
 
 <style>

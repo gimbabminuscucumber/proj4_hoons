@@ -78,4 +78,15 @@ CREATE TABLE product(
     foreign key (userId) references user (id)
 ) engine=InnoDB default charset=utf8;
 
+CREATE TABLE buy (
+    id int primary key auto_increment,
+    userId int,
+    productId int,
+    orderNum int,
+    totalPrice int,
+    totalCount int,
+    state varchar(100) default '주문 확인',
+    createDate timestamp
+) engine=InnoDB default charset=utf8;
+
 ```
