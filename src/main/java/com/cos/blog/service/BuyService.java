@@ -2,6 +2,7 @@ package com.cos.blog.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import com.cos.blog.domain.buy.BuyDao;
@@ -31,6 +32,11 @@ public class BuyService {
 
 	public OrderRespDto 주문완료(int id) {
 		return buyDao.findByOrder(id);
+	}
+
+	public List<OrderRespDto> 주문내역(int userId) {
+		System.out.println("BuyService/주문내역");
+		return buyDao.findOrderList(userId);
 	}
 	
 }

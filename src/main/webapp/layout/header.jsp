@@ -39,6 +39,7 @@
 					<ul class="navbar-nav">
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list">상품 목록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=basket&id=${principal.id }" >주문 내역</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
 					</ul>

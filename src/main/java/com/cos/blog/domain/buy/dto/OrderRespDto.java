@@ -2,8 +2,14 @@ package com.cos.blog.domain.buy.dto;
 
 import java.sql.Timestamp;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 public class OrderRespDto {
 	private int id;					// 구매 pk

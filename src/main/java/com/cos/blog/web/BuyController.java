@@ -110,7 +110,7 @@ public class BuyController extends HttpServlet{
 				Script.responseData(response, respData);
 				
 			// ====================================================	
-			// 												주문 완료
+			// 											주문 완료 페이지
 			// ====================================================		
 			}else if(cmd.equals("order")) {
 				int id = Integer.parseInt(request.getParameter("id"));
@@ -122,7 +122,19 @@ public class BuyController extends HttpServlet{
 				System.out.println("BuyController/orders : "  + orders);
 				RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
 				dis.forward(request, response);	
+
+			// ====================================================	
+			// 												주문 내역
+			// ====================================================	
+			}else if(cmd.equals("basket")) {
+				int userId = Integer.parseInt(request.getParameter("id"));
+				System.out.println("BuyController/basket/userId : "  + userId);
+				List<OrderRespDto> orders = buyService.주문내역(userId);
+				request.setAttribute("orders", orders);
 				
+				System.out.println("BuyController/basket/orders : "  + orders);
+				RequestDispatcher dis = request.getRequestDispatcher("buy/basket.jsp");
+				dis.forward(request, response);	
 			}
 	}
 }

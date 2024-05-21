@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
@@ -81,6 +83,48 @@ public class BuyDao {
 			DB.close(conn, pstmt, rs);
 		}
 		
+		return null;
+	}
+
+	// 주문 내역
+	public List<OrderRespDto> findOrderList(int userId) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ? ORDER BY b.id DESC";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		List<OrderRespDto> orders = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();		// 실행한 SQL 쿼리의 결과를 pstmt를 통해 rs에 할당
+			
+			while(rs.next()){
+				OrderRespDto dto = OrderRespDto.builder()
+						.id(rs.getInt("b.id"))
+						.userId(rs.getInt("b.userId"))
+						.productId(rs.getInt("b.productId"))
+						.orderNum(rs.getString("b.orderNum"))
+						.totalCount(rs.getInt("b.totalCount"))
+						.totalPrice(rs.getInt("b.totalPrice"))
+						.state(rs.getString("b.state"))
+						.createDate(rs.getTimestamp("b.createDate"))
+						.nickName(rs.getString("u.nickName"))
+						.email(rs.getString("u.email"))
+						.address(rs.getString("u.address"))
+						.brand(rs.getString("p.brand"))
+						.img(rs.getString("p.img"))
+						.content(rs.getString("p.content"))
+						.build();
+					orders.add(dto);
+			}
+			return orders;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			System.out.println("BuyDao/findOrderList/orders : " + orders);
+			DB.close(conn, pstmt, rs);
+		}
 		return null;
 	}
 
