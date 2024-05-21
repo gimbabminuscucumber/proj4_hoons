@@ -15,8 +15,8 @@ public class ProductService {
 		productDao = new ProductDao();
 	}
 	
-	public int 제품등록(SaveReqDto dto) throws IOException  {
-		System.out.println("ProductService/제품등록/dto : " + dto);		// ProductDao에서 저장성공시 1 / 실패시 -1
+	public int 상품등록(SaveReqDto dto) throws IOException  {
+		System.out.println("ProductService/상품등록/dto : " + dto);		// ProductDao에서 저장성공시 1 / 실패시 -1
 		return productDao.save(dto);
 	}
 
@@ -57,6 +57,7 @@ public class ProductService {
 	public List<DetailRespDto> 추천상품() {
 		return productDao.findByView();
 	}
+
 
 
 }

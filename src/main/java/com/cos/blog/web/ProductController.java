@@ -62,7 +62,7 @@ public class ProductController extends HttpServlet{
 			HttpSession session = request.getSession();							// 세션 불러오기
 			
 			// ====================================================	
-			// 												제품 등록 1
+			// 												상품 등록 1
 			// ====================================================	
 			// http://localhost:8080/project4/board?cmd=saveForm
 			if(cmd.equals("saveForm")) {
@@ -77,7 +77,7 @@ public class ProductController extends HttpServlet{
 				}
 				
 			// ====================================================	
-			// 												제품 등록 2
+			// 												상품 등록 2
 			// ====================================================	
 			}else if(cmd.equals("save")) {
 				
@@ -133,7 +133,7 @@ public class ProductController extends HttpServlet{
 				
 	            System.out.println("ProductController/save/dto : " + dto);
 	            
-				int result = productService.제품등록(dto);
+				int result = productService.상품등록(dto);
 				
 				if(result == 1) {	// 정상 입력 완료
 					response.sendRedirect("/project4/product?cmd=list");
@@ -143,7 +143,7 @@ public class ProductController extends HttpServlet{
 				
 				
 			// ====================================================	
-			// 												제품 목록
+			// 												상품 목록
 			// ====================================================	
 			}else if(cmd.equals("list")) {
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
@@ -186,7 +186,7 @@ public class ProductController extends HttpServlet{
 				}
 				
 			// ====================================================	
-			// 												제품 삭제
+			// 												상품 삭제
 			// ====================================================
 			}else if(cmd.equals("delete")) {
 				int id = Integer.parseInt(request.getParameter("id"));
@@ -199,45 +199,6 @@ public class ProductController extends HttpServlet{
 				String respData = gson.toJson(commonRespDto);
 				System.out.println("respData : " + respData);
 				
-				PrintWriter out = response.getWriter();
-				out.print(respData);
-				out.flush();
-
-			// ====================================================	
-			// 												상품 구매
-			// ====================================================	
-			}else if(cmd.equals("buyProduct")) {
-				BufferedReader br = request.getReader();
-				Gson gson = new Gson();
-				BuyReqDto dto = gson.fromJson(br, BuyReqDto.class);
-				CommonRespDto<String> commonRespDto = new CommonRespDto<>();
-				
-				// userId, productId 값이 제대로 안들어올 때
-				if(dto.getUserId() == 0) {
-					commonRespDto.setStatusCode(-1);
-					commonRespDto.setData("로그인 후 진행해주세요.");
-					
-					String respData = gson.toJson(commonRespDto);
-					PrintWriter out = response.getWriter();
-					out.print(respData);
-					out.flush();
-					return;
-				}
-
-				// 상품 구매시, 구매번호 생성
-				String orderNum = buyService.구매번호();
-				dto.setOrderNum(orderNum);
-
-				int result = buyService.상품구매(dto);
-				if(result == 1) {
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("구매가 완료되었습니다");
-				}else {
-					commonRespDto.setStatusCode(-1);
-					commonRespDto.setData("구매에 실패했습니다");
-				}
-				
-				String respData = gson.toJson(commonRespDto);
 				PrintWriter out = response.getWriter();
 				out.print(respData);
 				out.flush();

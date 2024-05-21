@@ -106,7 +106,11 @@ public class BoardController extends HttpServlet {
 			double currentPercent = (double)page/(lastPage)*100;		// 진척도별 바 게이지
 			request.setAttribute("currentPercent", currentPercent);	
 			
+			// RequestDispatcher는 특정 자원(예: JSP 페이지, 서블릿 등)으로 요청을 전달하거나 포함할 수 있는 객체
+			// - 반환된 RequestDispatcher 객체를 dis라는 변수에 할당
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
+			// RequestDispatcher 객체의 forward 메서드를 호출
+			// - 현재 요청과 응답 객체를 지정된 자원("board/list.jsp")으로 전달
 			dis.forward(request, response);	
 			
 		// ====================================================	

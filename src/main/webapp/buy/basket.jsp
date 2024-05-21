@@ -6,7 +6,7 @@
 <br>
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
-		<img src="images/icons/clap.png" alt="Logo" style="width:50px;">&nbsp;
+		<img src="images/icons/check.png" alt="Logo" style="width:50px;">&nbsp;
 		<div style="color: #353A3F; font-weight: bold">주문완료</div>
 	</div>
 </h1>
@@ -16,8 +16,12 @@
 <div class="container" style="text-align: center">
 
 	<form action="/project4/user?cmd=login" method="post"  name="loginSuccess">
+	<!-- <form> 태그에 데이터를 담아서 POST 로 보내면 Key=Value 형태로 간다 (x-www-form-urlencoded) -->
 		<div class="form-group">
-		    <span class="material-icons">주문번호 </span>
+			<div class="material-icons-input">
+			    <span class="material-icons">person_outline</span>
+			    <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required />
+			</div>	
 		</div>
 		
 		<div class="form-group">

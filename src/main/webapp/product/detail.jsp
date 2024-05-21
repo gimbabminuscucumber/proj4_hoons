@@ -45,7 +45,7 @@
 	                </div>
                <div>
 	                <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
-	                <button type="button" class="btn btn-primary" onclick="buyProduct()">구매하기</button>
+	                <button type="button" class="btn btn-primary" onclick="buy()">구매하기</button>
                </div>
             </div>
         </div>
@@ -163,14 +163,48 @@
     }
 	
 	// 구매하기
-    function buyProduct() {
-		
+    function buy() {
+       	
+       	var userId = document.getElementById("userId").value;
+       	var productId = document.getElementById("productId").value;
+       	var quantity = parseInt($("#quantity").val());
+        var price = parseInt(${products.price});
+        var totalPrice = price * quantity;
+        
+        var data = {			// json 타입
+            userId: userId,
+            productId: productId,
+            totalPrice: totalPrice,
+            totalCount: quantity
+        };
+        
+        $.ajax({
+        	type: "post",
+        	url: "/project4/buy?cmd=buy",
+        	data: JSON.stringify(data),
+        	contentType: "application/json; charset=utf-8",
+        	dataType: "json"
+        }).done(function(data){	// BuyController/buy에서 respData를 data로 받음
+        	console.log('00000');
+        	
+        	if(data.statusCode == -1){
+        		console.log('detail/buy/data.statusCode : ' + data.statusCode);
+        		alert("구매에 실패했습니다.");
+        	}else{
+        		console.log('detail/buy/data.statusCode : ' + data.statusCode);
+        		alert("구매를 완료하였습니다.");
+        		window.location.href = "/project4/buy?cmd=order&id=" + data.data;
+        	}
+        });
+       	console.log('111111111');
+
+        /*	
         var userId = $("input[name='userId']").val();			// name이 userId인 input 요소의 val()를 var userId에 저장
         var productId = $("input[name='productId']").val();
         var quantity = parseInt($("#quantity").val());
         var price = parseInt(${products.price});
         var totalPrice = price * quantity;
-       	
+        
         if (!userId || !productId || !quantity || !price || totalPrice <= 0) {
             alert("유효한 값을 입력해주세요.");
             return;
@@ -182,16 +216,15 @@
             totalPrice: totalPrice,
             totalCount: quantity
         };
-        
+    
         $.ajax({
             type: "POST",
-            url: "/project4/product?cmd=buyProduct",
+            url: "/project4/buy?cmd=buy",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         }).done(function(result) {
     		if(result.statusCode == 1){
-                $("#purchase").text(result.data.count);		// count 값을 id가 "purchase"인 HTML 요소의 텍스트로 설정
                 alert("구매가 완료되었습니다!");
             } else {
                 alert("구매에 실패했습니다");
@@ -200,7 +233,7 @@
             console.log("Error: ", error);
             alert("구매 중 오류가 발생했습니다.");
         });
-
+		*/
 	}
 </script>
 

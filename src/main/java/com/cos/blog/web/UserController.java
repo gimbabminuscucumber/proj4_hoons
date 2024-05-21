@@ -100,12 +100,6 @@ public class UserController extends HttpServlet {
 		// ====================================================				
 		}else if(cmd.equals("join")) {
 			// 1. http에서 데이터 받기
-//			String username = request.getParameter("username");
-//			String password = request.getParameter("password");
-//			String address = request.getParameter("address");
-//			String email = request.getParameter("email");
-			
-			// 버퍼로 데이터 받기
 	        String username = request.getParameter("username");
 	        String nickName = request.getParameter("nickName");
 	        String password = request.getParameter("password");

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.cos.blog.domain.buy.BuyDao;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
+import com.cos.blog.domain.buy.dto.OrderRespDto;
 
 public class BuyService {
 	
@@ -26,6 +27,10 @@ public class BuyService {
 		//int randomNum = (int)(Math.random() * 10000) + 0000;									// 0 ~ 9999 까지의 난수
 		String randomNum = String.format("%04d", (int)(Math.random() * 10000));	// 0000 ~ 9999 까지의 4자리 난수 
 		return dateNum + randomNum;
+	}
+
+	public OrderRespDto 주문완료(int id) {
+		return buyDao.findByOrder(id);
 	}
 	
 }

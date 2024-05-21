@@ -16,7 +16,7 @@ public class SaveReqDto {
 	// img
     private InputStream imgInputStream;
     private String imgFileName;
-	// explain
+	// explanation
     private InputStream explainInputStream;
     private String explainFileName;
     
