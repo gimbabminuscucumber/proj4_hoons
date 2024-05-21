@@ -18,7 +18,7 @@
 <div class="container" style="width: 500px">
 
 		<div class="form-group">
-		    <div>주문번호 
+		    <div><strong>주문번호</strong> 
 		    	<a href="/project4/buy?cmd=basket&id=${orders.userId }">${orders.orderNum }</a>
 		    </div>
 			<hr>
@@ -40,6 +40,11 @@
 						<fmt:formatNumber type="number" pattern="#,##0"  value="${orders.totalPrice}"/>원
 					</div>
 	            </div>
+	        </div>
+	        <br>
+	        <div class="d-flex">
+	        	<button type="button"  class="btn btn-danger" style="width: 50%">주문 취소</button> &nbsp;
+	        	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=basket&id=${orders.userId}'">주문 내역 바로가기</button>
 	        </div>
 		</div>
 		
