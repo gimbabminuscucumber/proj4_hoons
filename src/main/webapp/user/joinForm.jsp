@@ -14,7 +14,6 @@
 <br>
 <br>
 
-
 <div class="container" style="text-align: center">
 	<!-- UserController의 cmd.equals("join") 으로 전달 onsubmit : submit 되면 무조건 실행되는 함수-->
 	<form action="/project4/user?cmd=join" method="post" name="join">
