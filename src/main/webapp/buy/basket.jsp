@@ -73,7 +73,9 @@
 					<tr>
 						<td style="padding-left: 20px; text-align: left;">
 							<div style="display: flex; align-items: center;">
-								<img src="/project4/images/productImg/${order.img}" alt="Product Image" style="width: 70px; height: auto; margin-right: 10px;">
+								<a href="/project4/product?cmd=detail&id=${order.productId }">
+									<img src="/project4/images/productImg/${order.img}" alt="Product Image" style="width: 70px; height: auto; margin-right: 10px;">
+								</a>
 								<div>
 									<strong>${order.brand}</strong><br> ${order.content}
 								</div>
@@ -83,19 +85,20 @@
 							<fmt:formatDate pattern="yyyy-MM-dd" value="${order.createDate}"></fmt:formatDate>
 						</td>
 						<td>
-							${order.orderNum}
+							<span><a href="/project4/buy?cmd=detail&orderNum=${order.orderNum }">${order.orderNum}</a></span>
 						</td>
 						<td>
 							<fmt:formatNumber type="number" pattern="#,##0" value="${order.totalPrice}" />원 <br> 
 							<span style="color: grey">${order.totalCount}개</span>
 						</td>
 						<td>
-							${order.state}<br>
-							<button type="button" class="btn btn-outline-danger btn-sm">주문 취소</button>
+							<span>${order.state}</span><br>
+							<button type="button" class="btn btn-outline-info btn-sm">교환</button>
+							<button type="button" class="btn btn-outline-danger btn-sm">환불</button>
 						</td>
 					</tr>
 					<!-- 각 주문 항목 아래에 선 추가 -->
-					<c:if test="${!loop.last}">
+					<c:if test="${loop.last || !loop.last}">
 						<tr>
 							<td colspan="5">
 								<hr style="border-color: lightgrey;">
@@ -115,6 +118,7 @@
 </div>
 
 <style>
+
 thead th {
 	border-top: 1px solid;
 	border-bottom: 1px solid;
@@ -132,4 +136,21 @@ thead th {
 	color: grey;
     background-color: #f2f2f2; 
 }
+
+/* a태그 스타일*/
+/* a 태그 기본 색상을 검정색으로 설정 */
+a {
+    color: black;
+    text-decoration: none; /* 밑줄 없애기 */
+}
+
+/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
+a:hover {
+    color: #CB444A;
+    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+}
+
+
 </style>
+
+<%@ include file = "../layout/footer.jsp" %>

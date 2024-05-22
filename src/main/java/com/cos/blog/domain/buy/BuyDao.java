@@ -82,7 +82,6 @@ public class BuyDao {
 			System.out.println("BuyDao/findByOrder/dto : " + dto);
 			DB.close(conn, pstmt, rs);
 		}
-		
 		return null;
 	}
 
@@ -123,6 +122,85 @@ public class BuyDao {
 			e.printStackTrace();
 		}finally {
 			System.out.println("BuyDao/findOrderList/orders : " + orders);
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+	public List<OrderRespDto> findOrderDetail(String orderNum) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<OrderRespDto> details = new ArrayList<>();
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, orderNum);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				OrderRespDto dto = OrderRespDto.builder()
+						.id(rs.getInt("b.id"))
+						.userId(rs.getInt("b.userId"))
+						.productId(rs.getInt("b.productId"))
+						.orderNum(rs.getString("b.orderNum"))
+						.totalCount(rs.getInt("b.totalCount"))
+						.totalPrice(rs.getInt("b.totalPrice"))
+						.state(rs.getString("b.state"))
+						.createDate(rs.getTimestamp("b.createDate"))
+						.nickName(rs.getString("u.nickName"))
+						.email(rs.getString("u.email"))
+						.address(rs.getString("u.address"))
+						.brand(rs.getString("p.brand"))
+						.img(rs.getString("p.img"))
+						.content(rs.getString("p.content"))
+						.build();
+					details.add(dto);
+			}
+			return details;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			System.out.println("BuyDao/details : " + details);
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+	public OrderRespDto findByBuyer(String orderNum) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		OrderRespDto dto = new OrderRespDto();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, orderNum);
+			rs = pstmt.executeQuery();	
+			
+			if(rs.next()){
+				dto.setId(rs.getInt("b.id"));
+				dto.setUserId(rs.getInt("b.userId"));
+				dto.setProductId(rs.getInt("b.productId"));
+				dto.setOrderNum(rs.getString("b.orderNum"));
+				dto.setTotalCount(rs.getInt("b.totalCount"));
+				dto.setTotalPrice(rs.getInt("b.totalPrice"));
+				dto.setState(rs.getString("b.state"));
+				dto.setCreateDate(rs.getTimestamp("b.createDate"));
+				dto.setNickName(rs.getString("u.nickName"));
+				dto.setEmail(rs.getString("u.email"));
+				dto.setAddress(rs.getString("u.address"));
+				dto.setBrand(rs.getString("p.brand"));
+				dto.setImg(rs.getString("p.img"));
+				dto.setContent(rs.getString("p.content"));
+				return dto;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			System.out.println("BuyDao/findByOrder/dto : " + dto);
 			DB.close(conn, pstmt, rs);
 		}
 		return null;

@@ -19,7 +19,7 @@
 
 		<div class="form-group">
 		    <div><strong>주문번호</strong> 
-		    	<a href="/project4/buy?cmd=basket&id=${orders.userId }">${orders.orderNum }</a>
+		    	<a href="/project4/buy?cmd=detail&orderNum=${orders.orderNum }">${orders.orderNum }</a>
 		    </div>
 			<hr>
 			<p>${orders.nickName }</p>
@@ -47,8 +47,6 @@
 	        	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=basket&id=${orders.userId}'">주문 내역 바로가기</button>
 	        </div>
 		</div>
-		
-		
 		
 </div>
 

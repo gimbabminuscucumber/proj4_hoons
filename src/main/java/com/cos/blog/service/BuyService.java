@@ -38,5 +38,15 @@ public class BuyService {
 		System.out.println("BuyService/주문내역");
 		return buyDao.findOrderList(userId);
 	}
+
+	public List<OrderRespDto> 주문상세(String orderNum) {
+		System.out.println("BuyService/주문상세/orderNum : " + orderNum);
+		return buyDao.findOrderDetail(orderNum);
+	}
+
+	public OrderRespDto 구매자정보(String orderNum) {
+		return buyDao.findByBuyer(orderNum);
+	}
+
 	
 }
