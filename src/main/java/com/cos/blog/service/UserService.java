@@ -80,6 +80,12 @@ public class UserService {
 		int result = userDao.findByNickName(nickName);
 		return result;
 	}
+
+	public int 연락처중복체크(String phone) {
+		int result = userDao.findByPhone(phone);		// 1 이면 중복
+		System.out.println("UserService/phone : " + result);
+		return result;
+	}
 	
 	
 

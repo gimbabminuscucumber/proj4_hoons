@@ -8,6 +8,7 @@ public class JoinReqDto {			// = Data Transfer Object : 계층 간 데이터 전
 	private String username;
 	private String nickName;
 	private String password;
+	private String phone;
 	private String email;
 	private String address;
 }

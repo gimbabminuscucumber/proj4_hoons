@@ -18,6 +18,7 @@ public class User {
 	private String password;
 	private String email;
 	private String address;
+	private String phone;
 	private String userRole;	// admin, user
 	private Timestamp createDate; 
 }

@@ -18,7 +18,7 @@ public class UserDao {
 		System.out.println("UserDao/save/dto : " + dto);
 		System.out.println("UserDao/save/dto.getEmail() : " + dto.getEmail());
 		
-		String sql = "INSERT INTO user(username, nickName, password, email, address, userRole, createDate) VALUES(?,?,?,?,?,'USER', now())";
+		String sql = "INSERT INTO user(username, nickName, password, phone, email, address, userRole, createDate) VALUES(?,?,?,?,?,?,'USER', now())";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		try {
@@ -26,8 +26,9 @@ public class UserDao {
 			pstmt.setString(1, dto.getUsername());
 			pstmt.setString(2, dto.getNickName());
 			pstmt.setString(3, dto.getPassword());
-			pstmt.setString(4, dto.getEmail());
-			pstmt.setString(5, dto.getAddress());
+			pstmt.setString(4, dto.getPhone());
+			pstmt.setString(5, dto.getEmail());
+			pstmt.setString(6, dto.getAddress());
 			int result = pstmt.executeUpdate();
 			return result;
 		}catch(Exception e) {
@@ -40,7 +41,7 @@ public class UserDao {
 	
 	// 로그인
 	public User findByUsernameAndPassword(LoginReqDto dto) {		
-		String sql = "SELECT id, username, nickName, email, address FROM user WHERE username =? AND password =?";
+		String sql = "SELECT id, username, nickName, phone, email, address FROM user WHERE username =? AND password =?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
 		ResultSet rs = null;
@@ -56,6 +57,7 @@ public class UserDao {
 						.id(rs.getInt("id"))
 						.username(rs.getString("username"))
 						.nickName(rs.getString("nickName"))
+						.phone(rs.getString("phone"))
 						.email(rs.getString("email"))
 						.address(rs.getString("address"))
 						.build();
@@ -110,6 +112,7 @@ public class UserDao {
 				user.setId(rs.getInt("id"));
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
+				user.setPhone(rs.getString("phone"));
 				user.setEmail(rs.getString("email"));
 				user.setAddress(rs.getString("address"));
 			}
@@ -124,7 +127,7 @@ public class UserDao {
 
 	// 회원정보 수정
 	public int update(User user) {	
-		String sql = "UPDATE user SET nickName =?, password =?, email =?, address =? WHERE id = ?";
+		String sql = "UPDATE user SET nickName =?, password =?, phone =?, email =?, address =? WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 
@@ -132,9 +135,10 @@ public class UserDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getNickName());
 			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getEmail());
-			pstmt.setString(4, user.getAddress());
-			pstmt.setInt(5, user.getId());
+			pstmt.setString(3, user.getPhone());
+			pstmt.setString(4, user.getEmail());
+			pstmt.setString(5, user.getAddress());
+			pstmt.setInt(6, user.getId());
 			
 			int result = pstmt.executeUpdate();
 			System.out.println("UserDao/update/result : " + result);
@@ -302,6 +306,7 @@ public class UserDao {
 		return -1;
 	}
 
+	// 닉네임 중복 확인
 	public int findByNickName(String nickName) {
 		String sql = "SELECT nickName FROM user WHERE nickName = ?";
 		Connection conn = DB.getConnection();
@@ -311,6 +316,29 @@ public class UserDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, nickName);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return 1;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return -1;	// 중복 아님
+	}
+
+	// 연락처 중복확인
+	public int findByPhone(String phone) {
+		String sql = "SELECT phone FROM user WHERE phone = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try{
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, phone);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {

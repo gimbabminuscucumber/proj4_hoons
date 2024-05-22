@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ include file="../layout/header.jsp"%>
 
 <br>
@@ -100,7 +100,17 @@
 	<hr>
 	<div class="d-flex">
 		<div class="info" style="width:150px">연락처</div>
-		<div class="info" >전화번호</div>
+		
+		<%-- <div class="info" >${buyer.phone }</div> --%>
+		<!-- 전화번호를 하이픈(-)으로 나누기 -->
+		<div class="info">
+			<c:set var="phone" value="${buyer.phone}" />
+			<c:set var="part1" value="${fn:substring(phone, 0, 3)}" />
+			<c:set var="part2" value="${fn:substring(phone, 3, 7)}" />
+			<c:set var="part3" value="${fn:substring(phone, 7, 11)}" />
+			${part1}-${part2}-${part3}
+		</div>
+		
 	</div>
 	<hr>
 	<div class="d-flex">

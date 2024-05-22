@@ -33,6 +33,20 @@
 			</div>	
 		</div>
 		
+		<div class="form-group">
+			<div class= "d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">local_phone</span> 
+					<input type="text" name="phone" id="phone" class="form-control" value="${user.phone }" placeholder="Enter phone with (-)" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="phoneCheck()">중복확인</button>
+				</div>
+			</div>
+			<!-- ajax -->
+			<div><font id="checkPhone" size="2"></font></div>
+		</div>
+		
 		<div class="form-group insert-input-container">
 		    <div class="material-icons-input" style="width: 183px">
 		        <span class="material-icons">personal_video</span>
@@ -52,8 +66,8 @@
 			<button type="button" id="domain" class="btn btn-info" onclick="emailCheck()">중복확인</button>
 		</div>
 		<!-- ajax -->
-		<p><font id="checkEmail" size="2"></font></p>
-		<p>DB에 저장된 domain 가져오기</p> 
+		<div><font id="checkEmail" size="2"></font></div>
+		<p>inputEmail / domain 구분해서 가져오기</p> 
 
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
@@ -80,20 +94,33 @@
 <script>
 // 이메일 중복 확인
 	var emailChecking = false;
+	var phoneChecking = false;
 	var isChecking = false;
 	var email;
 	
+	// ====================================================	
+	// 												update
+	// ====================================================	
 	function updateSuccess() {				
 		if (emailChecking == false) {
 			alert("이메일 중복확인을 하세요");
 			 isChecking = false;
-		} else  {
+		} else if(phoneChecking == false) {
+			alert("연락처 중복확인을 하세요");
+			isChecking = false;
+		} else{	
 			alert("회원가입 완료");			
 			isChecking = true;
 			document.update.submit();
 		}
 	}
 	
+	window.onload = function() {
+	    emailCombine();
+	}
+	// ====================================================	
+	//												emailCombine 조합
+	//====================================================	
 	function emailCombine() {
 		var inputEmail = document.getElementById("inputEmail").value;
 		var domain = document.getElementById("domain").value;
@@ -101,6 +128,9 @@
 		email = inputEmail + domain; // 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
 	}
 
+	// ====================================================	
+	// 											email 중복확인
+	// ====================================================	
 	function emailCheck() {
 		console.log('email : ' + email); // emailCombine() 에서 email 을 받아옴
 
@@ -139,6 +169,50 @@
 		})
 	}
 	
+
+	// ====================================================	
+	// 											연락처 중복확인
+	// ====================================================	
+	function phoneCheck(){
+		
+		var phone = document.getElementById("phone").value;
+		console.log('phone : ' + phone);
+		
+		$.ajax({
+			type: "post",
+			url : "/project4/user?cmd=phoneCheck",
+			data : phone,
+			contentType : "text/plain; charset=utf-8",
+			dataType : "text" 
+		}).done(function(data){
+			console.log('phoneCheck/data : ' + data);
+			if(phone === "" ){
+				phoneChecking = false;
+				$("#checkPhone").html('(-)를 제외하여 연락처를 입력해주세요.');
+				$("#checkPhone").attr('color', 'red');
+			}else if(isNaN(phone)){
+				phoneChecking = false;
+				$("#checkPhone").html('연락처는 숫자로만 입력해주세요.');
+				$("#checkPhone").attr('color', 'red');				
+		    } else if(phone.length < 11){
+		        phoneChecking = false;
+		        $("#checkPhone").html('연락처는 11자리까지 입력해주세요.');
+		        $("#checkPhone").attr('color', 'red');		
+		    } else if(phone.length > 11){
+		        phoneChecking = false;
+		        $("#checkPhone").html('연락처는 12자리 미만으로 입력해주세요.');
+		        $("#checkPhone").attr('color', 'red');		
+			}else if(data === 'ok'){
+				phoneChecking = false;
+				$("#checkPhone").html('해당 연락처는 사용 중입니다.');
+				$("#checkPhone").attr('color', 'red');
+			}else{
+				phoneChecking = true;
+				$("#checkPhone").html('해당 연락처는 사용가능합니다.');
+				$("#checkPhone").attr('color', 'blue');
+			}
+		});
+	}
 	
 	//주소 API 실행 함수
 	function goPopup(){

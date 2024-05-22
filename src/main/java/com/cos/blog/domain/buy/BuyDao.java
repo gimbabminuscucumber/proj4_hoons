@@ -71,6 +71,7 @@ public class BuyDao {
 				dto.setNickName(rs.getString("u.nickName"));
 				dto.setEmail(rs.getString("u.email"));
 				dto.setAddress(rs.getString("u.address"));
+				dto.setPhone(rs.getString("u.phone"));
 				dto.setBrand(rs.getString("p.brand"));
 				dto.setImg(rs.getString("p.img"));
 				dto.setContent(rs.getString("p.content"));
@@ -111,6 +112,7 @@ public class BuyDao {
 						.nickName(rs.getString("u.nickName"))
 						.email(rs.getString("u.email"))
 						.address(rs.getString("u.address"))
+						.phone(rs.getString("u.phone"))
 						.brand(rs.getString("p.brand"))
 						.img(rs.getString("p.img"))
 						.content(rs.getString("p.content"))
@@ -152,6 +154,7 @@ public class BuyDao {
 						.nickName(rs.getString("u.nickName"))
 						.email(rs.getString("u.email"))
 						.address(rs.getString("u.address"))
+						.phone(rs.getString("u.phone"))
 						.brand(rs.getString("p.brand"))
 						.img(rs.getString("p.img"))
 						.content(rs.getString("p.content"))
@@ -191,6 +194,7 @@ public class BuyDao {
 				dto.setCreateDate(rs.getTimestamp("b.createDate"));
 				dto.setNickName(rs.getString("u.nickName"));
 				dto.setEmail(rs.getString("u.email"));
+				dto.setPhone(rs.getString("u.phone"));
 				dto.setAddress(rs.getString("u.address"));
 				dto.setBrand(rs.getString("p.brand"));
 				dto.setImg(rs.getString("p.img"));

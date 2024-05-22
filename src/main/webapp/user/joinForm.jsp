@@ -56,6 +56,20 @@
 		</div>
 
 
+		<div class="form-group">
+			<div class= "d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">local_phone</span> 
+					<input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone with (-)" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="phoneCheck()">중복확인</button>
+				</div>
+			</div>
+			<!-- ajax -->
+			<div><font id="checkPhone" size="2"></font></div>
+		</div>
+
 		<div class="form-group insert-input-container">
 			<div class="material-icons-input" style="width: 183px">
 				<span class="material-icons">personal_video</span> 
@@ -76,7 +90,7 @@
 			<button type="button" id="domain" class="btn btn-info" onclick="emailCheck()">중복확인</button>
 		</div>
 		<!-- ajax -->
-		<p><font id="checkEmail" size="2"></font></p>
+		<div><font id="checkEmail" size="2"></font></div>
 
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
@@ -102,6 +116,7 @@
 	var emailChecking = false;
 	var isChecking = false;	
 	var nickNameChecking = false;
+	var phoneChecking = false;
 
 	// ====================================================	
 	// 							중복확인 체크 및 미입력 데이터 체크
@@ -110,25 +125,25 @@
 		var username = document.getElementById("username").value;
 		var nickName = document.getElementById("nickName").value;
 		var password = document.getElementById("password").value;
+		var phone = document.getElementById("phone").value;
 		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
 		var address = document.getElementById("address").value;
 
 		if (userChecking == false) {
 			alert('아이디 중복확인을 하세요');
 			isChecking = false;
+		} else if(nickNameChecking == false){
+			console.log('nickName : ' + nickName);
+			alert('닉네임 중복확인을 하세요');
 		} else if(password === ''){
 			console.log('password : ' + password);
 			alert('비밀번호를 입력하세요');
+		} else if(phoneChecking == false){
+			alert('연락처 중복확인을 하세요');
 		} else if (emailChecking == false) {
 			console.log('password : ' + password);
 			alert('이메일 중복확인을 하세요');
 			isChecking = false;
-		} else if(nickName === ''){
-			console.log('nickName : ' + nickName);
-			alert('닉네임을 입력하세요');
-		} else if(nickNameChecking == false){
-			console.log('nickName : ' + nickName);
-			alert('닉네임 중복확인을 하세요');
 		} else if(userChecking == true && emailChecking == true && nickNameChecking == true) {
 			isChecking = true;
 			finalCheck();
@@ -142,6 +157,7 @@
 		var username = document.getElementById("username").value;
 		var nickName = document.getElementById("nickName").value;
 		var password = document.getElementById("password").value;
+		var phone = document.getElementById("phone").value;
 		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
 		var address = document.getElementById("address").value;
 		
@@ -152,6 +168,7 @@
 				username: username,
 				nickName: nickName,
 				password: password,
+				phone: phone,
 				email: email,
 				address: address
 			}, success: function(resp){
@@ -222,6 +239,10 @@
 		password = document.getElementById("password").value;
 	}
 	
+	window.onload = function() {
+	    emailCombine();
+	}
+	
 	// ====================================================	
 	//												emailCombine 조합
 	//====================================================	
@@ -230,6 +251,7 @@
 		var domain = document.getElementById("domain").value;
 		//var email = inputEmail + domain;			// var로 email에 데이터를 전달하면 전역변수로 설정한 var email과 다른 메모릴에 저장돼서 다른 함수에서 사용 불가
 		email = inputEmail + domain; 					// 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
+		console.log('emailCombine/email : ' + email);
 	}
 	
 	// ====================================================	
@@ -237,8 +259,6 @@
 	// ====================================================	
 	function emailCheck() {
 		var inputEmail = document.getElementById("inputEmail").value;
-
-		//console.log('email : ' + email); 					// emailCombine() 에서 email 을 받아옴
 		
 		$.ajax({
 			type : "post",
@@ -247,7 +267,7 @@
 			contentType : "text/plain; charset=utf-8",
 			dataType : "text"										// 서버에서 받을 데이터 타입
 		}).done(function(data) {
-			if (email == undefined || data === "") {
+			if (email == undefined || data === "" || inputEmail == "") {
 				console.log('공란 : data : ' + data);
 				console.log('공란 : email : ' + email);
 				emailChecking = false;					// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
@@ -302,6 +322,50 @@
 				nickNameChecking = true;
 				$("#checkNickName").html('해당 닉네임은 사용가능합니다.');
 				$("#checkNickName").attr('color', 'blue');
+			}
+		});
+	}
+
+	// ====================================================	
+	// 											연락처 중복확인
+	// ====================================================	
+	function phoneCheck(){
+		
+		var phone = document.getElementById("phone").value;
+		console.log('phone : ' + phone);
+		
+		$.ajax({
+			type: "post",
+			url : "/project4/user?cmd=phoneCheck",
+			data : phone,
+			contentType : "text/plain; charset=utf-8",
+			dataType : "text" 
+		}).done(function(data){
+			console.log('phoneCheck/data : ' + data);
+			if(phone === "" ){
+				phoneChecking = false;
+				$("#checkPhone").html('(-)를 제외하여 연락처를 입력해주세요.');
+				$("#checkPhone").attr('color', 'red');
+			}else if(isNaN(phone)){
+				phoneChecking = false;
+				$("#checkPhone").html('연락처는 숫자로만 입력해주세요.');
+				$("#checkPhone").attr('color', 'red');				
+		    } else if(phone.length < 11){
+		        phoneChecking = false;
+		        $("#checkPhone").html('연락처는 11자리까지 입력해주세요.');
+		        $("#checkPhone").attr('color', 'red');		
+		    } else if(phone.length > 11){
+		        phoneChecking = false;
+		        $("#checkPhone").html('연락처는 12자리 미만으로 입력해주세요.');
+		        $("#checkPhone").attr('color', 'red');		
+			}else if(data === 'ok'){
+				phoneChecking = false;
+				$("#checkPhone").html('해당 연락처는 사용 중입니다.');
+				$("#checkPhone").attr('color', 'red');
+			}else{
+				phoneChecking = true;
+				$("#checkPhone").html('해당 연락처는 사용가능합니다.');
+				$("#checkPhone").attr('color', 'blue');
 			}
 		});
 	}

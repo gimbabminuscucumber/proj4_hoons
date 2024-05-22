@@ -7,6 +7,7 @@ public class UpdateReqDto {
 	private int id;
 	private String nickName;
 	private String passwrod;
+	private String phone;
 	private String email;
 	private String address;
 }

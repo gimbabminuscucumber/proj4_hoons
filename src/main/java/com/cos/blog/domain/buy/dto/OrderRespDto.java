@@ -25,6 +25,7 @@ public class OrderRespDto {
 	private String nickName;
 	private String email;
 	private String address;
+	private String phone;
 
 	// product 테이블
 	private String brand;

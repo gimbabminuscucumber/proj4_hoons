@@ -103,6 +103,7 @@ public class UserController extends HttpServlet {
 	        String username = request.getParameter("username");
 	        String nickName = request.getParameter("nickName");
 	        String password = request.getParameter("password");
+	        String phone = request.getParameter("phone");
 	        String email = request.getParameter("email");
 	        String address = request.getParameter("address");
 			
@@ -111,6 +112,7 @@ public class UserController extends HttpServlet {
 			dto.setUsername(username);
 			dto.setNickName(nickName);
 			dto.setPassword(password);
+			dto.setPhone(phone);
 			dto.setEmail(email);
 			dto.setAddress(address);
 			
@@ -121,7 +123,7 @@ public class UserController extends HttpServlet {
 			int result = userService.회원가입(dto);
 			
 			if(result == 1) {
-				response.sendRedirect("user/loginForm.jsp");		// filter 사용으로 인해 sendRedirect() 사용불가하지만 loginForm 접근은 허용했기에 가능
+				response.sendRedirect("/project4/user?cmd=loginForm");		// filter 사용으로 인해 sendRedirect() 사용불가하지만 loginForm 접근은 허용했기에 가능
 			}else {
 				Script.back(response, "회원가입 실패");
 			}
@@ -176,6 +178,7 @@ public class UserController extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));		// 왜 파라미터의 변수 값을 쌍따옴표로 감싸지?
 			String nickName = request.getParameter("nickName");
 			String password = request.getParameter("password");
+			String phone = request.getParameter("phone");
 			String email = request.getParameter("email");
 			String address = request.getParameter("address");
 			
@@ -184,6 +187,7 @@ public class UserController extends HttpServlet {
 			user.setId(id);
 			user.setNickName(nickName);
 			user.setPassword(password);
+			user.setPhone(phone);
 			user.setEmail(email);
 			user.setAddress(address);
 			
@@ -328,6 +332,30 @@ public class UserController extends HttpServlet {
 				out.print("error");
 			}
 			out.flush();
+		
+		// ====================================================	
+		// 											연락처 중복 체크
+		// ====================================================	
+		}else if(cmd.equals("phoneCheck")) {
+			BufferedReader br = request.getReader();
+			String phone = br.readLine();
+			System.out.println("UserController/phone : "  + phone);
+			
+			int result = userService.연락처중복체크(phone);
+			PrintWriter out = response.getWriter();
+			
+			System.out.println("UserController/result : " + result);
+			
+			if(result == 1) {
+				out.print("ok");
+			}else if(result == -1) {
+				out.print("fail");
+			}else {
+				out.print("error");
+			}
+			out.flush();
 		}
+		
+		
 	}
 }
