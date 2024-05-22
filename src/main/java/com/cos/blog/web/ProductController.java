@@ -148,11 +148,12 @@ public class ProductController extends HttpServlet{
 			}else if(cmd.equals("list")) {
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 				request.setAttribute("principal", principal);
-
+				System.out.println("principal : " + principal);
 				//int page = Integer.parseInt(request.getParameter("page"));
 				//List<DetailRespDto> products = productService.상품목록(page);
 				List<DetailRespDto> products = productService.상품목록();
 				request.setAttribute("products", products);
+				
 				/*
 				// 페이지 계산
 				int productCount = productService.상품개수();

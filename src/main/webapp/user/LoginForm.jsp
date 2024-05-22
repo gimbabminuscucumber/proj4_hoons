@@ -87,17 +87,17 @@
 
 </body>
 <style>
-    .material-icons-input {								/* input 될 아이콘 칸 */
+    .material-icons-input {								
         display: inline-block;
         position: relative;
     }
-    .material-icons-input input {						/* 아이콘이 포함된 input 태그 */
+    .material-icons-input input {						
 	    width: 100%;
-	    padding-left: 40px; /* 예시: 좀 더 넓은 여백을 주기 위해 padding-left 값 조정 */
+	    padding-left: 40px; 
     }
-    .material-icons-input .material-icons {		/* 아이콘 위치 */
+    .material-icons-input .material-icons {	
         position: absolute;
-        left: 5px; /* 아이콘을 왼쪽에 위치 */
+        left: 5px; 
         top: 50%;
         transform: translateY(-50%);
     }

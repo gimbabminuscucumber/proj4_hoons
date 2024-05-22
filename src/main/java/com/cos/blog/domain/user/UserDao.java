@@ -41,7 +41,7 @@ public class UserDao {
 	
 	// 로그인
 	public User findByUsernameAndPassword(LoginReqDto dto) {		
-		String sql = "SELECT id, username, nickName, phone, email, address FROM user WHERE username =? AND password =?";
+		String sql = "SELECT * FROM user WHERE username =? AND password =?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
 		ResultSet rs = null;
@@ -60,6 +60,7 @@ public class UserDao {
 						.phone(rs.getString("phone"))
 						.email(rs.getString("email"))
 						.address(rs.getString("address"))
+						.userRole(rs.getString("userRole"))
 						.build();
 				return user;		// session이 정상이면, user 오브젝트를 만들어서 리턴
 			}

@@ -137,17 +137,14 @@ thead th {
     background-color: #f2f2f2; 
 }
 
-/* a태그 스타일*/
-/* a 태그 기본 색상을 검정색으로 설정 */
 a {
     color: black;
-    text-decoration: none; /* 밑줄 없애기 */
+    text-decoration: none; 
 }
 
-/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
 a:hover {
     color: #CB444A;
-    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+    text-decoration: underline; 
 }
 
 

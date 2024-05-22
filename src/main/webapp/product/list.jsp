@@ -81,7 +81,7 @@
     </div>
     <!-- 왼쪽 섹션 종료 -->
 
-    <!-- 중앙 섹션 -->
+    <!-- 중앙 섹션 시작-->
     <div class="section center">
     
         <!-- 검색창 -->
@@ -115,17 +115,15 @@
 						 </i>
 					</c:when>
 					<c:otherwise>
-						
+
 					</c:otherwise>
 				</c:choose>
 			</div>
 		</div>
-		
 		<!-- 상품 리스트 -->
         <c:if test="${empty products}">
             <div>&nbsp;&nbsp; 등록된 상품이 없습니다.</div>
         </c:if>
-
         <div class="row">
             <c:forEach var="product" items="${products}" varStatus="status">
             	<c:if test="${empty param.categoryId || product.categoryId == param.categoryId}">
@@ -139,10 +137,14 @@
 	                           	<div><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></div>
 	                           	<p style="font-size: 13px; color: grey">${product.content }</p>
 	                       		<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</h5>
-	                   			<div class="d-flex justify-content-end" >
-		                        	<button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
-		                        	<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
-								</div>				                   			
+                                <!-- userRole이 ADMIN인 경우만 보이게 -->
+								<c:if test="${principal.userRole == 'ADMIN' }">
+	                                <div class="d-flex justify-content-end">
+	                                    <button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
+	                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
+	                                </div>
+								</c:if>                                
+                                
 	                        </div>
 	                    </div>
 	                </div>
@@ -156,15 +158,14 @@
         </div>
     </div>
     <!-- 중앙 섹션 종료 -->
-
 </section>
+
 
 <script src="/project4/js/productInfo.js"></script>
 
 <style>
 .container {
     display: flex;
-    /* justify-content: space-between; */
 }
 
 .section {
@@ -186,17 +187,14 @@
 	height: 150px
 }
 
-/* a태그 스타일*/
-/* a 태그 기본 색상을 검정색으로 설정 */
 a {
     color: black;
-    text-decoration: none; /* 밑줄 없애기 */
+    text-decoration: none; 
 }
 
-/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
 a:hover {
     color: #CB444A;
-    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+    text-decoration: underline; 
 }
 
 

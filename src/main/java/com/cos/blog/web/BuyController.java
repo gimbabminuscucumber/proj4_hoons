@@ -81,8 +81,6 @@ public class BuyController extends HttpServlet{
 				
 				int result = buyService.상품구매(dto);
 
-				System.out.println("dto : " + dto);
-				
 				/*
 				 * 구매 성공시, buy 테이블의 id 값을 가져오지는 못함
 				// CommonRespDto<String> commonRespDto
@@ -106,7 +104,6 @@ public class BuyController extends HttpServlet{
 	            commonRespDto.setStatusCode(result != -1 ? 1 : -1);
 	            commonRespDto.setData(result);
 				String respData = gson.toJson(commonRespDto);
-				System.out.println("respData : " + respData);
 				Script.responseData(response, respData);
 				
 			// ====================================================	
@@ -115,11 +112,9 @@ public class BuyController extends HttpServlet{
 			}else if(cmd.equals("order")) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				
-				System.out.println("BuyController/id : "  + id);
 				OrderRespDto orders = buyService.주문완료(id);
 				request.setAttribute("orders", orders);
 				
-				System.out.println("BuyController/orders : "  + orders);
 				RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
 				dis.forward(request, response);	
 
@@ -128,12 +123,10 @@ public class BuyController extends HttpServlet{
 			// ====================================================	
 			}else if(cmd.equals("basket")) {
 				int userId = Integer.parseInt(request.getParameter("id"));
-				System.out.println("BuyController/basket/userId : "  + userId);
 				List<OrderRespDto> orders = buyService.주문내역(userId);
 				
 				request.setAttribute("orders", orders);
 				
-				System.out.println("BuyController/basket/orders : "  + orders);
 				RequestDispatcher dis = request.getRequestDispatcher("buy/basket.jsp");
 				dis.forward(request, response);	
 				
@@ -142,16 +135,12 @@ public class BuyController extends HttpServlet{
 			// ====================================================		
 			}else if(cmd.equals("detail")) {
 				String orderNum = request.getParameter("orderNum");
-				System.out.println("orderNum : " + orderNum);
 				
 				List<OrderRespDto> details = buyService.주문상세(orderNum);
 				request.setAttribute("details", details);
 				OrderRespDto buyer = buyService.구매자정보(orderNum);
 				request.setAttribute("buyer", buyer);
 				
-				
-				System.out.println("details : " + details);
-				System.out.println("buyer : " + buyer);
 				RequestDispatcher dis = request.getRequestDispatcher("buy/detail.jsp");
 				dis.forward(request, response);	
 			}

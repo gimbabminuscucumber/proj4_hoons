@@ -153,7 +153,7 @@
         var totalPrice = price * totalCount;
         var formattedPrice = new Intl.NumberFormat('ko-KR').format(totalPrice);	// 숫자를 1천 단위로 포맷팅
 
-        document.getElementById("totalPrice").innerText = formattedPrice + "원";			// price * quantity 연산값을 totaPrice의 innerText에 담기
+        document.getElementById("totalPrice").innerText = formattedPrice + "원";	// price * quantity 연산값을 totaPrice의 innerText에 담기
 	}
 	
     // 상세 정보로 스크롤
@@ -185,70 +185,26 @@
         	contentType: "application/json; charset=utf-8",
         	dataType: "json"
         }).done(function(data){	// BuyController/buy에서 respData를 data로 받음
-        	console.log('00000');
-        	
         	if(data.statusCode == -1){
-        		console.log('detail/buy/data.statusCode : ' + data.statusCode);
         		alert("구매에 실패했습니다.");
         	}else{
-        		console.log('detail/buy/data.statusCode : ' + data.statusCode);
         		alert("구매를 완료하였습니다.");
         		window.location.href = "/project4/buy?cmd=order&id=" + data.data;
         	}
         });
-       	console.log('111111111');
 
-        /*	
-        var userId = $("input[name='userId']").val();			// name이 userId인 input 요소의 val()를 var userId에 저장
-        var productId = $("input[name='productId']").val();
-        var quantity = parseInt($("#quantity").val());
-        var price = parseInt(${products.price});
-        var totalPrice = price * quantity;
-        
-        if (!userId || !productId || !quantity || !price || totalPrice <= 0) {
-            alert("유효한 값을 입력해주세요.");
-            return;
-        }
-        
-        var data = {
-            userId: userId,
-            productId: productId,
-            totalPrice: totalPrice,
-            totalCount: quantity
-        };
-    
-        $.ajax({
-            type: "POST",
-            url: "/project4/buy?cmd=buy",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        }).done(function(result) {
-    		if(result.statusCode == 1){
-                alert("구매가 완료되었습니다!");
-            } else {
-                alert("구매에 실패했습니다");
-            }
-        }).fail(function(error) {
-            console.log("Error: ", error);
-            alert("구매 중 오류가 발생했습니다.");
-        });
-		*/
 	}
 </script>
 
 <style>
-/* a태그 스타일*/
-/* a 태그 기본 색상을 검정색으로 설정 */
 a {
     color: black;
-    text-decoration: none; /* 밑줄 없애기 */
+    text-decoration: none; 
 }
 
-/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
 a:hover {
     color: #CB444A;
-    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+    text-decoration: underline;
 }
 
 

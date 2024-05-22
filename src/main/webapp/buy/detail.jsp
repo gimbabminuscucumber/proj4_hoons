@@ -136,13 +136,13 @@
 	</div>
 	<hr>
 	<div class="d-flex">
-		<div class="info" style="width:150px">배송비 합계</div>
-		<div class="info" >원</div>
+		<div class="info" style="width:150px">배송비</div>
+		<div class="info" >0원</div>
 	</div>
 	<hr>
 	<div class="d-flex">
-		<div class="info" style="width:150px">최종 결제 금액</div>
-		<div class="info" >원</div>
+		<div class="info" style="width:150px; font-size:15px"><strong>최종 결제 금액</strong></div>
+		<div class="info" style="font-size:15px" ><strong><fmt:formatNumber type="number" pattern="#,##0" value="${buyer.totalPrice}" />원</strong></div>
 	</div>
 	<hr>
 	
@@ -159,17 +159,14 @@ thead th {
 	padding-bottom: 10px;
 }
 
-/* a태그 스타일*/
-/* a 태그 기본 색상을 검정색으로 설정 */
 a {
     color: black;
-    text-decoration: none; /* 밑줄 없애기 */
+    text-decoration: none; 
 }
 
-/* a 태그에 마우스를 올렸을 때 색상을 회색으로 설정 (선택 사항) */
 a:hover {
     color: #CB444A;
-    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+    text-decoration: underline; 
 }
 
 .info{

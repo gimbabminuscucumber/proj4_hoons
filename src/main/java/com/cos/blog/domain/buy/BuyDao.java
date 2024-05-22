@@ -13,6 +13,7 @@ import com.cos.blog.domain.buy.dto.OrderRespDto;
 
 public class BuyDao {
 
+	// 상품 구매
 	public int buy(BuyReqDto dto) {
 		String sql = "INSERT INTO buy(userId, productId, totalPrice, totalCount, orderNum, createDate) VALUES(?,?,?,?,?,now())";
 		Connection conn = null;
@@ -80,7 +81,6 @@ public class BuyDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			System.out.println("BuyDao/findByOrder/dto : " + dto);
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
@@ -123,12 +123,12 @@ public class BuyDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			System.out.println("BuyDao/findOrderList/orders : " + orders);
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
 	}
 
+	// 주문 상세
 	public List<OrderRespDto> findOrderDetail(String orderNum) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
@@ -165,12 +165,12 @@ public class BuyDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			System.out.println("BuyDao/details : " + details);
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
 	}
 
+	// 구매자 정보
 	public OrderRespDto findByBuyer(String orderNum) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
@@ -204,7 +204,6 @@ public class BuyDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			System.out.println("BuyDao/findByOrder/dto : " + dto);
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
