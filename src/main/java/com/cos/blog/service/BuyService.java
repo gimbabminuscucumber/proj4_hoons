@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import com.cos.blog.domain.buy.BuyDao;
+import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
-import com.cos.blog.domain.buy.dto.OrderRespDto;
+import com.cos.blog.domain.buy.dto.OrderReqDto;
 
 public class BuyService {
 	
@@ -29,21 +30,31 @@ public class BuyService {
 		return dateNum + randomNum;
 	}
 
-	public OrderRespDto 주문완료(int id) {
+	public OrderReqDto 주문완료(int id) {
 		return buyDao.findByOrder(id);
 	}
 
-	public List<OrderRespDto> 주문내역(int userId) {
+	public List<OrderReqDto> 주문내역(int userId) {
 		return buyDao.findOrderList(userId);
 	}
 
-	public List<OrderRespDto> 주문상세(String orderNum) {
+	public List<OrderReqDto> 주문상세(String orderNum) {
 		return buyDao.findOrderDetail(orderNum);
 	}
 
-	public OrderRespDto 구매자정보(String orderNum) {
+	public OrderReqDto 구매자정보(String orderNum) {
 		return buyDao.findByBuyer(orderNum);
 	}
+
+	public int 장바구니담기(BasketReqDto dto) {
+		int result = buyDao.basket(dto);
+		return result;
+	}
+	
+	public List<BasketReqDto> 장바구니조회(int userId){
+		return buyDao.basketList(userId);
+	}
+
 
 	
 }

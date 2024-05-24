@@ -5,7 +5,7 @@
 <%@ include file="../layout/header.jsp"%>
 
 <!-- 상단 배너 -->
-<section class="container" style="width: 1100px">
+<section class="container" style="width: 1100px" id="container">
 	<div id="demo" class="carousel slide" data-ride="carousel" >
 		<ul class="carousel-indicators">
 			<li data-target="#demo" data-slide-to="0" class="active"></li>
@@ -37,7 +37,7 @@
 	</div>
 </section>
 
-<section class="container">
+<section class="container" id="container">
 
     <!-- 왼쪽 섹션 -->
     <div class="section left">
@@ -164,7 +164,7 @@
 <script src="/project4/js/productInfo.js"></script>
 
 <style>
-.container {
+#container {
     display: flex;
 }
 

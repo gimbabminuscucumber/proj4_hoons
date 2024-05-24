@@ -201,7 +201,7 @@
     }
     .material-icons-input .material-icons {		
         position: absolute;
-        left: 5px; 		
+        left: 5px; 
         top: 50%;
         transform: translateY(-50%);
     }
@@ -214,12 +214,12 @@
     }
 
     .insert-input-container .form-control {
-        flex: 1; 						/* 입력 칸이 버튼의 크기에 따라 유동적으로 변할 수 있도록 */
-        margin-right: 5px; 	/* 버튼과의 간격 조절 */
+        flex: 1; 
+        margin-right: 5px;
     }
 
     .insert-input-container .btn {
-        flex-shrink: 0; 			/* 버튼이 입력 칸의 크기에 영향을 받지 않도록 */
+        flex-shrink: 0; 
     }
     
 </style>

@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cos.blog.config.DB;
+import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
-import com.cos.blog.domain.buy.dto.OrderRespDto;
+import com.cos.blog.domain.buy.dto.OrderReqDto;
 
 public class BuyDao {
 
@@ -48,12 +49,12 @@ public class BuyDao {
 	}
 
 	// 주문 완료 (buy, user, product 테이블 조인)
-	public OrderRespDto findByOrder(int id) {
+	public OrderReqDto findByOrder(int id) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;		// ResultSet : SQL 쿼리 실행 후 반환된 결과 집합
-		OrderRespDto dto = new OrderRespDto();
+		OrderReqDto dto = new OrderReqDto();
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -87,12 +88,12 @@ public class BuyDao {
 	}
 
 	// 주문 내역
-	public List<OrderRespDto> findOrderList(int userId) {
+	public List<OrderReqDto> findOrderList(int userId) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
-		List<OrderRespDto> orders = new ArrayList<>();
+		List<OrderReqDto> orders = new ArrayList<>();
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -100,7 +101,7 @@ public class BuyDao {
 			rs = pstmt.executeQuery();		// 실행한 SQL 쿼리의 결과를 pstmt를 통해 rs에 할당
 			
 			while(rs.next()){
-				OrderRespDto dto = OrderRespDto.builder()
+				OrderReqDto dto = OrderReqDto.builder()
 						.id(rs.getInt("b.id"))
 						.userId(rs.getInt("b.userId"))
 						.productId(rs.getInt("b.productId"))
@@ -129,12 +130,12 @@ public class BuyDao {
 	}
 
 	// 주문 상세
-	public List<OrderRespDto> findOrderDetail(String orderNum) {
+	public List<OrderReqDto> findOrderDetail(String orderNum) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		List<OrderRespDto> details = new ArrayList<>();
+		List<OrderReqDto> details = new ArrayList<>();
 
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -142,7 +143,7 @@ public class BuyDao {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				OrderRespDto dto = OrderRespDto.builder()
+				OrderReqDto dto = OrderReqDto.builder()
 						.id(rs.getInt("b.id"))
 						.userId(rs.getInt("b.userId"))
 						.productId(rs.getInt("b.productId"))
@@ -171,12 +172,12 @@ public class BuyDao {
 	}
 
 	// 구매자 정보
-	public OrderRespDto findByBuyer(String orderNum) {
+	public OrderReqDto findByBuyer(String orderNum) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		OrderRespDto dto = new OrderRespDto();
+		OrderReqDto dto = new OrderReqDto();
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -207,6 +208,68 @@ public class BuyDao {
 			DB.close(conn, pstmt, rs);
 		}
 		return null;
+	}
+
+	// 장바구니 담기
+	public int basket(BasketReqDto dto) {
+	    String sql = "INSERT INTO basket (userId, productId, totalCount, totalPrice, img, brand, content, price, createDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, now())";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, dto.getUserId());
+	        pstmt.setInt(2, dto.getProductId());
+	        pstmt.setInt(3, dto.getTotalCount());
+	        pstmt.setInt(4, dto.getTotalPrice());
+	        pstmt.setString(5, dto.getImg());
+	        pstmt.setString(6, dto.getBrand());
+	        pstmt.setString(7, dto.getContent());
+	        pstmt.setInt(8, dto.getPrice());
+	        int result = pstmt.executeUpdate();
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt);
+	    }
+	    return -1;
+	}
+
+	// 장바구니 조회
+	public List<BasketReqDto> basketList(int userId) {
+		String sql = "SELECT * FROM basket WHERE userId = ?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    List<BasketReqDto> baskets = new ArrayList<>();
+
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, userId);
+	        rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            BasketReqDto dto = BasketReqDto.builder()
+	                .id(rs.getInt("id"))
+	                .userId(rs.getInt("userId"))
+	                .productId(rs.getInt("productId"))
+	                .totalCount(rs.getInt("totalCount"))
+	                .totalPrice(rs.getInt("totalPrice"))
+	                .img(rs.getString("img"))
+	                .brand(rs.getString("brand"))
+	                .content(rs.getString("content"))
+	                .price(rs.getInt("price"))
+	                .build();
+	            baskets.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt, rs);
+	    }
+	    return baskets;
 	}
 
 }

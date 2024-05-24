@@ -20,8 +20,9 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.cos.blog.domain.buy.Buy;
+import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
-import com.cos.blog.domain.buy.dto.OrderRespDto;
+import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
@@ -30,8 +31,6 @@ import com.cos.blog.service.BuyService;
 import com.cos.blog.service.ProductService;
 import com.cos.blog.util.Script;
 import com.google.gson.Gson;
-
-
 
 // URL 주소를 테이블 명으로 하면 편하다
 // http://localhost:8080/project4/product
@@ -74,7 +73,7 @@ public class BuyController extends HttpServlet{
 				
 				Gson gson = new Gson();
 				BuyReqDto dto = gson.fromJson(reqData, BuyReqDto.class);
-				
+				System.out.println("dto : " + dto);
 				// 상품 구매시, 구매번호 생성
 				String orderNum = buyService.구매번호();
 				dto.setOrderNum(orderNum);
@@ -104,30 +103,33 @@ public class BuyController extends HttpServlet{
 	            commonRespDto.setStatusCode(result != -1 ? 1 : -1);
 	            commonRespDto.setData(result);
 				String respData = gson.toJson(commonRespDto);
+				System.out.println("BuyController/buy/respData : " + respData);
 				Script.responseData(response, respData);
 				
+						
 			// ====================================================	
 			// 											주문 완료 페이지
 			// ====================================================		
 			}else if(cmd.equals("order")) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				
-				OrderRespDto orders = buyService.주문완료(id);
+				OrderReqDto orders = buyService.주문완료(id);
 				request.setAttribute("orders", orders);
 				
 				RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
 				dis.forward(request, response);	
 
+
 			// ====================================================	
 			// 												주문 내역
 			// ====================================================	
-			}else if(cmd.equals("basket")) {
+			}else if(cmd.equals("list")) {
 				int userId = Integer.parseInt(request.getParameter("id"));
-				List<OrderRespDto> orders = buyService.주문내역(userId);
+				List<OrderReqDto> orders = buyService.주문내역(userId);
 				
 				request.setAttribute("orders", orders);
 				
-				RequestDispatcher dis = request.getRequestDispatcher("buy/basket.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("buy/list.jsp");
 				dis.forward(request, response);	
 				
 			// ====================================================	
@@ -136,13 +138,56 @@ public class BuyController extends HttpServlet{
 			}else if(cmd.equals("detail")) {
 				String orderNum = request.getParameter("orderNum");
 				
-				List<OrderRespDto> details = buyService.주문상세(orderNum);
+				List<OrderReqDto> details = buyService.주문상세(orderNum);
 				request.setAttribute("details", details);
-				OrderRespDto buyer = buyService.구매자정보(orderNum);
+				OrderReqDto buyer = buyService.구매자정보(orderNum);
 				request.setAttribute("buyer", buyer);
 				
 				RequestDispatcher dis = request.getRequestDispatcher("buy/detail.jsp");
 				dis.forward(request, response);	
+			
+			// ====================================================	
+			// 											장바구니 담기
+			// ====================================================		
+			}else if(cmd.equals("basket")) {
+				BufferedReader br = request.getReader();
+				String reqData = br.readLine();
+				System.out.println("BuyController/reqData : " + reqData);
+				
+				Gson gson = new Gson();
+				BasketReqDto dto = gson.fromJson(reqData, BasketReqDto.class);
+				System.out.println("BuyController/dto : " + dto);
+				
+				CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
+				int result = buyService.장바구니담기(dto);
+				if(result == 1) {
+					commonRespDto.setStatusCode(result);
+					commonRespDto.setData("ok");
+				}else {
+					commonRespDto.setStatusCode(result);
+					commonRespDto.setData("fail");
+				}
+				
+				String data = gson.toJson(commonRespDto);
+				System.out.println("data : " + data);
+				
+				PrintWriter out = response.getWriter();
+				out.print(data);
+				out.flush();
+			
+				// ====================================================	
+				// 											장바구니 조회
+				// ====================================================		
+			}else if(cmd.equals("basketList")) {
+				int userId = Integer.parseInt(request.getParameter("id"));
+				System.out.println("BuyController/basketList/userId : " + userId);
+				
+				List<BasketReqDto> baskets = buyService.장바구니조회(userId);
+		        System.out.println("BuyController/basketList/baskets : " + baskets);
+		        
+		        request.setAttribute("baskets", baskets);
+		        RequestDispatcher dis = request.getRequestDispatcher("buy/basketList.jsp");
+		        dis.forward(request, response);
 			}
 	}
 }

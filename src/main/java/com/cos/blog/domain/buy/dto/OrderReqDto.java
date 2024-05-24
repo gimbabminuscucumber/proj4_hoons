@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class OrderRespDto {
+public class OrderReqDto {
 	private int id;					// 구매 pk
 	private int userId;			// 구매자
 	private int productId;	// 구매 제품

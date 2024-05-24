@@ -21,6 +21,9 @@
                 <div class="form-group">
                 	<input type="hidden" name="userId" id="userId" value="${principal.id}">
 					<input type="hidden" name="productId" id="productId" value="${products.id}">
+					<input type="hidden" name="img" id="img" value="${products.img}">
+					<input type="hidden" name="brand" id="brand" value="${products.brand}">
+					<input type="hidden" name="content" id="content" value="${products.content}">
                    	<img src="/project4/images/productImg/${products.img }" alt="Product Image" style="width: 100%; max-width: 400px; height: auto;">
                 </div>
             </div>
@@ -33,7 +36,6 @@
                 <p><span id="purchase">리뷰 개수 : </span></p>
                 <h3 class="price" id="price"><fmt:formatNumber type="number" pattern="#,##0"  value="${products.price}"/>원</h3>
                 <p>(weight : ${products.weight }원)</p>
-                <c:if test="${products.content == null}"></c:if>
                
                 <div class="form-group d-flex" >
                     <button type="button" class="btn btn-light" onclick="minus()" >-</button>
@@ -44,7 +46,7 @@
 	               		합계 : <span id="totalPrice" style="color: #CB444A; font-size:25px"><span>
 	                </div>
                <div>
-	                <button type="button" class="btn btn-outline-info">장바구니에 추가</button>
+	                <button type="button" class="btn btn-outline-info" onclick="basket()">장바구니에 추가</button>
 	                <button type="button" class="btn btn-primary" onclick="buy()">구매하기</button>
                </div>
             </div>
@@ -164,7 +166,6 @@
 	
 	// 구매하기
     function buy() {
-       	
        	var userId = document.getElementById("userId").value;
        	var productId = document.getElementById("productId").value;
        	var quantity = parseInt($("#quantity").val());
@@ -189,11 +190,51 @@
         		alert("구매에 실패했습니다.");
         	}else{
         		alert("구매를 완료하였습니다.");
+        		console.log('data.data : ' + data.data);
         		window.location.href = "/project4/buy?cmd=order&id=" + data.data;
         	}
         });
-
 	}
+	
+	// 장바구니에 담기
+    function basket() {
+		
+        var userId = document.getElementById("userId").value;
+        var productId = document.getElementById("productId").value;
+        var img = document.getElementById("img").value;
+        var brand = document.getElementById("brand").value;
+        var quantity = parseInt($("#quantity").val());
+        var price = parseInt(${products.price});
+        var totalPrice = price * quantity;
+        var content = document.getElementById("content").value;
+
+        var data = {
+            userId: userId,
+            productId: productId,
+            img: img,					// DB에 저장된 데이터를 el문으로 불러온 데이터를 가져와야하기에 input type="hidden" 사용
+            brand: brand,			// DB에 저장된 데이터를 el문으로 불러온 데이터를 가져와야하기에 input type="hidden" 사용
+            price: price,
+            content: content,
+            totalCount: quantity,
+            totalPrice: totalPrice
+        };
+
+		$.ajax({
+			type: "post",
+			url: "/project4/buy?cmd=basket",
+			data: JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json"
+		}).done(function(data){
+			console.log('ajax 호출 성공');
+			if(data.statusCode == 1){
+				alert('장바구니에 담았습니다.');
+			}else{
+				alert('장바구니 담기에 실패했습니다.');
+			}
+		})
+    }
+	
 </script>
 
 <style>

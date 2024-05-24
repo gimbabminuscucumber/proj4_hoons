@@ -58,7 +58,6 @@ public class ProductController extends HttpServlet{
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String cmd = request.getParameter("cmd");
 			ProductService productService = new ProductService();
-			BuyService buyService = new BuyService();
 			HttpSession session = request.getSession();							// 세션 불러오기
 			
 			// ====================================================	

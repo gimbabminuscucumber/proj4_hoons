@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../layout/header.jsp"%>
 
-<section class="container">
+<section class="container" id="container">
 
 	<!-- 왼쪽 섹션 -->
 	<div class="section">
@@ -138,20 +138,17 @@
 
 
 <style>
-.container {
+#container {
 	display: flex;
-	/* justify-content: space-between;*/
 }
 
 .section {
-	/*flex-grow: 1; /* 동일한 너비를 가지도록 */
 	padding: 10px;
-	/*background-color: lightblue;*/
 	margin: 1px;
 }
 
 .section.center {
-	flex-grow: 9; /* center section의 너비를 늘림 */
+	flex-grow: 9; 
 }
 </style>
 

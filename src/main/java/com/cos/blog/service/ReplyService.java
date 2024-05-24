@@ -2,7 +2,6 @@ package com.cos.blog.service;
 
 import java.util.List;
 
-import com.cos.blog.domain.board.BoardDao;
 import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.reply.ReplyDao;
 import com.cos.blog.domain.reply.dto.ReplyRespDto;

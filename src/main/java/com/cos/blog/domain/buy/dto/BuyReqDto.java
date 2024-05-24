@@ -13,5 +13,4 @@ public class BuyReqDto {
 	private String orderNum;	// 구매 번호
 	private String state;		// 주문 상태	(주문확인/배송중/배송완료/교환 신청완료 ... 무신사 참조)
 	private Timestamp createDate;	// 구매 일자
-	
 }
