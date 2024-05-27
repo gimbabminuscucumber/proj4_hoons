@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Script {
 
+	// 응답받은 데이터에 대해 alert 메세지를 전달
 	public static void back(HttpServletResponse response, String msg) {
 		PrintWriter out;
 		try {
@@ -21,6 +22,7 @@ public class Script {
 		}
 	}
 
+	// 응답받은 데이터에 대해 alert 메세지는 미전달
 	public static void responseData(HttpServletResponse response, String jsonData) {
 		PrintWriter out;
 		try {

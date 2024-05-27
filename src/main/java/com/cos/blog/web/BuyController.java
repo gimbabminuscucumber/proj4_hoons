@@ -2,11 +2,8 @@ package com.cos.blog.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -17,18 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
-import com.cos.blog.domain.buy.Buy;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
-import com.cos.blog.domain.product.dto.DetailRespDto;
-import com.cos.blog.domain.product.dto.SaveReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BuyService;
-import com.cos.blog.service.ProductService;
 import com.cos.blog.util.Script;
 import com.google.gson.Gson;
 
@@ -59,6 +51,8 @@ public class BuyController extends HttpServlet{
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String cmd = request.getParameter("cmd");
 			BuyService buyService = new BuyService();
+			HttpSession session = request.getSession();
+			User user = (User)session.getAttribute("principal");
 			
 			// ====================================================	
 			// 												상품 구매
@@ -69,11 +63,9 @@ public class BuyController extends HttpServlet{
 				
 				// detail.jsp > fucntion buy()의 var data{} 를  test에 저장 (json 타입이라 String 으로만 저장가능)
 				String reqData = br.readLine();					
-				System.out.println("reqData : " + reqData);	// detail.jsp에서 json 타입으로 받아온 data
 				
 				Gson gson = new Gson();
 				BuyReqDto dto = gson.fromJson(reqData, BuyReqDto.class);
-				System.out.println("dto : " + dto);
 				// 상품 구매시, 구매번호 생성
 				String orderNum = buyService.구매번호();
 				dto.setOrderNum(orderNum);
@@ -103,11 +95,50 @@ public class BuyController extends HttpServlet{
 	            commonRespDto.setStatusCode(result != -1 ? 1 : -1);
 	            commonRespDto.setData(result);
 				String respData = gson.toJson(commonRespDto);
-				System.out.println("BuyController/buy/respData : " + respData);
 				Script.responseData(response, respData);
 				
 						
 			// ====================================================	
+			// 												주문서 작성
+			// ====================================================		
+			}else if(cmd.equals("buyForm")) {
+				/*
+				BufferedReader br = request.getReader();
+				String reqData = br.readLine();
+				Gson gson = new Gson();
+				BuyFormReqDto dto = gson.fromJson(reqData, BuyFormReqDto.class);
+
+				CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
+				int result = buyService.주문서작성(dto);
+
+				if(result == 1) {
+					commonRespDto.setStatusCode(result);
+					commonRespDto.setData("ok");
+				}else {
+					commonRespDto.setStatusCode(result);
+					commonRespDto.setData("fail");
+				}
+				
+				String data = gson.toJson(commonRespDto);
+				
+				PrintWriter out = response.getWriter();
+				out.print(data);
+				out.flush();
+				*/
+			
+				System.out.println("BuyController/주문서작성 진입");
+
+			    String[] productIds = request.getParameterValues("productId");
+			    int[] checkedItems = Arrays.stream(productIds).mapToInt(Integer::parseInt).toArray();
+
+			    List<BasketReqDto> baskets = buyService.주문서작성(checkedItems);
+
+			    request.setAttribute("baskets", baskets);
+			    System.out.println("BuyController/000");
+			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm.jsp");
+			    dis.forward(request, response);
+
+	        // ====================================================	
 			// 											주문 완료 페이지
 			// ====================================================		
 			}else if(cmd.equals("order")) {
@@ -152,11 +183,9 @@ public class BuyController extends HttpServlet{
 			}else if(cmd.equals("basket")) {
 				BufferedReader br = request.getReader();
 				String reqData = br.readLine();
-				System.out.println("BuyController/reqData : " + reqData);
 				
 				Gson gson = new Gson();
 				BasketReqDto dto = gson.fromJson(reqData, BasketReqDto.class);
-				System.out.println("BuyController/dto : " + dto);
 				
 				CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
 				int result = buyService.장바구니담기(dto);
@@ -169,25 +198,23 @@ public class BuyController extends HttpServlet{
 				}
 				
 				String data = gson.toJson(commonRespDto);
-				System.out.println("data : " + data);
 				
 				PrintWriter out = response.getWriter();
 				out.print(data);
 				out.flush();
 			
-				// ====================================================	
-				// 											장바구니 조회
-				// ====================================================		
+			// ====================================================	
+			// 											장바구니 조회
+			// ====================================================		
 			}else if(cmd.equals("basketList")) {
 				int userId = Integer.parseInt(request.getParameter("id"));
-				System.out.println("BuyController/basketList/userId : " + userId);
 				
 				List<BasketReqDto> baskets = buyService.장바구니조회(userId);
-		        System.out.println("BuyController/basketList/baskets : " + baskets);
-		        
 		        request.setAttribute("baskets", baskets);
 		        RequestDispatcher dis = request.getRequestDispatcher("buy/basketList.jsp");
 		        dis.forward(request, response);
+		        
 			}
+
 	}
 }

@@ -1,12 +1,14 @@
 package com.cos.blog.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import com.cos.blog.domain.buy.BuyDao;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
+import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 
@@ -17,9 +19,11 @@ public class BuyService {
 	public BuyService() {
 		buyDao = new BuyDao();
 	}
-
+	
 	public int 상품구매(BuyReqDto dto) {
-		return buyDao.buy(dto);
+		System.out.println("BuyService/상품구매");
+		return buyDao.buy(dto);						// MyBatis 또는 직접 작성한 SQL 쿼리를 사용하여 데이터를 관리 / 데이터베이스와 직접 상호작용
+		//return buyRepository.save(dto);		// JPA/Hibernate를 사용하여 ORM 방식으로 데이터를 관리 / 객체와 관계형 데이터베이스 간의 매핑을 자동으로 처리
 	}
 	
 	public String 구매번호() {
@@ -55,6 +59,17 @@ public class BuyService {
 		return buyDao.basketList(userId);
 	}
 
+	public List<BasketReqDto> 주문서작성(int[] checkedItems) {
+		System.out.println("BuyService/주문서작성 진입");
+		
+	    List<BasketReqDto> baskets = new ArrayList<>();
+	    for (int productId : checkedItems) {
+	        BasketReqDto basket = buyDao.buyForm(productId);
+	        baskets.add(basket);
+	        System.out.println("BuyService/주문서작성/0000");
+	    }
+	    return baskets;
+	}
 
 	
 }

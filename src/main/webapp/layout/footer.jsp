@@ -4,7 +4,7 @@
 <br>
 <br>
 <br>
-<div style="background-color: #343a40; color: white; height:200px">
+<div style="background-color: #343a40; color: white; height:350px">
 	<br>
 	<div class="container">
 		<!-- Nav tabs -->
@@ -25,20 +25,27 @@
 			<div id="privateInfo" class="container tab-pane fade">
 				<br>
 				<h3>개인정보 처리방침</h3>
-				<p></p>
+				<p>내용 기제하기</p>
 			</div>
 			<div id="usage" class="container tab-pane fade">
 				<br>
 				<h3>이용약관</h3>
-				<p></p>
+				<p>느에에에 요오오옹 기이이이 제에에에에</p>
 			</div>
 			<div id="kids" class="container tab-pane fade">
 				<br>
 				<h3>청소년 보호방침</h3>
-				<p></p>
+				<p>ㅁㅁㄴㅇㄹㅁㄹ4</p>
 			</div>
 		</div>
 		<br>
+	</div>
+	
+	<div class="container" style="text-align: center">
+	<hr style="border-color:white">
+		<p>Created by 비둘기멋지게발차기</p>
+		<p>💻 pigeongorgeuskick@naver.com</p>
+		<p>📞 010-1234-5678</p>
 	</div>
 </div>
 

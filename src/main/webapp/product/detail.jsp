@@ -5,53 +5,61 @@
 <%@ include file="../layout/header.jsp"%>
 
 <div class="container">
-    <br> 
-    <br>
-    <p style="font-size: 15px; color: grey; padding-left:18px">
-	    카테고리 >  
-	    <c:if test="${products.categoryId == 0}">육류</c:if>
-	    <c:if test="${products.categoryId == 1}">과일</c:if>
-	    <c:if test="${products.categoryId == 2}">채소</c:if>
-	    <c:if test="${products.categoryId == 3}">과자/간식</c:if>
-	    <c:if test="${products.categoryId == 4}">밀키트</c:if>
-    </p>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                	<input type="hidden" name="userId" id="userId" value="${principal.id}">
-					<input type="hidden" name="productId" id="productId" value="${products.id}">
-					<input type="hidden" name="img" id="img" value="${products.img}">
-					<input type="hidden" name="brand" id="brand" value="${products.brand}">
-					<input type="hidden" name="content" id="content" value="${products.content}">
-                   	<img src="/project4/images/productImg/${products.img }" alt="Product Image" style="width: 100%; max-width: 400px; height: auto;">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h2>${products.brand}</h2>
-                <div>
-                	<c:if test="${products.content != null}"><h4>${products.content}</h4></c:if>
-                	<c:if test="${products.content == null}"><h4>하단 상세설명 참조</h4></c:if>
-                </div>
-                <p><span id="purchase">리뷰 개수 : </span></p>
-                <h3 class="price" id="price"><fmt:formatNumber type="number" pattern="#,##0"  value="${products.price}"/>원</h3>
-                <p>(weight : ${products.weight }원)</p>
-               
-                <div class="form-group d-flex" >
-                    <button type="button" class="btn btn-light" onclick="minus()" >-</button>
-                    <input type="text" class="btn btn" id="quantity" value="1" min="1" style="width:50px">
-                    <button type="button" class="btn btn-light" onclick="plus()">+</button>
-                </div>
-	                <div class="form-group" >
-	               		합계 : <span id="totalPrice" style="color: #CB444A; font-size:25px"><span>
+	<form action="/project4/buy?cmd=buyForm" method="POST" name="buy"  enctype="multipart/form-data">
+		<input type="hidden" name="userId" id="userId" value="${principal.id}">
+		<input type="hidden" name="nickName" id="nickName" value="${principal.nickName}">
+		<input type="hidden" name="address" id="address" value="${principal.address}">
+		<input type="hidden" name="phone" id="phone" value="${principal.phone}">
+		<input type="hidden" name="productId" id="productId" value="${products.id}">
+		<input type="hidden" name="content" id="content" value="${products.content}">
+		<input type="hidden" name="weight" id="weight" value="${products.weight}">
+		<input type="hidden" name="img" id="img" value="${products.img}">
+		<input type="hidden" name="brand" id="brand" value="${products.brand}">
+		
+        
+	    <br> 
+	    <br>
+	    <p style="font-size: 15px; color: grey; padding-left:18px">
+		    카테고리 >  
+		    <c:if test="${products.categoryId == 0}">육류</c:if>
+		    <c:if test="${products.categoryId == 1}">과일</c:if>
+		    <c:if test="${products.categoryId == 2}">채소</c:if>
+		    <c:if test="${products.categoryId == 3}">과자/간식</c:if>
+		    <c:if test="${products.categoryId == 4}">밀키트</c:if>
+	    </p>
+	    <div class="container">
+	        <div class="row">
+	            <div class="col-md-6">
+	                <div class="form-group">
+	                   	<img src="/project4/images/productImg/${products.img }" alt="Product Image" style="width: 100%; max-width: 400px; height: auto;">
 	                </div>
-               <div>
-	                <button type="button" class="btn btn-outline-info" onclick="basket()">장바구니에 추가</button>
-	                <button type="button" class="btn btn-primary" onclick="buy()">구매하기</button>
-               </div>
-            </div>
-        </div>
-    </div>
+	            </div>
+	            <div class="col-md-6">
+	                <h2 id="brand">${products.brand}</h2>
+	                <div>
+	                	<c:if test="${products.content != null}"><h4>${products.content}</h4></c:if>
+	                	<c:if test="${products.content == null}"><h4>하단 상세설명 참조</h4></c:if>
+	                </div>
+	                <p><span id="purchase">리뷰 개수 : </span></p>
+	                <h3 class="price" id="price"><fmt:formatNumber type="number" pattern="#,##0"  value="${products.price}"/>원</h3>
+	                <p>(weight : ${products.weight }원)</p>
+	               
+	                <div class="form-group d-flex" >
+	                    <button type="button" class="btn btn-light" onclick="minus()" >-</button>
+	                    <input type="text" class="btn btn" id="quantity" value="1" min="1" style="width:50px">
+	                    <button type="button" class="btn btn-light" onclick="plus()">+</button>
+	                </div>
+		                <div class="form-group" >
+		               		합계 : <span id="totalPrice" style="color: #CB444A; font-size:25px"><span>
+		                </div>
+	               <div>
+		                <button type="button" class="btn btn-outline-info" onclick="basket()">장바구니에 추가</button>
+		                <button type="button" class="btn btn-primary" onclick="purchase()">구매하기</button>
+	               </div>
+	            </div>
+	        </div>
+	    </div>
+	</form>	    
 </div>
 <div class="container">
 <hr>
@@ -164,35 +172,62 @@
         document.getElementById('productDetail').scrollIntoView({behavior: 'smooth'});
     }
 	
-	// 구매하기
-    function buy() {
+	// 주문서 작성
+    function purchase() {
+		console.log('주문서 작성');
        	var userId = document.getElementById("userId").value;
-       	var productId = document.getElementById("productId").value;
+        var nickName = document.getElementById("nickName").value;
+        var address = document.getElementById("address").value;
+        var phone = document.getElementById("phone").value;
+
+        var productId = document.getElementById("productId").value;
+        var brand = document.getElementById("brand").value;
+        var content = document.getElementById("content").value;
+        var weight = document.getElementById("weight").value;
        	var quantity = parseInt($("#quantity").val());
         var price = parseInt(${products.price});
         var totalPrice = price * quantity;
+        var img = document.getElementById("img").value;
+        
         
         var data = {			// json 타입
             userId: userId,
+            nickName: nickName,
+            address: address,
+            phone: phone,
             productId: productId,
+            brand: brand,
+            content: content,
+            weight: weight,
             totalPrice: totalPrice,
-            totalCount: quantity
+            totalCount: quantity,
+            img: img
         };
-        
+        /*
+        console.log('data.userId : ' + data.userId);
+        console.log('data.nickName : ' + data.nickName);
+        console.log('data.address : ' + data.address);
+        console.log('data.phone : ' + data.phone);
+        console.log('data.productId : ' + data.productId);
+        console.log('data.brand : ' + data.brand);
+        console.log('data.content : ' + data.content);
+        console.log('data.weight : ' + data.weight);
+        console.log('data.totalPrice : ' + data.totalPrice);
+        console.log('data.totalCount : ' + data.totalCount);
+        console.log('data.img : ' + data.img);
+        */
         $.ajax({
         	type: "post",
-        	url: "/project4/buy?cmd=buy",
+        	url: "/project4/buy?cmd=buyForm",	// 데이터 보낼 경로
         	data: JSON.stringify(data),
         	contentType: "application/json; charset=utf-8",
         	dataType: "json"
-        }).done(function(data){	// BuyController/buy에서 respData를 data로 받음
-        	if(data.statusCode == -1){
-        		alert("구매에 실패했습니다.");
-        	}else{
-        		alert("구매를 완료하였습니다.");
-        		console.log('data.data : ' + data.data);
-        		window.location.href = "/project4/buy?cmd=order&id=" + data.data;
-        	}
+        }).done(function(data){	
+        	console.log('주문서 작성');
+        	console.log('data : ' + data);
+        	console.log('00000');
+        	
+        	//window.location.href = "/project4/buy?cmd=buyForm&id=" + data.data;	// data.data = userId
         });
 	}
 	
@@ -219,6 +254,7 @@
             totalPrice: totalPrice
         };
 
+        
 		$.ajax({
 			type: "post",
 			url: "/project4/buy?cmd=basket",

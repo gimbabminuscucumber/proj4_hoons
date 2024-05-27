@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../layout/header.jsp"%>
 
@@ -8,15 +7,15 @@
 <br>
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
-		<img src="images/icons/cart.png" alt="Logo" style="width: 50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">장바구니</div>
+		<img src="images/icons/coin.png" alt="Logo" style="width: 50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">주문서 작성</div>
 	</div>
 </h1>
 <br>
 <br>
 
 <div class="container" style="text-align: center">
- 	<form action="/project4/buy?cmd=buyForm" method="post" id="buyForm"> 
+ 	<form action="/project4/buy?cmd=basketBuy" method="post" id="basketBuy"> 
 		<div class="form-group">
 			<table>
 				<thead>
@@ -114,33 +113,33 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("selectAll").addEventListener("change", function() {
-            let checkboxes = document.querySelectorAll(".productCheck");
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = document.getElementById("selectAll").checked;
-            });
-        });
-
-        document.getElementById("buy").addEventListener("click", function() {
-        	console.log('basketList.jsp/주문하기 버튼 클릭');
-            let form = document.getElementById("buyForm");
-            let checkboxes = document.querySelectorAll(".productCheck:checked");
-            if (checkboxes.length > 0) {
-                checkboxes.forEach(function(checkbox) {
-                    let hiddenInput = document.createElement("input");
-                    hiddenInput.type = "hidden";
-                    hiddenInput.name = "productId";
-                    hiddenInput.value = checkbox.value;
-                    form.appendChild(hiddenInput);
-                });
-	        	console.log('basketList.jsp/0000');
-                form.submit();
+	document.addEventListener("DOMContentLoaded", function() {
+	    // 1. 첫 번째 <th>에 총 항목 개수 표시
+	    document.getElementById("totalItems").textContent = "${totalCount}";
+	
+	    // 2. 체크박스 기능
+	    document.getElementById("selectAll").addEventListener("change", function() {	// id="selectAll" 이 이벤트리스터를 추가하여 변경사항이 발생하면 함수 실행
+	        let checkboxes = document.querySelectorAll(".productCheck");							// class="productCheck"의 모든 요소를 checkboxes에 NodeList로 저장 (NodeList는 배열과 유사한 객체로, 선택된 모든 체크박스 요소를 포함)
+	        checkboxes.forEach(function(checkbox) {																// checkboxes의 NodeList의 각 체크박스 요소에 콜백함수 실행 
+	            checkbox.checked = document.getElementById("selectAll").checked;				// 체크박스의 checked 과 selectAll 체크박스의 checked 속성을 동일하게 설정 (모든 productCheck 체크박스는 "selectAll" 체크박스의 상태에 따라 체크되거나 체크 해제)
+	        });
+	    });
+	    
+        // 3. 주문하기 버튼 클릭 시 체크된 항목만 전송
+        document.getElementById("buy").addEventListener("click", function() {		// id="buy" 클릭시 함수 실행
+            let form = document.getElementById("basketBuy");										// id="basketBuy" 를 form에 할당
+            let checkboxes = document.querySelectorAll(".productCheck:checked");	// id="pruductCheck"에서 check가 된 모든 요소들을 checkboxes에 할당
+            if (checkboxes.length > 0) {																				// checkboxes의 길이가 0 초과시
+                form.submit();																								// form을 submit
             } else {
                 alert("주문할 상품을 선택하세요.");
             }
         });
-    });
+	});
+	
+	
+	// 장바구니 총 금액, 
+	
 </script>
 
 <style>
@@ -174,5 +173,3 @@ a:hover {
 }
 
 </style>
-
-<%@ include file = "../layout/footer.jsp" %>

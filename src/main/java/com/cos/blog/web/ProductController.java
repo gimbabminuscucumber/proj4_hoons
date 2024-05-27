@@ -67,6 +67,7 @@ public class ProductController extends HttpServlet{
 			if(cmd.equals("saveForm")) {
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 				request.setAttribute("principal", principal);
+			
 				if(principal != null) {
 					RequestDispatcher dis = request.getRequestDispatcher("product/saveForm.jsp");
 					dis.forward(request, response);	
@@ -173,8 +174,6 @@ public class ProductController extends HttpServlet{
 				int id = Integer.parseInt(request.getParameter("id"));
 				DetailRespDto products = productService.상품상세보기(id);
 				List<DetailRespDto> suggests = productService.추천상품();
-				
-				System.out.println("ProductController/detail/suggests : "  + suggests);
 				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");

@@ -15,6 +15,8 @@ public class Review {
 	private int reviewId;
 	private int userId;
 	private int productId;
+	private int score;				// 별점 
+	private String nickName;
 	private String content;
 	private String img;
 	private Timestamp createDate;

@@ -3,12 +3,14 @@ package com.cos.blog.domain.buy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
+import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 
@@ -16,6 +18,7 @@ public class BuyDao {
 
 	// 상품 구매
 	public int buy(BuyReqDto dto) {
+		System.out.println("BuyDao 시작");
 		String sql = "INSERT INTO buy(userId, productId, totalPrice, totalCount, orderNum, createDate) VALUES(?,?,?,?,?,now())";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -30,15 +33,17 @@ public class BuyDao {
 			pstmt.setInt(4, dto.getTotalCount());
 			pstmt.setString(5, dto.getOrderNum());
 			int result = pstmt.executeUpdate();
+			System.out.println("BuyDao/result : 	" + result);
 
 			// 추가
 			if(result == 1) {
 				rs = pstmt.getGeneratedKeys();		// 생성된 id 값 반환
 				if(rs.next()) {
-					return rs.getInt(1);		// 생성된 id 리턴
+					return rs.getInt(1);		// 생성된 id 리턴		// 수정 전
 				}
 			}
-			
+			System.out.println("BuyDao/5555");
+			System.out.println("BuyDao/buy/result : " + result);
 			return result;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -272,4 +277,39 @@ public class BuyDao {
 	    return baskets;
 	}
 
+	// 주문서 작성
+	public BasketReqDto buyForm(int productId) {
+		System.out.println("BuyDao/buyForm 진입");
+	    String sql = "SELECT * FROM basket WHERE productId = ?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    BasketReqDto basket = null;
+
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, productId);
+	        rs = pstmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            basket = new BasketReqDto();
+	            basket.setProductId(rs.getInt("productId"));
+	            basket.setUserId(rs.getInt("userId"));
+	            basket.setTotalCount(rs.getInt("totalCount"));
+	            basket.setTotalPrice(rs.getInt("totalPrice"));
+	            basket.setImg(rs.getString("img"));
+	            basket.setBrand(rs.getString("brand"));
+	            basket.setContent(rs.getString("content"));
+	            basket.setPrice(rs.getInt("price"));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	System.out.println("BuyDao/buyForm 0000");
+	        DB.close(conn, pstmt, rs);
+	    }
+	    return basket;
+	}
+	
 }
