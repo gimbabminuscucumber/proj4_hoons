@@ -31,5 +31,6 @@ public class OrderReqDto {
 	private String brand;
 	private String img;
 	private String content;
+	private int price;
 	
 }

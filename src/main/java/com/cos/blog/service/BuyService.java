@@ -11,6 +11,7 @@ import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.user.User;
 
 public class BuyService {
 	
@@ -59,6 +60,7 @@ public class BuyService {
 		return buyDao.basketList(userId);
 	}
 
+	/*
 	public List<BasketReqDto> 주문서작성(int[] checkedItems) {
 		System.out.println("BuyService/주문서작성 진입");
 		
@@ -70,6 +72,17 @@ public class BuyService {
 	    }
 	    return baskets;
 	}
-
+*/	
+	public List<OrderReqDto> 주문서작성(int[] checkedItems, int userId) {
+		System.out.println("BuyService/주문서작성 진입");
+	    List<OrderReqDto> orders = new ArrayList<>();
+	    for (int productId : checkedItems) {
+	        OrderReqDto dto = buyDao.buyForm(productId, userId);
+	        orders.add(dto);
+	    }
+	    System.out.println("BuyService/주문서작성/orders : " + orders);
+	    return orders;
+	}
+	
 	
 }

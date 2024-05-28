@@ -17,6 +17,7 @@
 
 <div class="container" style="text-align: center">
  	<form action="/project4/buy?cmd=buyForm" method="post" id="buyForm"> 
+ 		<input type="hidden" id="userId" value="${sessionScope.principal.id }">
 		<div class="form-group">
 			<table>
 				<thead>
@@ -115,6 +116,10 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+	    // 1. 첫 번째 <th>에 총 항목 개수 표시
+	    document.getElementById("totalItems").textContent = "${totalCount}";
+	    
+	    // 2. checkbox 모두 체크하기
         document.getElementById("selectAll").addEventListener("change", function() {
             let checkboxes = document.querySelectorAll(".productCheck");
             checkboxes.forEach(function(checkbox) {
@@ -122,8 +127,8 @@
             });
         });
 
+	    // 3. checkbox에 check된 상품 '주문서 작성' 페이지로 데이터 넘기기 
         document.getElementById("buy").addEventListener("click", function() {
-        	console.log('basketList.jsp/주문하기 버튼 클릭');
             let form = document.getElementById("buyForm");
             let checkboxes = document.querySelectorAll(".productCheck:checked");
             if (checkboxes.length > 0) {
@@ -134,7 +139,6 @@
                     hiddenInput.value = checkbox.value;
                     form.appendChild(hiddenInput);
                 });
-	        	console.log('basketList.jsp/0000');
                 form.submit();
             } else {
                 alert("주문할 상품을 선택하세요.");

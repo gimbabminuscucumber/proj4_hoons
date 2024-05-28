@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.buy.dto.BasketReqDto;
+import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
@@ -102,42 +103,22 @@ public class BuyController extends HttpServlet{
 			// 												주문서 작성
 			// ====================================================		
 			}else if(cmd.equals("buyForm")) {
-				/*
-				BufferedReader br = request.getReader();
-				String reqData = br.readLine();
-				Gson gson = new Gson();
-				BuyFormReqDto dto = gson.fromJson(reqData, BuyFormReqDto.class);
-
-				CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
-				int result = buyService.주문서작성(dto);
-
-				if(result == 1) {
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("ok");
-				}else {
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("fail");
-				}
 				
-				String data = gson.toJson(commonRespDto);
-				
-				PrintWriter out = response.getWriter();
-				out.print(data);
-				out.flush();
-				*/
-			
 				System.out.println("BuyController/주문서작성 진입");
-
 			    String[] productIds = request.getParameterValues("productId");
 			    int[] checkedItems = Arrays.stream(productIds).mapToInt(Integer::parseInt).toArray();
 
-			    List<BasketReqDto> baskets = buyService.주문서작성(checkedItems);
+			    // 로그인된 사용자 정보 가져오기 (예: 세션에서 userId를 가져오는 방식)
+			    int userId = user.getId();
+			    System.out.println("BuyController/주문서작성/userId : " + userId);
 
-			    request.setAttribute("baskets", baskets);
-			    System.out.println("BuyController/000");
+			    List<OrderReqDto> orders = buyService.주문서작성(checkedItems, userId);
+			    System.out.println("BuyController/주문서작성/orders : " + orders);
+
+			    request.setAttribute("orders", orders);
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm.jsp");
 			    dis.forward(request, response);
-
+				
 	        // ====================================================	
 			// 											주문 완료 페이지
 			// ====================================================		

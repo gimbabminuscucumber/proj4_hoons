@@ -41,9 +41,9 @@
 		<br>
 	</div>
 	
-	<div class="container" style="text-align: center">
+	<div class="container" style="text-align: left">
 	<hr style="border-color:white">
-		<p>Created by 비둘기멋지게발차기</p>
+		<p>🏆 Created by 비둘기멋지게발차기</p>
 		<p>💻 pigeongorgeuskick@naver.com</p>
 		<p>📞 010-1234-5678</p>
 	</div>

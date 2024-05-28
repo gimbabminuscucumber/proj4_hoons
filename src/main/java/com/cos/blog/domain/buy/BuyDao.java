@@ -13,6 +13,7 @@ import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.user.User;
 
 public class BuyDao {
 
@@ -278,6 +279,7 @@ public class BuyDao {
 	}
 
 	// 주문서 작성
+	/*
 	public BasketReqDto buyForm(int productId) {
 		System.out.println("BuyDao/buyForm 진입");
 	    String sql = "SELECT * FROM basket WHERE productId = ?";
@@ -311,5 +313,48 @@ public class BuyDao {
 	    }
 	    return basket;
 	}
+	*/
+	public OrderReqDto buyForm(int productId, int userId) {
+		System.out.println("BuyDao/buyForm 진입");
+		String sql = "SELECT * FROM basket b INNER JOIN user u ON b.userId = u.id WHERE b.productId = ? AND u.id = ?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    OrderReqDto dto = null;
+	
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, productId);
+	        pstmt.setInt(2, userId);
+	        rs = pstmt.executeQuery();
+	        System.out.println("BuyDao/buyForm000");
+	
+	        if (rs.next()) {
+	        	dto = OrderReqDto.builder()
+	                .productId(rs.getInt("productId"))
+	                .userId(rs.getInt("userId"))
+	                .totalCount(rs.getInt("totalCount"))
+	                .totalPrice(rs.getInt("totalPrice"))
+	                .img(rs.getString("img"))
+	                .brand(rs.getString("brand"))
+	                .content(rs.getString("content"))
+	                .nickName(rs.getString("nickName"))
+	                .email(rs.getString("email"))
+	                .address(rs.getString("address"))
+	                .phone(rs.getString("phone"))
+	                .price(rs.getInt("price"))
+	                .build();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	System.out.println("BuyDao/buyForm1111");
+	        DB.close(conn, pstmt, rs);
+	    }
+	    System.out.println("BuyDao/buyForm/dto : " + dto);
+	    return dto;
+	}	
+		
 	
 }
