@@ -33,6 +33,7 @@ function init(){
 		}
 }
 
+
 </script>
 
 <body onload="init();">		<!-- body onload : body가 모두 load 됐을 때 -->

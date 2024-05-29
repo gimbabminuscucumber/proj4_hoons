@@ -161,7 +161,7 @@ public class UserController extends HttpServlet {
 			// 1. 유저 확인
 			int id = Integer.parseInt(request.getParameter("id"));
 			User user = userService.회원찾기(id);		// 해당 id의 유저가 있으면 데이터 뿌리기
-			
+
 			// 2. 현재 데이터 뿌리기
 			request.setAttribute("user", user);
 			
@@ -344,18 +344,15 @@ public class UserController extends HttpServlet {
 			int result = userService.연락처중복체크(phone);
 			PrintWriter out = response.getWriter();
 			
-			System.out.println("UserController/result : " + result);
-			
-			if(result == 1) {
+			if(result == 1) {				// 중복이면
 				out.print("ok");
-			}else if(result == -1) {
+			}else if(result == -1) {	// 중복이 아니면
 				out.print("fail");
 			}else {
 				out.print("error");
 			}
 			out.flush();
 		}
-		
 		
 	}
 }

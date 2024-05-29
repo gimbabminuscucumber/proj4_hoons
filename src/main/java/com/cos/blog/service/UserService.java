@@ -18,7 +18,6 @@ public class UserService {
 	}
 	
 	public int 회원가입(JoinReqDto dto) {		// insert 작업 : 잘됐다 안됐다의 결과값을 리턴
-		System.out.println("UserService/save/dto : " + dto);
 		int result = userDao.save(dto);
 		return result;
 	}
@@ -29,7 +28,7 @@ public class UserService {
 	
 	public int 유저네임중복체크(String username) {
 		int result = userDao.findByUsername(username);
-		System.out.println("UserService.유저네임 중복 여부 : " + result);		// 1 이면 중복, -1 이면 신규
+		//System.out.println("UserService.유저네임 중복 여부 : " + result);		// 1 이면 중복, -1 이면 신규
 		return result; 
 	}
 
@@ -52,7 +51,6 @@ public class UserService {
 	}
 
 	public User 회원패스워드(PasswordReqDto dto) {	// 비밀번호 찾기 1
-		System.out.println("UserService dto : " + dto);
 		return userDao.userInfo2(dto);
 	}
 
@@ -71,7 +69,6 @@ public class UserService {
 	}
 
 	public int 유저이메일중복체크(String email) {				// 이메일 중복 여부 확인
-		System.out.println("UserService/email : " + email);
 		int result = userDao.findByEmail(email);
 		return result;
 	}
@@ -83,7 +80,7 @@ public class UserService {
 
 	public int 연락처중복체크(String phone) {
 		int result = userDao.findByPhone(phone);		// 1 이면 중복
-		System.out.println("UserService/phone : " + result);
+		//System.out.println("UserService/phone : " + result);
 		return result;
 	}
 	

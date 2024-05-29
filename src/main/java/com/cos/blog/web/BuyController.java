@@ -60,6 +60,8 @@ public class BuyController extends HttpServlet{
 			// ====================================================	
 			// http://localhost:8080/project4/buy?cmd=buyProduct
 			if(cmd.equals("buy")) {
+				/*
+				// 제품 상세페이지에서 데이터를 DB에 저장하기
 				BufferedReader br = request.getReader();
 				
 				// detail.jsp > fucntion buy()의 var data{} 를  test에 저장 (json 타입이라 String 으로만 저장가능)
@@ -67,53 +69,66 @@ public class BuyController extends HttpServlet{
 				
 				Gson gson = new Gson();
 				BuyReqDto dto = gson.fromJson(reqData, BuyReqDto.class);
+				
 				// 상품 구매시, 구매번호 생성
 				String orderNum = buyService.구매번호();
 				dto.setOrderNum(orderNum);
-				
 				int result = buyService.상품구매(dto);
 
-				/*
-				 * 구매 성공시, buy 테이블의 id 값을 가져오지는 못함
-				// CommonRespDto<String> commonRespDto
-				// - CommonRespDto를 String 타입으로 매개변수화
-				// - CommonRespDto 클래스의 인스턴스를 참조
-				// - CommonRespDto<String> 타입의 변수를 선언
-				// - 이 인스턴스는 String 타입의 데이터를 다루도록 설정
-				CommonRespDto<String> commonRespDto = new CommonRespDto<>();
-				
-				if(result != 1) {					// 상품구매()에 데이터가 정상 입력 안되면
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("상품구매 실패");
-				}else if(result == 1) {		// 상품구매() 데이터 정상 입력시,
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("상품구매 성공");
-				}
-				*/
-				
 				// 구매 성공시, buy 테이블의 id 값 가져오기
 				CommonRespDto<Integer> commonRespDto = new CommonRespDto<>();
-	            commonRespDto.setStatusCode(result != -1 ? 1 : -1);
-	            commonRespDto.setData(result);
+				commonRespDto.setStatusCode(result != -1 ? 1 : -1);
+				commonRespDto.setData(result);
 				String respData = gson.toJson(commonRespDto);
 				Script.responseData(response, respData);
+				*/
 				
-						
+				// 장바구니에서 배열 데이터를 DB에 저장하기
+				BufferedReader br = request.getReader();
+		        StringBuilder reqData = new StringBuilder();
+		        String line;
+		        while ((line = br.readLine()) != null) {
+		            reqData.append(line);
+		        }
+		        
+		        // 요청 데이터 확인
+		        System.out.println("Request Data: " + reqData.toString());
+
+		        Gson gson = new Gson();
+		        BuyReqDto[] dtos = gson.fromJson(reqData.toString(), BuyReqDto[].class);
+		        
+		        // 상품 구매 처리
+		        for (BuyReqDto dto : dtos) {
+		            // 각 dto를 활용하여 상품 구매 처리
+		            String orderNum = buyService.구매번호();
+		            dto.setOrderNum(orderNum);
+		            int result = buyService.상품구매(dto);
+		            
+		            // 응답 데이터 전송
+		            CommonRespDto<Integer> commonRespDto = new CommonRespDto<>();
+		            commonRespDto.setStatusCode(result != -1 ? 1 : -1);
+		            commonRespDto.setData(result);
+		            String respData = gson.toJson(commonRespDto);
+		            Script.responseData(response, respData);
+		        }
+				
+				
 			// ====================================================	
 			// 												주문서 작성
 			// ====================================================		
 			}else if(cmd.equals("buyForm")) {
-				
-				System.out.println("BuyController/주문서작성 진입");
-			    String[] productIds = request.getParameterValues("productId");
+				String[] productIds = request.getParameterValues("productId");
 			    int[] checkedItems = Arrays.stream(productIds).mapToInt(Integer::parseInt).toArray();
 
 			    // 로그인된 사용자 정보 가져오기 (예: 세션에서 userId를 가져오는 방식)
 			    int userId = user.getId();
-			    System.out.println("BuyController/주문서작성/userId : " + userId);
 
 			    List<OrderReqDto> orders = buyService.주문서작성(checkedItems, userId);
-			    System.out.println("BuyController/주문서작성/orders : " + orders);
+
+			    // 구매한 상품을 basket 테이블에서 삭제
+			    for (int productId : checkedItems) {
+			        buyService.장바구니삭제(userId, productId);
+			    }
 
 			    request.setAttribute("orders", orders);
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm.jsp");
@@ -123,14 +138,14 @@ public class BuyController extends HttpServlet{
 			// 											주문 완료 페이지
 			// ====================================================		
 			}else if(cmd.equals("order")) {
-				int id = Integer.parseInt(request.getParameter("id"));
-				
-				OrderReqDto orders = buyService.주문완료(id);
-				request.setAttribute("orders", orders);
-				
-				RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
-				dis.forward(request, response);	
+			    int id = Integer.parseInt(request.getParameter("id"));
 
+			    // 주문 완료된 데이터만을 가져오기
+			    List<OrderReqDto> orders = buyService.주문완료(id);
+			    request.setAttribute("orders", orders);
+
+			    RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
+			    dis.forward(request, response);
 
 			// ====================================================	
 			// 												주문 내역

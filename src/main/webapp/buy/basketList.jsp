@@ -87,7 +87,7 @@
 					
 					<c:if test="${empty baskets}">
 						<tr>
-							<td colspan="5">장바구니에 상품이 없습니다.</td>
+							<td colspan="7"><br><p>장바구니에 상품이 없습니다.</p></td>
 						</tr>
 					</c:if>
 				</tbody>

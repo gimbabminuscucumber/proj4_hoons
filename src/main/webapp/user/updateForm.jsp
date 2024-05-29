@@ -27,6 +27,20 @@
 		</div>
 		
 		<div class="form-group">
+			<div class= "d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">face</span> 
+					<input type="text" name="nickName" id="nickName" class="form-control" placeholder="Enter NickName" value="${user.nickName }" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="nickNameCheck()">중복확인</button>
+				</div>
+			</div>
+			<!-- ajax -->
+			<div><font id="checkNickName" size="2"></font></div>
+		</div>
+		
+		<div class="form-group">
 			<div class="material-icons-input" style="width: 421px">
 			    <span class="material-icons">lock_outline</span>
 				<input type="password" name="password" class="form-control" placeholder="Enter Password"  required/>
@@ -47,28 +61,20 @@
 			<div><font id="checkPhone" size="2"></font></div>
 		</div>
 		
-		<div class="form-group insert-input-container">
-		    <div class="material-icons-input" style="width: 183px">
-		        <span class="material-icons">personal_video</span>
-		        <input type="email"  name="email"  id="inputEmail" class="form-control" value="${user.email}" placeholder="Enter Email" oninput="emailCombine()"  required />
-		    </div>
-		    
- 			<div class="email domain dropdown">
-				<select id="domain" class="custom-select" style="width: 155px" onchange="emailCombine()" >
-				<!-- onchange(): 입력 필드의 값이 변경되고 사용자가 입력을 완료하고 필드를 떠날 때 발생 -->
-					<option selected disabled>@example.com</option>
-					<option value="@naver.com">@naver.com</option>
-					<option value="@gmail.com">@gmail.com</option>
-					<option value="@nate.com">@nate.com</option>
-					<option value="@daum.net">@daum.net</option>
-				</select>
+		<div class="form-group">
+			<div class= "d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">personal_video</span> 
+					<input type="text" name="email" id="email" class="form-control" value="${user.email}" placeholder="Enter Email" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="emailCheck()">중복확인</button>
+				</div>
 			</div>
-			<button type="button" id="domain" class="btn btn-info" onclick="emailCheck()">중복확인</button>
+			<!-- ajax -->
+			<div><font id="checkEmail" size="2"></font></div>
 		</div>
-		<!-- ajax -->
-		<div><font id="checkEmail" size="2"></font></div>
-		<p>inputEmail / domain 구분해서 가져오기</p> 
-
+		
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
 				<span class="material-icons">home</span>
@@ -95,70 +101,70 @@
 // 이메일 중복 확인
 	var emailChecking = false;
 	var phoneChecking = false;
+	var nickNameChecking = false;
 	var isChecking = false;
 	var email;
-	
+	var password = document.getElementById('password').value;
 	// ====================================================	
 	// 												update
 	// ====================================================	
 	function updateSuccess() {				
-		if (emailChecking == false) {
-			alert("이메일 중복확인을 하세요");
+		if(nickNameChecking == false){
+			alert("닉네임 중복확인을 하세요");
+			 isChecking = false;
+		}else if(password === '' || password == undefined){
+			alert("비밀번호를 입력 하세요");
 			 isChecking = false;
 		} else if(phoneChecking == false) {
 			alert("연락처 중복확인을 하세요");
 			isChecking = false;
+		}else if (emailChecking == false) {
+			alert("이메일 중복확인을 하세요");
+			 isChecking = false;
 		} else{	
-			alert("회원가입 완료");			
+			alert("회원정보 수정 완료");			
 			isChecking = true;
 			document.update.submit();
 		}
-	}
-	
-	window.onload = function() {
-	    emailCombine();
-	}
-	// ====================================================	
-	//												emailCombine 조합
-	//====================================================	
-	function emailCombine() {
-		var inputEmail = document.getElementById("inputEmail").value;
-		var domain = document.getElementById("domain").value;
-		//var email = inputEmail + domain;			// var로 email에 데이터를 전달하면 전역변수로 설정한 var email과 다른 메모릴에 저장돼서 다른 함수에서 사용 불가
-		email = inputEmail + domain; // 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
 	}
 
 	// ====================================================	
 	// 											email 중복확인
 	// ====================================================	
 	function emailCheck() {
-		console.log('email : ' + email); // emailCombine() 에서 email 을 받아옴
-
+		var email = document.getElementById("email").value;
+		//var email = $("#email").val();
+		var originalEmail = "${user.email}"; 	// DB에 저장된 원래 이메일 데이터
+		
 		$.ajax({
 			type : "post",
 			url : "/project4/user?cmd=emailCheck",
-			data : email, // email 데이터를 객체 형태로 전달
+			data : email, 												// email 데이터를 객체 형태로 전달
 			contentType : "text/plain; charset=utf-8",
-			dataType : "text" // 서버에서 받을 데이터 타입
+			dataType : "text"										// 서버에서 받을 데이터 타입
 		}).done(function(data) {
-			if (email == undefined || data === "") {
+			if (email == undefined || data === "" || email == "") {
 				console.log('공란 : data : ' + data);
 				console.log('공란 : email : ' + email);
 				emailChecking = false;					// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
 				$("#checkEmail").html('이메일을 입력해주세요.');
 				$("#checkEmail").attr('color', 'red');
-			} else if (data === 'ok') {
+			} else if (email !== originalEmail && data === 'ok') {
 				console.log('중복 : data : ' + data);
 				console.log('중복 : email : ' + email);
 				emailChecking = false;
 				$("#checkEmail").html('동일한 이메일로 가입한 내역이 있습니다.');
 				$("#checkEmail").attr('color', 'red');
-			} else if (email.indexOf('@example.com') !== -1) {
+			} else if (email.indexOf('@') === -1) {		// 해당 문자열이 없으면
 				console.log('오류 : data : ' + data);
 				console.log('오류 : email : ' + email);
 				emailChecking = false;
-				$("#checkEmail").html('도메인을 선택해주세요.');
+				$("#checkEmail").html('도메인을 입력해주세요.');
 				$("#checkEmail").attr('color', 'red');
+			} else if (email === originalEmail) {
+	            emailChecking = true;
+	            $("#checkEmail").html('수정사항이 없습니다.');
+	            $("#checkEmail").attr('color', 'blue');
 			} else {
 				console.log('신규 : data : ' + data);
 				console.log('신규 : email : ' + email);
@@ -169,6 +175,41 @@
 		})
 	}
 	
+	// ====================================================	
+	// 											닉네임 중복확인
+	// ====================================================	
+	function nickNameCheck(){
+		
+		var nickName = document.getElementById("nickName").value;
+		var originalNickName = "${user.nickName}";
+		console.log('nickNameCheck/originalNickName : ' + originalNickName);
+		
+		$.ajax({
+			type: "post",
+			url : "/project4/user?cmd=nickNameCheck",
+			data : nickName,
+			contentType : "text/plain; charset=utf-8",
+			dataType : "text" 
+		}).done(function(data){
+			if(nickName === "" ){
+				nickNameChecking = false;
+				$("#checkNickName").html('닉네임을 입력해주세요.');
+				$("#checkNickName").attr('color', 'red');
+			}else if(nickName !== originalNickName && data === 'ok'){
+				nickNameChecking = false;
+				$("#checkNickName").html('해당 닉네임은 사용 중입니다.');
+				$("#checkNickName").attr('color', 'red');
+			}else if(nickName === originalNickName){
+				nickNameChecking = true;
+				$("#checkNickName").html('수정사항이 없습니다.');
+				$("#checkNickName").attr('color', 'blue');
+			}else{
+				nickNameChecking = true;
+				$("#checkNickName").html('해당 닉네임은 사용가능합니다.');
+				$("#checkNickName").attr('color', 'blue');
+			}
+		});
+	}
 
 	// ====================================================	
 	// 											연락처 중복확인
@@ -176,7 +217,9 @@
 	function phoneCheck(){
 		
 		var phone = document.getElementById("phone").value;
+		var originalPhone = "${user.phone}"; 	// DB에 저장된 원래 phone 데이터
 		console.log('phone : ' + phone);
+		console.log('originalPhone : ' + originalPhone);
 		
 		$.ajax({
 			type: "post",
@@ -202,10 +245,14 @@
 		        phoneChecking = false;
 		        $("#checkPhone").html('연락처는 12자리 미만으로 입력해주세요.');
 		        $("#checkPhone").attr('color', 'red');		
-			}else if(data === 'ok'){
+			}else if(phone !== originalPhone && data === 'ok'){
 				phoneChecking = false;
 				$("#checkPhone").html('해당 연락처는 사용 중입니다.');
 				$("#checkPhone").attr('color', 'red');
+			}else if(phone === originalPhone) {			// DB에 저장된 나의 데이터와 일치한 경우
+				phoneChecking = true;
+				$("#checkPhone").html('수정사항이 없습니다.');
+				$("#checkPhone").attr('color', 'blue');
 			}else{
 				phoneChecking = true;
 				$("#checkPhone").html('해당 연락처는 사용가능합니다.');

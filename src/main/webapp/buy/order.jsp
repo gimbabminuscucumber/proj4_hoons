@@ -17,37 +17,38 @@
 
 <div class="container" style="width: 500px">
 
+    <c:forEach var="order" items="${orders}">
 		<div class="form-group">
 		    <div><strong>주문번호</strong> 
-		    	<a href="/project4/buy?cmd=detail&orderNum=${orders.orderNum }">${orders.orderNum }</a>
+		    	<a href="/project4/buy?cmd=detail&orderNum=${order.orderNum }">${order.orderNum }</a>
 		    </div>
 			<hr>
-			<p>${orders.nickName }</p>
-			<span>${orders.address }</span>
+			<p>${order.nickName }</p>
+			<span>${order.address }</span>
 			<hr>
 	        <div style="display: flex; align-items: center;">
 	            <div>
-	            	<a href="/project4/product?cmd=detail&id=${orders.productId }">
-	            		<img src="/project4/images/productImg/${orders.img }" alt="Product Image" style="width: 100%; max-width: 100px; height: auto;">
+	            	<a href="/project4/product?cmd=detail&id=${order.productId }">
+	            		<img src="/project4/images/productImg/${order.img }" alt="Product Image" style="width: 100%; max-width: 100px; height: auto;">
 	            	</a>
 	            </div>
 	            <div style="margin-left: 20px;">
-	                <div><a href="#">${orders.brand }</a></div>
-	                <div><strong>${orders.content }</strong></div>
-					<div>주문 수량 : ${orders.totalCount }개</div>
+	                <div><a href="#">${order.brand }</a></div>
+	                <div><strong>${order.content }</strong></div>
+					<div>주문 수량 : ${order.totalCount }개</div>
 					<div>
 						<span>주문 금액 : </span>
-						<fmt:formatNumber type="number" pattern="#,##0"  value="${orders.totalPrice}"/>원
+						<fmt:formatNumber type="number" pattern="#,##0"  value="${order.totalPrice}"/>원
 					</div>
 	            </div>
 	        </div>
 	        <br>
 	        <div class="d-flex">
 	        	<button type="button"  class="btn btn-danger" style="width: 50%">주문 취소</button> &nbsp;
-	        	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=list&id=${orders.userId}'">주문 내역 바로가기</button>
+	        	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=list&id=${order.userId}'">주문 내역 바로가기</button>
 	        </div>
 		</div>
-		
+	</c:forEach>
 </div>
 
 

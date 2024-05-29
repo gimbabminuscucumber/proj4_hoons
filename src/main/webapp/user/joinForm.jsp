@@ -70,27 +70,22 @@
 			<div><font id="checkPhone" size="2"></font></div>
 		</div>
 
-		<div class="form-group insert-input-container">
-			<div class="material-icons-input" style="width: 183px">
-				<span class="material-icons">personal_video</span> 
-				<input type="text" name="email" id="inputEmail" class="form-control" placeholder="Enter Email" oninput="emailCombine()"  required /> 
-				<!-- oninput(): 입력 필드의 값이 변경될 때마다 발생. 사용자가 입력을 하면 즉시 발생 -->
-			</div>
 
- 			<div class="email domain dropdown">
-				<select id="domain" class="custom-select" style="width: 155px" onchange="emailCombine()" >
-				<!-- onchange(): 입력 필드의 값이 변경되고 사용자가 입력을 완료하고 필드를 떠날 때 발생 -->
-					<option selected disabled>@example.com</option>
-					<option value="@naver.com">@naver.com</option>
-					<option value="@gmail.com">@gmail.com</option>
-					<option value="@nate.com">@nate.com</option>
-					<option value="@daum.net">@daum.net</option>
-				</select>
+
+		<div class="form-group">
+			<div class= "d-flex insert-input-container">
+				<div class="material-icons-input" style="width: 338px">
+					<span class="material-icons">personal_video</span> 
+					<input type="text" name="email" id="email" class="form-control" placeholder="Enter Email" required />
+				</div>
+				<div>
+					<button type="button" class="btn btn-info" onclick="emailCheck()">중복확인</button>
+				</div>
 			</div>
-			<button type="button" id="domain" class="btn btn-info" onclick="emailCheck()">중복확인</button>
+			<!-- ajax -->
+			<div><font id="checkEmail" size="2"></font></div>
 		</div>
-		<!-- ajax -->
-		<div><font id="checkEmail" size="2"></font></div>
+		
 
 		<div class="form-group d-flex insert-input-container">
 			<div class="material-icons-input" style="width: 338px">
@@ -239,26 +234,12 @@
 		password = document.getElementById("password").value;
 	}
 	
-	window.onload = function() {
-	    emailCombine();
-	}
-	
-	// ====================================================	
-	//												emailCombine 조합
-	//====================================================	
-	function emailCombine() {
-		var inputEmail = document.getElementById("inputEmail").value;
-		var domain = document.getElementById("domain").value;
-		//var email = inputEmail + domain;			// var로 email에 데이터를 전달하면 전역변수로 설정한 var email과 다른 메모릴에 저장돼서 다른 함수에서 사용 불가
-		email = inputEmail + domain; 					// 다른 함수에서 email 값을 사용하기 위해선 var, const 같은 키워드를 사용하면 안됨
-		console.log('emailCombine/email : ' + email);
-	}
-	
 	// ====================================================	
 	// 											email 중복확인
 	// ====================================================	
 	function emailCheck() {
-		var inputEmail = document.getElementById("inputEmail").value;
+		var email = document.getElementById("email").value;
+		//var email = $("#email").val();
 		
 		$.ajax({
 			type : "post",
@@ -267,7 +248,7 @@
 			contentType : "text/plain; charset=utf-8",
 			dataType : "text"										// 서버에서 받을 데이터 타입
 		}).done(function(data) {
-			if (email == undefined || data === "" || inputEmail == "") {
+			if (email == undefined || data === "" || email == "") {
 				console.log('공란 : data : ' + data);
 				console.log('공란 : email : ' + email);
 				emailChecking = false;					// 신규 아이디로 중복허용 후, 다시 중복된 아이디로 회원가입할 수 있으니 잘못된 경우는 다 isChecking="false"로
@@ -279,11 +260,11 @@
 				emailChecking = false;
 				$("#checkEmail").html('동일한 이메일로 가입한 내역이 있습니다.');
 				$("#checkEmail").attr('color', 'red');
-			} else if (email.indexOf('@example.com') !== -1) {		// 해당 문자열이 포함되어있으면
+			} else if (email.indexOf('@') === -1) {		// 해당 문자열이 없으면
 				console.log('오류 : data : ' + data);
 				console.log('오류 : email : ' + email);
 				emailChecking = false;
-				$("#checkEmail").html('도메인을 선택해주세요.');
+				$("#checkEmail").html('도메인을 입력해주세요.');
 				$("#checkEmail").attr('color', 'red');
 			} else {
 				console.log('신규 : data : ' + data);

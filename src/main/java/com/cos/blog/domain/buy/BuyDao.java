@@ -19,7 +19,6 @@ public class BuyDao {
 
 	// 상품 구매
 	public int buy(BuyReqDto dto) {
-		System.out.println("BuyDao 시작");
 		String sql = "INSERT INTO buy(userId, productId, totalPrice, totalCount, orderNum, createDate) VALUES(?,?,?,?,?,now())";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -34,7 +33,6 @@ public class BuyDao {
 			pstmt.setInt(4, dto.getTotalCount());
 			pstmt.setString(5, dto.getOrderNum());
 			int result = pstmt.executeUpdate();
-			System.out.println("BuyDao/result : 	" + result);
 
 			// 추가
 			if(result == 1) {
@@ -43,8 +41,6 @@ public class BuyDao {
 					return rs.getInt(1);		// 생성된 id 리턴		// 수정 전
 				}
 			}
-			System.out.println("BuyDao/5555");
-			System.out.println("BuyDao/buy/result : " + result);
 			return result;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -55,6 +51,7 @@ public class BuyDao {
 	}
 
 	// 주문 완료 (buy, user, product 테이블 조인)
+	/*
 	public OrderReqDto findByOrder(int id) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.id = ?";
 		Connection conn = DB.getConnection();
@@ -92,7 +89,48 @@ public class BuyDao {
 		}
 		return null;
 	}
+*/
+	public List<OrderReqDto> findOrder(int id) {
+	    List<OrderReqDto> orders = new ArrayList<>();
+	    String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
 
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, id);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            OrderReqDto dto = OrderReqDto.builder()
+	                    .id(rs.getInt("b.id"))
+	                    .userId(rs.getInt("b.userId"))
+	                    .productId(rs.getInt("b.productId"))
+	                    .orderNum(rs.getString("b.orderNum"))
+	                    .totalCount(rs.getInt("b.totalCount"))
+	                    .totalPrice(rs.getInt("b.totalPrice"))
+	                    .state(rs.getString("b.state"))
+	                    .createDate(rs.getTimestamp("b.createDate"))
+	                    .nickName(rs.getString("u.nickName"))
+	                    .email(rs.getString("u.email"))
+	                    .address(rs.getString("u.address"))
+	                    .phone(rs.getString("u.phone"))
+	                    .brand(rs.getString("p.brand"))
+	                    .img(rs.getString("p.img"))
+	                    .content(rs.getString("p.content"))
+	                    .build();
+	            orders.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt, rs);
+	    }
+	    return orders;
+	}
+	
 	// 주문 내역
 	public List<OrderReqDto> findOrderList(int userId) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ? ORDER BY b.id DESC";
@@ -279,43 +317,7 @@ public class BuyDao {
 	}
 
 	// 주문서 작성
-	/*
-	public BasketReqDto buyForm(int productId) {
-		System.out.println("BuyDao/buyForm 진입");
-	    String sql = "SELECT * FROM basket WHERE productId = ?";
-	    Connection conn = null;
-	    PreparedStatement pstmt = null;
-	    ResultSet rs = null;
-	    BasketReqDto basket = null;
-
-	    try {
-	        conn = DB.getConnection();
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, productId);
-	        rs = pstmt.executeQuery();
-	        
-	        if (rs.next()) {
-	            basket = new BasketReqDto();
-	            basket.setProductId(rs.getInt("productId"));
-	            basket.setUserId(rs.getInt("userId"));
-	            basket.setTotalCount(rs.getInt("totalCount"));
-	            basket.setTotalPrice(rs.getInt("totalPrice"));
-	            basket.setImg(rs.getString("img"));
-	            basket.setBrand(rs.getString("brand"));
-	            basket.setContent(rs.getString("content"));
-	            basket.setPrice(rs.getInt("price"));
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	    	System.out.println("BuyDao/buyForm 0000");
-	        DB.close(conn, pstmt, rs);
-	    }
-	    return basket;
-	}
-	*/
 	public OrderReqDto buyForm(int productId, int userId) {
-		System.out.println("BuyDao/buyForm 진입");
 		String sql = "SELECT * FROM basket b INNER JOIN user u ON b.userId = u.id WHERE b.productId = ? AND u.id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
@@ -328,7 +330,6 @@ public class BuyDao {
 	        pstmt.setInt(1, productId);
 	        pstmt.setInt(2, userId);
 	        rs = pstmt.executeQuery();
-	        System.out.println("BuyDao/buyForm000");
 	
 	        if (rs.next()) {
 	        	dto = OrderReqDto.builder()
@@ -349,12 +350,31 @@ public class BuyDao {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    } finally {
-	    	System.out.println("BuyDao/buyForm1111");
 	        DB.close(conn, pstmt, rs);
 	    }
-	    System.out.println("BuyDao/buyForm/dto : " + dto);
 	    return dto;
-	}	
+	}
+
+	// 장바구니를 통해 구매한 상품은 구매완료 후, 장바구니에서 상품 목록 삭제하기
+	public int basketDelete(int userId, int productId) {
+	    String sql = "DELETE FROM basket WHERE userId = ? AND productId = ?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, userId);
+	        pstmt.setInt(2, productId);
+	        int result = pstmt.executeUpdate();
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt);
+	    }
+	    return -1;
+	}
 		
 	
 }

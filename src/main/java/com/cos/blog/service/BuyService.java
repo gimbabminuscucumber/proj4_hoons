@@ -35,8 +35,9 @@ public class BuyService {
 		return dateNum + randomNum;
 	}
 
-	public OrderReqDto 주문완료(int id) {
-		return buyDao.findByOrder(id);
+	//public OrderReqDto 주문완료(int id) {
+	public List<OrderReqDto> 주문완료(int id) {
+		return buyDao.findOrder(id);
 	}
 
 	public List<OrderReqDto> 주문내역(int userId) {
@@ -60,28 +61,17 @@ public class BuyService {
 		return buyDao.basketList(userId);
 	}
 
-	/*
-	public List<BasketReqDto> 주문서작성(int[] checkedItems) {
-		System.out.println("BuyService/주문서작성 진입");
-		
-	    List<BasketReqDto> baskets = new ArrayList<>();
-	    for (int productId : checkedItems) {
-	        BasketReqDto basket = buyDao.buyForm(productId);
-	        baskets.add(basket);
-	        System.out.println("BuyService/주문서작성/0000");
-	    }
-	    return baskets;
-	}
-*/	
 	public List<OrderReqDto> 주문서작성(int[] checkedItems, int userId) {
-		System.out.println("BuyService/주문서작성 진입");
 	    List<OrderReqDto> orders = new ArrayList<>();
 	    for (int productId : checkedItems) {
 	        OrderReqDto dto = buyDao.buyForm(productId, userId);
 	        orders.add(dto);
 	    }
-	    System.out.println("BuyService/주문서작성/orders : " + orders);
 	    return orders;
+	}
+
+	public int 장바구니삭제(int userId, int productId) {
+	    return buyDao.basketDelete(userId, productId);
 	}
 	
 	

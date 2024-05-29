@@ -203,19 +203,7 @@
             totalCount: quantity,
             img: img
         };
-        /*
-        console.log('data.userId : ' + data.userId);
-        console.log('data.nickName : ' + data.nickName);
-        console.log('data.address : ' + data.address);
-        console.log('data.phone : ' + data.phone);
-        console.log('data.productId : ' + data.productId);
-        console.log('data.brand : ' + data.brand);
-        console.log('data.content : ' + data.content);
-        console.log('data.weight : ' + data.weight);
-        console.log('data.totalPrice : ' + data.totalPrice);
-        console.log('data.totalCount : ' + data.totalCount);
-        console.log('data.img : ' + data.img);
-        */
+
         $.ajax({
         	type: "post",
         	url: "/project4/buy?cmd=buyForm",	// 데이터 보낼 경로
@@ -223,11 +211,7 @@
         	contentType: "application/json; charset=utf-8",
         	dataType: "json"
         }).done(function(data){	
-        	console.log('주문서 작성');
-        	console.log('data : ' + data);
-        	console.log('00000');
-        	
-        	//window.location.href = "/project4/buy?cmd=buyForm&id=" + data.data;	// data.data = userId
+        	//window.location.href = "/project4/buy?cmd=buyForm"
         });
 	}
 	
