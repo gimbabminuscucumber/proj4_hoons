@@ -67,24 +67,24 @@
 <br>
 
 <h5 class="bold-text">다른 고객들이 많이 본 상품</h5>
-	<br>
-        <div class="row">
-            <c:forEach var="suggest" items="${suggests}" varStatus="status">
-            	<input type="hidden" name="suggestId" id="suggestId" value="${suggest.id }">
-                <div class="col-md-3">
-                    <div class="card m-2">
-                        <a href="/project4/product?cmd=detail&id=${suggest.id }">
-                        	<img src="${pageContext.request.contextPath}/images/productImg/${suggest.img}" alt="Product Image" style="width: 100%; height: 152px;">
-                        </a>
-                        <div class="card-body">
-                           	<div><a href="/project4/product?cmd=detail&id=${suggest.id }"><strong>${suggest.brand}</strong></a></div>
-                           	<p style="font-size: 13px; color: grey">${suggest.content }</p>
-                       		<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${suggest.price}"/></strong>원</h5>
-                        </div>
-                    </div>
-                </div>
-            </c:forEach>
+<br>
+<div class="row">
+	<c:forEach var="suggest" items="${suggests}" varStatus="status">
+		<input type="hidden" name="suggestId" id="suggestId" value="${suggest.id }">
+		<div class="col-md-3">
+			<div class="card m-2">
+				<a href="/project4/product?cmd=detail&id=${suggest.id }">
+					<img src="${pageContext.request.contextPath}/images/productImg/${suggest.img}" alt="Product Image" style="width: 100%; height: 152px;">
+				</a>
+				<div class="card-body">
+					<div><a href="/project4/product?cmd=detail&id=${suggest.id }"><strong>${suggest.brand}</strong></a></div>
+					<p style="font-size: 13px; color: grey">${suggest.content }</p>
+					<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${suggest.price}"/></strong>원</h5>
+				</div>
+			</div>
 		</div>
+	</c:forEach>
+</div>
 
 <!-- 추가 Info -->
 <br>
@@ -95,7 +95,7 @@
 		<a class="nav-link" href="#" onclick="scrollToDetail(event)">상품상세정보</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="#">고객리뷰</a>
+		<a class="nav-link" href="#" onclick="scrollToDetail(event)">고객리뷰</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="#">배송/반품/교환 안내</a>
@@ -114,21 +114,59 @@
 <c:if test="${!empty  products.explanation}">
 	<img src="/project4/images/productImg/${products.explanation }" id="productDetail" alt="Product Detail" >
 </c:if>
+<br>
+<br>
+<hr style="border-color: lightgrey;">
+<br>
+<br>
 
 <!-- 고객리뷰 -->
-<!-- 
-<h5 class="bold-text">포토 & 동영상 리뷰 ${reviews.img }</h5>
-<c:if test="${empty  reviews.img}"></c:if>
-	<img src="/project4/images/reviewImg/${reviews.img }" id="reviewImg" alt="Review Images" >
-<c:if test="${!empty  reviews.img}">
- -->
+<h5 class="bold-text">고객리뷰</h5>
+<br>
+<c:if test="${not empty reviews}">
+    <c:forEach var="review" items="${reviews}">
+        <div class="review">
+            <p>작성자: ${review.nickName}</p>
+            <p>별점: ${review.score}</p>
+            <p>리뷰 내용: ${review.text}</p>
+            <p>작성일: ${review.createDate}</p>
+        </div>
+    </c:forEach>
+</c:if>
+<c:if test="${empty reviews}">
+    <p>작성된 리뷰가 없습니다.</p>
 </c:if>
 <br>
 <br>
-
+<hr style="border-color: lightgrey;">
+<br>
+<br>
 
 <!-- 배송/반품/교환 안내 -->
 <!-- 추천상품 -->
+<h5 class="bold-text">고객님께 추천하는 상품</h5>
+<br>
+<!--  동일 브랜드의 제품 나열하기
+<div class="row">
+	<c:forEach var="suggest" items="${suggests}" varStatus="status">
+		<input type="hidden" name="suggestId" id="suggestId" value="${suggest.id }">
+		<div class="col-md-3">
+			<div class="card m-2">
+				<a href="/project4/product?cmd=detail&id=${suggest.id }">
+					<img src="${pageContext.request.contextPath}/images/productImg/${suggest.img}" alt="Product Image" style="width: 100%; height: 152px;">
+				</a>
+				<div class="card-body">
+					<div><a href="/project4/product?cmd=detail&id=${suggest.id }"><strong>${suggest.brand}</strong></a></div>
+					<p style="font-size: 13px; color: grey">${suggest.content }</p>
+					<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${suggest.price}"/></strong>원</h5>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+</div>
+ -->
+
+
 
 </div>
 

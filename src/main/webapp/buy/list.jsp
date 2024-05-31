@@ -66,7 +66,8 @@
 									<img src="/project4/images/productImg/${order.img}" alt="Product Image" style="width: 70px; height: auto; margin-right: 10px;">
 								</a>
 								<div>
-									<strong>${order.brand}</strong><br> ${order.content}
+									<strong>${order.brand}</strong><br>
+									<a href="/project4/product?cmd=detail&id=${order.productId }">${order.content}</a>
 								</div>
 							</div>
 						</td>

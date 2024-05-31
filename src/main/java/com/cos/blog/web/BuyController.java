@@ -136,8 +136,6 @@ public class BuyController extends HttpServlet{
 				List<OrderReqDto> orders = buyService.주문내역(userId);
 				request.setAttribute("orders", orders);
 				
-				System.out.println("BuyController/list/orders : " + orders);
-				
 				RequestDispatcher dis = request.getRequestDispatcher("buy/list.jsp");
 				dis.forward(request, response);	
 				

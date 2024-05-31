@@ -14,6 +14,7 @@ import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
 
@@ -398,7 +399,39 @@ public class BuyDao {
 		return -1;
 	}
 
-
+	// 리뷰 정보 (제품 상세 페이지에서 출력하려고)
+	public List<InfoRespDto> findByReview(int id) {		// id = productId
+		String sql = "SELECT * FROM review r INNER JOIN user u ON r.userId = u.id WHERE r.productId = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<InfoRespDto> reviews = new ArrayList<>();
 		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				InfoRespDto dto = InfoRespDto.builder()	
+						.buyId(rs.getInt("r.id"))
+						.productId(rs.getInt("r.productId"))
+						.userId(rs.getInt("r.userId"))
+						.score(rs.getInt("r.score"))
+						.text(rs.getString("r.text"))
+						.status(rs.getInt("r.status"))
+						.createDate(rs.getTimestamp("r.createDate"))
+						.nickName(rs.getString("u.nickName"))
+						.build();
+				reviews.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return reviews;
+	}
+	
 	
 }

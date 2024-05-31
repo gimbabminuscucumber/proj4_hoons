@@ -23,6 +23,8 @@ import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
 import com.cos.blog.domain.product.dto.DetailRespDto;
 import com.cos.blog.domain.product.dto.SaveReqDto;
+import com.cos.blog.domain.review.dto.InfoRespDto;
+import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BuyService;
 import com.cos.blog.service.ProductService;
@@ -58,6 +60,7 @@ public class ProductController extends HttpServlet{
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String cmd = request.getParameter("cmd");
 			ProductService productService = new ProductService();
+			BuyService buyService = new BuyService();
 			HttpSession session = request.getSession();							// 세션 불러오기
 			
 			// ====================================================	
@@ -174,12 +177,15 @@ public class ProductController extends HttpServlet{
 				int id = Integer.parseInt(request.getParameter("id"));
 				DetailRespDto products = productService.상품상세보기(id);
 				List<DetailRespDto> suggests = productService.추천상품();
+				List<InfoRespDto> reviews = buyService.리뷰정보(id);
+				System.out.println("ProductController/detail/reviews : " + reviews);
 				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");
 				}else {
 					request.setAttribute("products", products);
 					request.setAttribute("suggests", suggests);
+					request.setAttribute("reviews", reviews);
 					RequestDispatcher dis = request.getRequestDispatcher("product/detail.jsp");
 					dis.forward(request, response);	
 				}

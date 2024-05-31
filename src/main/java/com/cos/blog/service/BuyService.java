@@ -12,6 +12,7 @@ import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
 
@@ -82,6 +83,10 @@ public class BuyService {
 	public int 리뷰작성(ReviewReqDto dto) {
 		System.out.println("BuyService/리뷰작성");
 		return buyDao.review(dto);
+	}
+
+	public List<InfoRespDto> 리뷰정보(int id) {
+		return buyDao.findByReview(id);
 	}
 
 
