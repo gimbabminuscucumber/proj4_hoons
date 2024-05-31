@@ -20,21 +20,11 @@
 	<!-- 상단 버튼 -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<ul class="nav nav-pills" role="tablist">
-			<li class="nav-item">
-				<a class="nav-link active" data-toggle="pill" href="#home">입금/결제</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-toggle="pill" href="#menu1">배송중</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-toggle="pill" href="#menu2">배송완료</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-toggle="pill" href="#menu3">교환</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-toggle="pill" href="#menu4">환불</a>
-			</li>
+			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">입금/결제</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">배송중</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">배송완료</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu3">교환</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu4">환불</a></li>
 		</ul>
 		
 		<!-- 날짜 선택란 -->
@@ -60,10 +50,9 @@
 					<th style="width: 200px">주문상태</th>
 				</tr>
 			</thead>
-
 			<tbody>
 				<c:forEach var="order" items="${orders}" varStatus="loop">
-
+					<input type="hidden" id="userId" value="${sessionScope.principal.id }">
 					<c:if test="${loop.first}">
 						<tr>
 							<td colspan="5" style="padding-top: 10px;"></td>
@@ -95,6 +84,15 @@
 							<span>${order.state}</span><br>
 							<button type="button" class="btn btn-outline-info btn-sm">교환</button>
 							<button type="button" class="btn btn-outline-danger btn-sm">환불</button>
+							<!-- 리뷰 작성 -->
+							<c:choose>
+								<c:when test="${reviewAlreadyWritten}">
+									<button type="button" class="btn btn-outline-primary btn-sm" disabled>리뷰작성</button>
+								</c:when>
+								<c:otherwise>
+									<button type="button" class="btn btn-outline-primary btn-sm" onclick="review(${order.id})">리뷰작성</button>		<!-- JSON 데이터로 만들기 -->
+								</c:otherwise>
+							</c:choose>
 						</td>
 					</tr>
 					<!-- 각 주문 항목 아래에 선 추가 -->
@@ -116,6 +114,16 @@
 	</div>
 
 </div>
+
+<script>
+	function review(id){
+		console.log('리뷰작성 버튼 클릭');
+		console.log('buy테이블의 id : ' + id);
+		
+		location.href="/project4/buy?cmd=reviewForm&id=" + id;
+		
+	}
+</script>
 
 <style>
 

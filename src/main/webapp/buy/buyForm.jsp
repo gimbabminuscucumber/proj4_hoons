@@ -154,7 +154,7 @@
     function buy(){
         console.log('구매하기 버튼 클릭');
         var userId = document.getElementById("userId").value;
-        var data = []; // 상품 정보를 저장할 배열
+        var data = []; 						// 상품 정보를 저장할 배열
         
         // 각 상품에 대한 정보를 배열에 추가
         <c:forEach var="order" items="${orders}">
@@ -168,21 +168,21 @@
         </c:forEach>
 		
         console.log('JSON.stringify(data) : ' + JSON.stringify(data));
-	    console.log('data : ' + data);
-	    console.log('userId : ' + userId);
+        console.log('userId : ' + userId);
+        console.log('data.productId : ' + data.productId);
+        console.log('product.productId : ' + product.productId);
+        console.log('productId : ' + productId);
 	    
+        
 		$.ajax({
 		    type: "post",
 		    url: "/project4/buy?cmd=buy",
 		    data: JSON.stringify(data),
 		    contentType: "application/json",
 		    success: function(resp){
-		        console.log("구매를 완료했습니다.");
 		        alert("구매를 완료했습니다.")
-		        window.location.href = "/project4/buy?cmd=order&id="+userId;
-		    },
-		    error: function(error){
-		        console.error("구매에 실패했습니다.");
+		        window.location.href = "/project4/buy?cmd=order&userId="+userId + "&productId=" + product.productId;
+		    },error: function(error){
 		        alert("구매에 실패했습니다.")
 		    }
 		});

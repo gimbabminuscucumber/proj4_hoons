@@ -1,4 +1,4 @@
-package com.cos.blog.domain.review;
+package com.cos.blog.domain.review.dto;
 
 import java.sql.Timestamp;
 
@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Review {
-	private int id;						// pk
-	private int userId;				// fk
-	private int buyId;				// fk
-	private int productId;		// fk
+public class ReviewReqDto {
+	private int buyId;
+	private int productId;
+	private int userId;
+
 	private int score;				// 별점 
 	private String text;			// 내용
 	private int status;				// 리뷰 작성 여부
 	private Timestamp createDate;
+	
 }

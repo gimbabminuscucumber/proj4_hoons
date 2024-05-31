@@ -31,7 +31,7 @@
 
 			<tbody>
 				<c:forEach var="detail" items="${details}" varStatus="loop">
-
+					<c:set var="totalSum" value="${totalSum + detail.totalPrice}" />
 					<c:if test="${loop.first}">
 						<tr>
 							<td colspan="5" style="padding-top: 10px;"></td>
@@ -132,7 +132,7 @@
 	
 	<div class="d-flex">
 		<div class="info" style="width:150px">상품 합계</div>
-		<div class="info" ><fmt:formatNumber type="number" pattern="#,##0" value="${buyer.totalPrice}" />원</div>
+		<div class="info" ><fmt:formatNumber type="number" pattern="#,##0" value="${totalSum}" />원</div>
 	</div>
 	<hr>
 	<div class="d-flex">
@@ -142,7 +142,7 @@
 	<hr>
 	<div class="d-flex">
 		<div class="info" style="width:150px; font-size:15px"><strong>최종 결제 금액</strong></div>
-		<div class="info" style="font-size:15px" ><strong><fmt:formatNumber type="number" pattern="#,##0" value="${buyer.totalPrice}" />원</strong></div>
+		<div class="info" style="font-size:15px"><strong><fmt:formatNumber type="number" pattern="#,##0" value="${totalSum}" />원</strong></div>
 	</div>
 	<hr>
 	

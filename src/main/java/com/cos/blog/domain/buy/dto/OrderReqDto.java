@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class OrderReqDto {
-	private int id;					// 구매 pk
+	private int id;					// buy 테이블의 id
 	private int userId;			// 구매자
 	private int productId;	// 구매 제품
 	private int totalPrice;	// 총 구매 금액

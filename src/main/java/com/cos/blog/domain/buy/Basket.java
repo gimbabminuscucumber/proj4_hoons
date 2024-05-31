@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Basket {
-	private int id;
+	private int id;		// basket 테이블의 id
 	private int userId;
 	private int productId;
+	
 	private int totalCount;
 	private int totalPrice;
+	
 	private String img;
 	private String brand;
 	private String content;

@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cos.blog.config.DB;
+import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
 
 public class BuyDao {
@@ -51,48 +53,9 @@ public class BuyDao {
 	}
 
 	// 주문 완료 (buy, user, product 테이블 조인)
-	/*
-	public OrderReqDto findByOrder(int id) {
-		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.id = ?";
-		Connection conn = DB.getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;		// ResultSet : SQL 쿼리 실행 후 반환된 결과 집합
-		OrderReqDto dto = new OrderReqDto();
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
-			rs = pstmt.executeQuery();		// 실행한 SQL 쿼리의 결과를 pstmt를 통해 rs에 할당
-			
-			if(rs.next()){
-				dto.setId(rs.getInt("b.id"));
-				dto.setUserId(rs.getInt("b.userId"));
-				dto.setProductId(rs.getInt("b.productId"));
-				dto.setOrderNum(rs.getString("b.orderNum"));
-				dto.setTotalCount(rs.getInt("b.totalCount"));
-				dto.setTotalPrice(rs.getInt("b.totalPrice"));
-				dto.setState(rs.getString("b.state"));
-				dto.setCreateDate(rs.getTimestamp("b.createDate"));
-				dto.setNickName(rs.getString("u.nickName"));
-				dto.setEmail(rs.getString("u.email"));
-				dto.setAddress(rs.getString("u.address"));
-				dto.setPhone(rs.getString("u.phone"));
-				dto.setBrand(rs.getString("p.brand"));
-				dto.setImg(rs.getString("p.img"));
-				dto.setContent(rs.getString("p.content"));
-				return dto;
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			DB.close(conn, pstmt, rs);
-		}
-		return null;
-	}
-*/
-	public List<OrderReqDto> findOrder(int id) {
+	public List<OrderReqDto> findByOrder(int userId, int productId) {
 	    List<OrderReqDto> orders = new ArrayList<>();
-	    String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ?";
+	    String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE u.id =? AND p.id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
@@ -100,7 +63,8 @@ public class BuyDao {
 	    try {
 	        conn = DB.getConnection();
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, id);
+	        pstmt.setInt(1, userId);
+	        pstmt.setInt(2, productId);
 	        rs = pstmt.executeQuery();
 
 	        while (rs.next()) {
@@ -132,7 +96,7 @@ public class BuyDao {
 	}
 	
 	// 주문 내역
-	public List<OrderReqDto> findOrderList(int userId) {
+	public List<OrderReqDto> findByOrderList(int userId) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -174,7 +138,7 @@ public class BuyDao {
 	}
 
 	// 주문 상세
-	public List<OrderReqDto> findOrderDetail(String orderNum) {
+	public List<OrderReqDto> findByOrderDetail(String orderNum) {
 		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -375,6 +339,63 @@ public class BuyDao {
 	    }
 	    return -1;
 	}
+
+	public OrderReqDto findByProduct(int id) {
+		String sql = "SELECT * FROM buy b INNER JOIN product p ON b.productId = p.id WHERE b.id = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    OrderReqDto dto = null;
+	    
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = OrderReqDto.builder()
+						.id(rs.getInt("id"))
+						.productId(rs.getInt("productId"))
+		                .userId(rs.getInt("userId"))
+		                .totalCount(rs.getInt("totalCount"))
+		                .totalPrice(rs.getInt("totalPrice"))
+		                .img(rs.getString("img"))
+		                .brand(rs.getString("brand"))
+		                .content(rs.getString("content"))
+		                .price(rs.getInt("price"))
+		                .build();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return dto;
+	}
+
+	public int review(ReviewReqDto dto) {
+		String sql = "INSERT INTO review(userId, buyId, productId, score, text, status, createDate) VALUES(?,?,?,?,?,1,now())";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getUserId());
+			pstmt.setInt(2, dto.getBuyId());
+			pstmt.setInt(3, dto.getProductId());
+			pstmt.setInt(4, dto.getScore());
+			pstmt.setString(5, dto.getText());
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+
+
 		
 	
 }

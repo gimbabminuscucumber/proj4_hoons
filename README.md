@@ -102,4 +102,15 @@ CREATE TABLE basket (
     createDate timestamp
 ) engine=InnoDB default charset=utf8;
 
+CREATE TABLE review(
+	id int primary key auto_increment,
+    userId int,
+    buyId int,
+    productId int,
+    score int,
+    text varchar(250),
+    status int,
+    createDate timestamp
+) engine=InnoDB default charset=utf8;
+
 ```

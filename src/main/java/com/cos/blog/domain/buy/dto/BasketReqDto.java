@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class BasketReqDto {
-	private int id;
+	private int id;			// basket 테이블의 id
 	private int userId;
 	private int productId;
 

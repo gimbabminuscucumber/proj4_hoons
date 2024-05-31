@@ -17,15 +17,14 @@
 
 <div class="container" style="width: 500px">
 
-    <c:forEach var="order" items="${orders}">
+	<!-- 상품 정보 -->
+    <c:forEach var="order" items="${orders}" varStatus="loop">
 		<div class="form-group">
+			<hr style="border-color: lightgrey;">
 		    <div><strong>주문번호</strong> 
 		    	<a href="/project4/buy?cmd=detail&orderNum=${order.orderNum }">${order.orderNum }</a>
 		    </div>
-			<hr>
-			<p>${order.nickName }</p>
-			<span>${order.address }</span>
-			<hr>
+			<br>
 	        <div style="display: flex; align-items: center;">
 	            <div>
 	            	<a href="/project4/product?cmd=detail&id=${order.productId }">
@@ -34,7 +33,9 @@
 	            </div>
 	            <div style="margin-left: 20px;">
 	                <div><a href="#">${order.brand }</a></div>
-	                <div><strong>${order.content }</strong></div>
+	                <div>
+	                	<strong><a href="/project4/product?cmd=detail&id=${order.productId }">${order.content }</a></strong>
+	                </div>
 					<div>주문 수량 : ${order.totalCount }개</div>
 					<div>
 						<span>주문 금액 : </span>
@@ -51,4 +52,4 @@
 	</c:forEach>
 </div>
 
-
+<%@ include file = "../layout/footer.jsp" %>

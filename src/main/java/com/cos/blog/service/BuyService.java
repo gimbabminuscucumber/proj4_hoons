@@ -6,11 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.buy.BuyDao;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
 
 public class BuyService {
@@ -35,17 +37,16 @@ public class BuyService {
 		return dateNum + randomNum;
 	}
 
-	//public OrderReqDto 주문완료(int id) {
-	public List<OrderReqDto> 주문완료(int id) {
-		return buyDao.findOrder(id);
+	public List<OrderReqDto> 주문완료(int userId, int productId) {
+		return buyDao.findByOrder(userId, productId);
 	}
-
+    
 	public List<OrderReqDto> 주문내역(int userId) {
-		return buyDao.findOrderList(userId);
+		return buyDao.findByOrderList(userId);
 	}
 
 	public List<OrderReqDto> 주문상세(String orderNum) {
-		return buyDao.findOrderDetail(orderNum);
+		return buyDao.findByOrderDetail(orderNum);
 	}
 
 	public OrderReqDto 구매자정보(String orderNum) {
@@ -73,6 +74,17 @@ public class BuyService {
 	public int 장바구니삭제(int userId, int productId) {
 	    return buyDao.basketDelete(userId, productId);
 	}
+
+	public OrderReqDto 리뷰상품(int id) {
+		return buyDao.findByProduct(id);
+	}
+
+	public int 리뷰작성(ReviewReqDto dto) {
+		System.out.println("BuyService/리뷰작성");
+		return buyDao.review(dto);
+	}
+
+
 	
 	
 }
