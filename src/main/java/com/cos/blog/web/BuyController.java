@@ -136,6 +136,8 @@ public class BuyController extends HttpServlet{
 				List<OrderReqDto> orders = buyService.주문내역(userId);
 				request.setAttribute("orders", orders);
 				
+				System.out.println("BuyController/list/orders : " + orders);
+				
 				RequestDispatcher dis = request.getRequestDispatcher("buy/list.jsp");
 				dis.forward(request, response);	
 				
@@ -204,43 +206,9 @@ public class BuyController extends HttpServlet{
 					
 				
 			// ====================================================	
-			// 											리뷰 작성 페이지
+			// 												리뷰 저장
 			// ====================================================		
 			}else if(cmd.equals("review")) {
-				/*
-				 * reviewForm.jsp에서 ajax를 통해 json으로 보내기 '전'
-				int id = Integer.parseInt(request.getParameter("buyId"));
-				int userId = Integer.parseInt(request.getParameter("userId"));
-				int productId = Integer.parseInt(request.getParameter("productId"));
-				String text = request.getParameter("text");
-			    int score = Integer.parseInt(request.getParameter("score"));
-				System.out.println("BuyController/review :: userId : " + userId +" id : " + id + " productId : " +productId + " text : " + text + " score : " + score);
-				
-				ReviewReqDto dto = new ReviewReqDto();
-				dto.setBuyId(id);
-				dto.setUserId(userId);
-				dto.setProductId(productId);
-				dto.setScore(score);
-				dto.setText(text);
-				
-				int result = buyService.리뷰작성(dto);	
-				
-			    CommonRespDto<String> commonRespDto = new CommonRespDto<>();
-			    if (result == 1) {
-			        commonRespDto.setStatusCode(1);
-			        commonRespDto.setData("리뷰 작성을 완료하였습니다.");
-			    } else {
-			        commonRespDto.setStatusCode(-1);
-			        commonRespDto.setData("리뷰 작성에 실패했습니다.");
-			    }
-
-			    String respData = new Gson().toJson(commonRespDto);
-			    PrintWriter out = response.getWriter();
-			    out.print(respData);
-			    out.flush();
-				 */
-				
-				// reviewForm.jsp에서 ajax를 통해 json으로 보낸 '후'
 				BufferedReader br = request.getReader();
 			    StringBuilder reqData = new StringBuilder();
 			    String line;

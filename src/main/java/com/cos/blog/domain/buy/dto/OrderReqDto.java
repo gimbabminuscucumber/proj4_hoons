@@ -33,4 +33,7 @@ public class OrderReqDto {
 	private String content;
 	private int price;
 	
+	// review 테이블
+	private int status;		// 추가
+	
 }

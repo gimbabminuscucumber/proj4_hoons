@@ -97,7 +97,7 @@ public class BuyDao {
 	
 	// 주문 내역
 	public List<OrderReqDto> findByOrderList(int userId) {
-		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ? ORDER BY b.id DESC";
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id LEFT JOIN review r ON b.id = r.buyId WHERE b.userId = ? ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
@@ -125,6 +125,7 @@ public class BuyDao {
 						.brand(rs.getString("p.brand"))
 						.img(rs.getString("p.img"))
 						.content(rs.getString("p.content"))
+						.status(rs.getInt("r.status"))
 						.build();
 					orders.add(dto);
 			}
@@ -340,6 +341,7 @@ public class BuyDao {
 	    return -1;
 	}
 
+	// 리뷰 작성 페이지에 데이터 가져가기
 	public OrderReqDto findByProduct(int id) {
 		String sql = "SELECT * FROM buy b INNER JOIN product p ON b.productId = p.id WHERE b.id = ?";
 		Connection conn = DB.getConnection();
@@ -373,6 +375,7 @@ public class BuyDao {
 		return dto;
 	}
 
+	// 리뷰 저장
 	public int review(ReviewReqDto dto) {
 		String sql = "INSERT INTO review(userId, buyId, productId, score, text, status, createDate) VALUES(?,?,?,?,?,1,now())";
 		Connection conn = DB.getConnection();
