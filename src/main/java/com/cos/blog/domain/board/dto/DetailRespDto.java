@@ -20,6 +20,7 @@ public class DetailRespDto {		// Board 테이블 + User 테이블
 	private Timestamp createDate;	
 	private int category;						// Board 테이블 데이터 ↑
 	private String username;				// User 테이블 데이터 ↓
+	private String nickName;
 	private int userId;
 	
 	// 게시글 작성시, 제목(title)에 <script> 코드 방어

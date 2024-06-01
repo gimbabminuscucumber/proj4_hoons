@@ -13,8 +13,9 @@ import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
 
 public class BoardDao {
-
-	public int save(SaveReqDto dto) {			// 게시글 작성
+	
+	// 게시글 작성
+	public int save(SaveReqDto dto) {
 		String sql = "INSERT INTO board(userId, title, content, createDate, category) VALUES(?,?,?, now(), ?)";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -54,6 +55,7 @@ public class BoardDao {
 		return -1;
 	}
 	*/
+	
 	// 페이징 처리 (list 페이지) 
 	public int count() {
 		String sql = "SELECT count(*) FROM board";	
@@ -99,8 +101,8 @@ public class BoardDao {
  		return -1; 
 	}
 	
-
-	public DetailRespDto findById(int id) {		// 게시글 상세보기
+	// 게시글 상세보기
+	public DetailRespDto findById(int id) {	
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT * FROM board b INNER JOIN user u ON b.userId = u.id WHERE b.id = ?;");
 		
@@ -134,7 +136,7 @@ public class BoardDao {
 		return null;
 	}
 
-
+	// 게시글 목록
 	// Board 테이블 + User 테이블 = 조인된 데이터
 	public List<DetailRespDto> findAll(int page) {		// 게시글 목록 + 페이지 처리
 		String sql = "SELECT * FROM board b INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC LIMIT ?, 5";
@@ -145,7 +147,7 @@ public class BoardDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, page*5);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
+			pstmt.setInt(1, page*5);					// page 당 보여질 게시글이 7개씩이라서 *7 를 연산
 			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
 			
 			while(rs.next()) {								// 커서를 이동하는 함수 (board에 데이터가 한 행씩 담기면 커서가 이동해서 그 다음 행의 데이터를 담음)
@@ -155,6 +157,7 @@ public class BoardDao {
 						.content(rs.getString("b.content"))
 						.readCount(rs.getInt("b.readCount"))
 						.userId(rs.getInt("b.userId"))
+						.nickName(rs.getString("u.nickName"))
 						.createDate(rs.getTimestamp("b.createDate"))
 						.category(rs.getInt("b.category"))
 						.username(rs.getString("u.username"))
@@ -236,9 +239,9 @@ public class BoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%"+keyword+"%");
-			pstmt.setString(2, "%"+keyword+"%");		// b.content의 물음표도 써야함
-			pstmt.setInt(3, page*5);					// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
-			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
+			pstmt.setString(2, "%"+keyword+"%");	// b.content의 물음표도 써야함
+			pstmt.setInt(3, page*5);							// page 당 보여질 게시글이 4개씩이라서 *4 를 연산
+			rs = pstmt.executeQuery();						// rs : 위에서 select 한 결과를 담고 있음
 			
 			while(rs.next()) {								// 커서를 이동하는 함수 (board에 데이터가 한 행씩 담기면 커서가 이동해서 그 다음 행의 데이터를 담음)
 				DetailRespDto dto = DetailRespDto.builder()
