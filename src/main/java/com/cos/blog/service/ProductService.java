@@ -54,8 +54,12 @@ public class ProductService {
 		return productDao.findByCategory(categoryId);
 	}
 
-	public List<DetailRespDto> 추천상품() {
+	public List<DetailRespDto> 많이본상품() {
 		return productDao.findByView();
+	}
+
+	public List<DetailRespDto> 추천상품(String brand) {
+		return productDao.findByBrand(brand);
 	}
 
 

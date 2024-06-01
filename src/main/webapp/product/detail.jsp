@@ -69,17 +69,16 @@
 <h5 class="bold-text">다른 고객들이 많이 본 상품</h5>
 <br>
 <div class="row">
-	<c:forEach var="suggest" items="${suggests}" varStatus="status">
-		<input type="hidden" name="suggestId" id="suggestId" value="${suggest.id }">
+	<c:forEach var="mostView" items="${mostViews}" varStatus="status">
 		<div class="col-md-3">
 			<div class="card m-2">
-				<a href="/project4/product?cmd=detail&id=${suggest.id }">
-					<img src="${pageContext.request.contextPath}/images/productImg/${suggest.img}" alt="Product Image" style="width: 100%; height: 152px;">
+				<a href="/project4/product?cmd=detail&id=${mostView.id }">
+					<img src="${pageContext.request.contextPath}/images/productImg/${mostView.img}" alt="Product Image" style="width: 100%; height: 152px;">
 				</a>
 				<div class="card-body">
-					<div><a href="/project4/product?cmd=detail&id=${suggest.id }"><strong>${suggest.brand}</strong></a></div>
-					<p style="font-size: 13px; color: grey">${suggest.content }</p>
-					<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${suggest.price}"/></strong>원</h5>
+					<div><a href="/project4/product?cmd=detail&id=${mostView.id }"><strong>${mostView.brand}</strong></a></div>
+					<p style="font-size: 13px; color: grey">${mostView.content }</p>
+					<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${mostView.price}"/></strong>원</h5>
 				</div>
 			</div>
 		</div>
@@ -124,15 +123,30 @@
 <h5 class="bold-text">고객리뷰</h5>
 <br>
 <c:if test="${not empty reviews}">
-    <c:forEach var="review" items="${reviews}">
-        <div class="review">
-            <p>작성자: ${review.nickName}</p>
-            <p>별점: ${review.score}</p>
-            <p>리뷰 내용: ${review.text}</p>
-            <p>작성일: ${review.createDate}</p>
-        </div>
-    </c:forEach>
+	<c:forEach var="review" items="${reviews}" varStatus="status">
+	    <div class="container" style="<c:if test='${!status.last}'>border-bottom: 1px solid lightgrey; padding-bottom: 10px; margin-bottom: 10px;</c:if>">
+	        <div id="${review.id }">
+	            <div class="d-flex">
+	                <strong>${review.nickName }</strong>
+	                <p style="color:grey; margin-left: 5px; margin-right: 5px">l</p>
+	                <fmt:formatDate pattern="yyyy.MM.dd" value="${review.createDate}"></fmt:formatDate>
+	                <!-- 삭제버튼 -->
+	                <div class="ml-auto">
+	                    <c:if test="${sessionScope.principal.id == review.userId }">
+	                        <i onclick="deleteReply(${review.id})" class="material-icons" style="cursor:pointer">delete</i>
+	                    </c:if>
+	                </div>
+	            </div>
+	            <div>
+	                <p style="font-size: 13px"><c:forEach var="i" begin="1" end="${review.score }">⭐️</c:forEach></p>
+	                <p>${review.text }</p>
+	            </div>
+	        </div>
+	    </div>
+	</c:forEach>
 </c:if>
+
+
 <c:if test="${empty reviews}">
     <p>작성된 리뷰가 없습니다.</p>
 </c:if>
@@ -146,10 +160,9 @@
 <!-- 추천상품 -->
 <h5 class="bold-text">고객님께 추천하는 상품</h5>
 <br>
-<!--  동일 브랜드의 제품 나열하기
+<!--  동일 브랜드의 제품 나열하기-->
 <div class="row">
 	<c:forEach var="suggest" items="${suggests}" varStatus="status">
-		<input type="hidden" name="suggestId" id="suggestId" value="${suggest.id }">
 		<div class="col-md-3">
 			<div class="card m-2">
 				<a href="/project4/product?cmd=detail&id=${suggest.id }">
@@ -164,7 +177,6 @@
 		</div>
 	</c:forEach>
 </div>
- -->
 
 
 

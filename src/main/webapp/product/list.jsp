@@ -128,13 +128,15 @@
             <c:forEach var="product" items="${products}" varStatus="status">
             	<c:if test="${empty param.categoryId || product.categoryId == param.categoryId}">
 	            	<input type="hidden" name="id" value="${product.id }">
+	            	<input type="hidden" name="brand" value="${product.brand }">
 	                <div class="col-md-3">
 	                    <div class="card m-2">
-	                        <a href="/project4/product?cmd=detail&id=${product.id }">
+	                        <a href="/project4/product?cmd=detail&id=${product.id}&brand=${product.brand}">
 	                        	<img src="${pageContext.request.contextPath}/images/productImg/${product.img}" alt="Product Image" style="width: 100%; height: 152px;">
 	                        </a>
 	                        <div class="card-body">
-	                           	<div><a href="/project4/product?cmd=detail&id=${product.id }"><strong>${product.brand}</strong></a></div>
+	                        	<!-- 클릭시, 해당 브랜드 제품만 보이게 -->
+	                           	<div><a href="#"><strong>${product.brand}</strong></a></div>
 	                           	<p style="font-size: 13px; color: grey">${product.content }</p>
 	                       		<h5><strong><fmt:formatNumber type="number" pattern="#,##0"  value="${product.price}"/></strong>원</h5>
                                 <!-- userRole이 ADMIN인 경우만 보이게 -->

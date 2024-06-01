@@ -15,6 +15,7 @@
 		<div>작성자 : <i><a href="#">${boards.username }</a></i></div>&nbsp;
 		<div>작성일 : <i><fmt:formatDate pattern="yyyy-MM-dd" value="${boards.createDate}"></fmt:formatDate></i></div>&nbsp;
 		<div>조회수 : <i>${boards.readCount }</i></div>
+		<!-- 댓글 작성 & 댓글 삭제시 페이지를 reload 해서 조회수가 올라감 > 페이지 reload 없이 댓글 작성 및 삭제 하는 방법 찾기 -->
 	</h6>
 	<br>
 	
@@ -49,18 +50,17 @@
 					<div class="panel-body">
 						<input type="hidden" name="userId" value="${sessionScope.principal.id }">
 						<input type="hidden" name="boardId" value="${boards.id }">
- 					
- 						<textarea id="content" id="reply__write__form" class="form-control" placeholder="내용을 입력하세요." rows="2"></textarea>
-						<br>
-						<div class="d-flex justify-content-end"><button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary">댓글쓰기</button></div>
-						<div class="clearfix"></div>
+ 						
+ 						<c:if test="${empty sessionScope.principal }">
+	 						<textarea id="content" id="reply__write__form" class="form-control" placeholder="로그인을 해야 댓글을 사용할 수 있습니다.." rows="2"></textarea>
+ 						</c:if>
+ 						<c:if test="${!empty sessionScope.principal }">
+	 						<textarea id="content" id="reply__write__form" class="form-control" placeholder="내용을 입력하세요." rows="2"></textarea>
+							<br>
+							<div class="d-flex justify-content-end"><button onclick="replySave(${sessionScope.principal.id}, ${boards.id })" class="btn btn-primary">댓글쓰기</button></div>
+							<div class="clearfix"></div>
+ 						</c:if>
 						<hr />
-
-						<c:choose>
-							<c:when test=""></c:when>
-							<c:otherwise></c:otherwise>
-						</c:choose>
-
 
 						<!-- 댓글 리스트-->
 						<ul id="reply__list" class="media-list">
@@ -73,9 +73,8 @@
 										<p>${reply.content }</p>
 									</div>
 									<div class="m-2">
-										<c:if test="${sessonScope.principal.id == reply.userId }">
-											<!-- delete에 마우스 갖다댔을 때, css로 마우스 포인터가 손가락으로 바뀌게하기 -->
-											<i onclick="deleteReply(${reply.id})" class="material-icons">delete</i>
+										<c:if test="${sessionScope.principal.id == reply.userId }">
+											<i onclick="deleteReply(${reply.replyId})" class="material-icons" style="cursor:pointer">delete</i>
 										</c:if>
 									</div>
 								</li>

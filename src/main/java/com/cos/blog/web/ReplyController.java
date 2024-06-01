@@ -72,11 +72,10 @@ public class ReplyController extends HttpServlet {
 //			dto.setContent(content);
 
 		}else if(cmd.equals("delete")) {
-			int id = Integer.parseInt(request.getParameter("id"));
-			
+			int id = Integer.parseInt(request.getParameter("id"));	// id = replyId
 			int result = replyService.댓글삭제(id);
 			
-			CommonRespDto commonDto = new CommonRespDto<>();
+			CommonRespDto<Reply> commonDto = new CommonRespDto<>();
 			commonDto.setStatusCode(result);
 			
 			Gson gson = new Gson();

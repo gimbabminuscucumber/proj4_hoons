@@ -397,6 +397,45 @@ public class ProductDao {
 		return null;
 	}
 
+	// 추천 상품
+	public List<DetailRespDto> findByBrand(String brand) {
+		String sql = "SELECT * FROM product WHERE brand = ? ORDER BY view DESC LIMIT 4";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<DetailRespDto> suggests = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, brand);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				DetailRespDto dto = DetailRespDto.builder()
+						.id(rs.getInt("id"))
+						.userId(rs.getInt("userId"))
+						.price(rs.getInt("price"))
+						.categoryId(rs.getInt("categoryId"))
+						.count(rs.getInt("count"))
+						.weight(rs.getString("weight"))
+						.brand(rs.getString("brand"))
+						.img(rs.getString("img"))
+						.content(rs.getString("content"))
+						.createDate(rs.getTimestamp("createDate"))
+						.view(rs.getInt("view"))
+						.explanation(rs.getString("explanation"))
+						.build();
+				suggests.add(dto);
+			}
+			return suggests;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt,rs);
+		}
+		return null;
+	}
+
 
 	
 }

@@ -123,7 +123,6 @@ public class BoardController extends HttpServlet {
 			List<ReplyRespDto> replys = replyService.댓글목록(id);		// 댓글 목록 + 유저의 username
 			int replyCount = replyService.댓글수(id);
 			
-			System.out.println("BoardController/detail/boards : " + boards);
 			if(boards == null) {
 				Script.back(response, "게시글을 불러올 수 없습니다.");
 			}else {

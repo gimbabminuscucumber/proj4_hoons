@@ -11,9 +11,9 @@ function deleteReply(id){
 			console.log(result);
 			alert("댓글을 삭제하였습니다.");
 			// 방법 1. 화면 새로고침
-			//location.reload();
 			// 방법 2. ajax
 			$("#reply-"+id).remove();
+			location.reload();
 		} else {
 			alert("댓글 삭제에 실패하였습니다.");
 		}

@@ -151,7 +151,6 @@ public class ProductController extends HttpServlet{
 			}else if(cmd.equals("list")) {
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 				request.setAttribute("principal", principal);
-				System.out.println("principal : " + principal);
 				//int page = Integer.parseInt(request.getParameter("page"));
 				//List<DetailRespDto> products = productService.상품목록(page);
 				List<DetailRespDto> products = productService.상품목록();
@@ -174,18 +173,22 @@ public class ProductController extends HttpServlet{
 			// 												상품 상세
 			// ====================================================
 			}else if(cmd.equals("detail")) {
-				int id = Integer.parseInt(request.getParameter("id"));
+				int id = Integer.parseInt(request.getParameter("id"));		// id = product테이블의 id
+				String brand = request.getParameter("brand");
+				System.out.println("ProductController/detail/brand : " + brand);
 				DetailRespDto products = productService.상품상세보기(id);
-				List<DetailRespDto> suggests = productService.추천상품();
+				List<DetailRespDto> mostViews = productService.많이본상품();
 				List<InfoRespDto> reviews = buyService.리뷰정보(id);
+				List<DetailRespDto> suggests = productService.추천상품(brand);
 				System.out.println("ProductController/detail/reviews : " + reviews);
 				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");
 				}else {
 					request.setAttribute("products", products);
-					request.setAttribute("suggests", suggests);
+					request.setAttribute("mostViews", mostViews);
 					request.setAttribute("reviews", reviews);
+					request.setAttribute("suggests", suggests);
 					RequestDispatcher dis = request.getRequestDispatcher("product/detail.jsp");
 					dis.forward(request, response);	
 				}

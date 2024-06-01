@@ -70,9 +70,11 @@ public class ReplyDao {
 	}
 
 	public int deleteById(int id) {
+		System.out.println("ReplyDao/deleteById/id : " + id);
 		String sql = "DELETE FROM reply WHERE replyId = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
@@ -87,7 +89,7 @@ public class ReplyDao {
 	}
 
 	
-	public List<ReplyRespDto> findAll(int id) {			// 파라미터 : 게시글 id
+	public List<ReplyRespDto> findAll(int id) {			// id = board의 id
 		String sql = "SELECT * FROM reply r INNER JOIN user u ON r.userId = u.id INNER JOIN board b ON r.boardId = b.id WHERE r.boardId = ? ORDER BY r.replyId DESC";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -101,7 +103,7 @@ public class ReplyDao {
 			
 			while(rs.next()) {
 				ReplyRespDto dto = new ReplyRespDto();
-				dto.setId(rs.getInt("r.replyId"));
+				dto.setReplyId(rs.getInt("r.replyId"));
 				dto.setUserId(rs.getInt("r.userId"));
 				dto.setBoardId(rs.getInt("r.boardId"));
 				dto.setContent(rs.getString("r.content"));
