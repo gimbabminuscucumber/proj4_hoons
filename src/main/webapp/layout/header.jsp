@@ -54,6 +54,7 @@
                             <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
                         </c:if>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list">상품 목록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list">게시글</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=list&id=${principal.id }" >주문 내역</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=basketList&id=${principal.id }" >장바구니</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
@@ -70,7 +71,7 @@
 					        <div class="dropdown-menu ">
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/board?cmd=saveForm">글쓰기</a>
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=updateForm&id=${sessionScope.principal.id}">회원정보</a>
-					            <a class="dropdown-item" href="#">장바구니</a>
+					            <a class="dropdown-item" href="<%=request.getContextPath()%>/buy?cmd=basketList&id=${principal.id }" >장바구니</a>
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/buy?cmd=list&id=${principal.id }" >주문 내역</a>
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a>
 					        </div>
@@ -86,6 +87,7 @@
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=joinForm">회원가입</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list">상품 목록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list">게시글</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
 					</ul>
 				</div>

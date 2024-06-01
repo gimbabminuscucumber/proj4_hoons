@@ -20,21 +20,21 @@
 	<!-- 상단 버튼 -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<ul class="nav nav-pills" role="tablist">
-			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">입금/결제</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">배송중</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">배송완료</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu3">교환</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu4">환불</a></li>
+			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">🔥Hot 레시피</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">⏰무물 타임</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">🏆이달의 이벤트</a></li>
 		</ul>
 		
-		<!-- 날짜 선택란 -->
-		<form action="orderList" method="get" class="form-inline">
-			<div class="form-group" >
-				<input type="date" id="startDate" name="startDate" >&nbsp;
-				<input type="date" id="endDate" name="endDate" >&nbsp;
-				<button type="button" class="btn btn-primary btn-sm" onclick="">조회하기</button>
-			</div>
-		</form>
+		<!-- 검색창 -->
+		<!-- - 검색 버튼 누르면 파라미터 3개가 controller로 감 (cmd, page, keyword) -->
+		<div>
+			<form class="form-inline d-flex justify-content-end" action="/project4/board">
+				<input type="hidden" name="cmd" value="search" /> <!-- <form>태그가 /project4/board?cmd=search 로 감 -->
+				<input type="hidden" name="page" value="0" /> 
+				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 60%">
+				<button class="btn btn-primary m-1">검색</button>
+			</form>
+		</div>
 	</div>
 	<br>
 
@@ -59,7 +59,7 @@
 					
 					<c:if test="${loop.first}">
 						<tr>
-							<td colspan="5" style="padding-top: 10px;"></td>
+							<td colspan="5" style="padding-top: 15px;"></td>
 						</tr>
 					</c:if>
 
@@ -72,18 +72,10 @@
 								<c:if test="${board.category == 3}">3</c:if>
 							</span>
 						</td>
-						<td style="padding-left: 20px; text-align: left;">
-							<strong><a href="/project4/board?cmd=detail&id=${board.id }">${board.title}</a></strong>
-						</td>
-						<td>
-							<span>${board.nickName }</a></span>
-						</td>
-						<td>
-							<fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate>
-						</td>
-						<td>
-							<span>${board.readCount}</span>
-						</td>
+						<td style="padding-left: 20px; text-align: left;"><strong><a href="/project4/board?cmd=detail&id=${board.id }">${board.title}</a></strong></td>
+						<td><span>${board.nickName }</span></td>
+						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></td>
+						<td><span>${board.readCount}</span></td>
 					</tr>
 					<!-- 각 주문 항목 아래에 선 추가 -->
 					<c:if test="${loop.last || !loop.last}">
