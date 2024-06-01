@@ -62,6 +62,14 @@ public class ProductService {
 		return productDao.findByBrand(brand);
 	}
 
+	public DetailRespDto 상품정보(int id) {
+		return productDao.findById(id);
+	}
+
+	public int 상품수정(SaveReqDto dto) throws IOException {
+		return productDao.update(dto);
+	}
+
 
 
 }

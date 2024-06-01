@@ -23,6 +23,7 @@ function uploadImage() {
    	});
 }
 
+// 상품 삭제
 function deleteById(id){
 	
 	$.ajax({

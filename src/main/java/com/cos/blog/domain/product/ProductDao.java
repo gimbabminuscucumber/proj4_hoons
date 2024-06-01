@@ -436,6 +436,57 @@ public class ProductDao {
 		return null;
 	}
 
+	// 상품 수정
+	public int update(SaveReqDto dto) throws IOException {
+
+		System.out.println("ProductDao/update/진입");
+		// 이미지 파일 경로 저장
+		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
+		String explainPath = uploadImage(dto.getExplainInputStream(), dto.getExplainFileName());
+		if(imagePath == null) {
+			return -1;	// 이미지 업로드 실패 시 처리
+		}
+		String sql = "UPDATE product SET userId=?, price=?, categoryId=?, brand=?, content=?, weight=?, img=?, explanation=? WHERE id=?";
+	    Connection conn = DB.getConnection();
+	    PreparedStatement pstmt = null;
+	    System.out.println("ProductDao/update 000");
+	    System.out.println("ProductDao/update/dto.getId : " + dto.getId());
+	    System.out.println("ProductDao/update/dto.getUserId : " + dto.getUserId());
+	    System.out.println("ProductDao/update/dto.getPrice : " + dto.getPrice());
+	    System.out.println("ProductDao/update/dto.getCategoryId : " + dto.getCategoryId());
+	    System.out.println("ProductDao/update/dto.getBrand : " + dto.getBrand());
+	    System.out.println("ProductDao/update/dto.getContent : " + dto.getContent());
+	    System.out.println("ProductDao/update/dto.getWeight : " + dto.getWeight());
+	    System.out.println("ProductDao/update/dto.getImgFileName : " + dto.getImgFileName());
+	    System.out.println("ProductDao/update/dto.getExplainFileName : " + dto.getExplainFileName());
+	    
+	    try {
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, dto.getUserId());
+	        pstmt.setInt(2, dto.getPrice());
+	        pstmt.setInt(3, dto.getCategoryId());
+	        pstmt.setString(4, dto.getBrand());
+	        pstmt.setString(5, dto.getContent());
+	        pstmt.setString(6, dto.getWeight());
+	        pstmt.setString(7, dto.getImgFileName()); 			// 이미지 파일 경로
+	        pstmt.setString(8, dto.getExplainFileName());		// 설명 파일 경로
+	        pstmt.setInt(9, dto.getId()); 									// 수정할 상품의 ID
+	        
+	        System.out.println("ProductDao/update 111");
+	        
+	        int result = pstmt.executeUpdate();
+	        System.out.println("ProductDao/update/result : " + result);
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	System.out.println("ProductDao/update 222");
+	        DB.close(conn, pstmt);
+	    }
+	    
+	    return -1;
+	}
+
 
 	
 }

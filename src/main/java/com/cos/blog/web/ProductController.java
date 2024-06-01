@@ -175,12 +175,10 @@ public class ProductController extends HttpServlet{
 			}else if(cmd.equals("detail")) {
 				int id = Integer.parseInt(request.getParameter("id"));		// id = product테이블의 id
 				String brand = request.getParameter("brand");
-				System.out.println("ProductController/detail/brand : " + brand);
 				DetailRespDto products = productService.상품상세보기(id);
 				List<DetailRespDto> mostViews = productService.많이본상품();
 				List<InfoRespDto> reviews = buyService.리뷰정보(id);
 				List<DetailRespDto> suggests = productService.추천상품(brand);
-				System.out.println("ProductController/detail/reviews : " + reviews);
 				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");
@@ -230,6 +228,92 @@ public class ProductController extends HttpServlet{
 				request.setAttribute("products", products);
 				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
 				dis.forward(request, response);	
+				
+			// ====================================================	
+			// 							 				데이터 수정 페이지
+			// ====================================================
+			}else if(cmd.equals("updateForm")) {
+				System.out.println("ProductController/updateForm 진입");
+				int id = Integer.parseInt(request.getParameter("id"));	// product 테이블의 id
+				System.out.println("ProductController/updateForm/id : " + id);
+				
+				DetailRespDto products = productService.상품정보(id);
+				System.out.println("ProductController/updateForm/products : " + products);
+				System.out.println("ProductController/updateForm/products.getId() : " + products.getId());
+				request.setAttribute("products", products);
+				RequestDispatcher dis = request.getRequestDispatcher("product/updateForm.jsp");
+				dis.forward(request, response);	
+				System.out.println("ProductController/updateForm/0000 ");
+				
+			// ====================================================	
+			// 							 					데이터 수정 
+			// ====================================================
+			}else if(cmd.equals("update")) {
+				System.out.println("ProductController/update 진입");
+				
+				int id = Integer.parseInt(request.getParameter("id"));
+				int userId = Integer.parseInt(request.getParameter("userId"));
+				int price = Integer.parseInt(request.getParameter("price"));
+				int categoryId = Integer.parseInt(request.getParameter("category"));
+				String brand = request.getParameter("brand");
+				String content = request.getParameter("content");
+				String weight = request.getParameter("weight");
+				
+				// 1. 이미지 파일 업로드
+//				String img = request.getParameter("img");
+				Part imgPart = request.getPart("img");
+				String imgFileName = Paths.get(imgPart.getSubmittedFileName()).getFileName().toString();
+				InputStream imgInputStream = imgPart.getInputStream();
+				// explanation 추가
+	            Part explainPart = request.getPart("explanation");
+	            String explainFileName = Paths.get(explainPart.getSubmittedFileName()).getFileName().toString();
+	            InputStream explainInputStream = explainPart.getInputStream();
+	            
+				// 2. 파일 이름에 타임스탬프 추가
+				String timestamp = String.valueOf(System.currentTimeMillis());
+				String newImgFileName = timestamp + "_" + imgFileName;
+				// explanation 추가
+	            String newExplainFileName = timestamp + "_" + explainFileName;
+				
+				// 3. 파일 저장 경로 설정
+				String uploadPath = getServletContext().getRealPath("/images/productImg");
+				Path filePath = Paths.get(uploadPath, newImgFileName);
+				// explain 추가
+				 Path explainFilePath = Paths.get(uploadPath, newExplainFileName);
+				 
+				// 4. 파일 저장
+				Files.copy(imgInputStream, filePath);
+				// explanation 추가
+				Files.copy(explainInputStream, explainFilePath);
+				
+				SaveReqDto dto = new SaveReqDto();
+				dto.setId(id);
+				dto.setUserId(userId);
+				dto.setPrice(price);
+				dto.setCategoryId(categoryId);
+				dto.setWeight(weight);
+				dto.setBrand(brand);
+				dto.setContent(content);
+//				dto.setImg(img);
+				
+				// 이미지 파일 업로드
+	            dto.setImgFileName(newImgFileName);
+	            dto.setImgInputStream(imgInputStream);
+				// explanation 추가
+	            dto.setExplainFileName(newExplainFileName);
+	            dto.setExplainInputStream(explainInputStream);
+				
+	            System.out.println("ProductController/save/dto : " + dto);
+	            
+				int result = productService.상품수정(dto);
+				
+				if(result == 1) {	// 정상 입력 완료
+					response.sendRedirect("/project4/product?cmd=list");
+				}else {					// 정상 입력 실패
+					Script.back(response, "상품 수정 실패");
+				}
+				
+				
 			}
 	}
 }

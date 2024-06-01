@@ -216,7 +216,7 @@ public class BoardDao {
 			pstmt.setInt(3, dto.getCategory());
 			pstmt.setInt(4, dto.getId());
 			int result = pstmt.executeUpdate();
-			return result; 
+			return result;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {

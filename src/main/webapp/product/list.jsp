@@ -142,7 +142,7 @@
                                 <!-- userRole이 ADMIN인 경우만 보이게 -->
 								<c:if test="${principal.userRole == 'ADMIN' }">
 	                                <div class="d-flex justify-content-end">
-	                                    <button type="button" class="btn btn-info btn-sm" style="height: 2rem;">수정</button>&nbsp;
+	                                    <button type="button" class="btn btn-info btn-sm" onclick="updateById(${product.id})" style="height: 2rem;">수정</button>&nbsp;
 	                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteById(${product.id})" style="height: 2rem;">삭제</button>
 	                                </div>
 								</c:if>                                
@@ -164,6 +164,26 @@
 
 
 <script src="/project4/js/productInfo.js"></script>
+<script>
+function updateById(productId) {
+    if (confirm("해당 상품을 수정하시겠습니까?")) {
+        // Ajax 요청을 통해 ProductController에 해당 상품의 정보를 요청
+        $.ajax({
+            type: "GET",
+            url: "/project4/product?cmd=updateForm&id=" + productId,
+            success: function(response) {
+                // 요청이 성공했을 때, updateForm 페이지로 이동
+                window.location.href = "/project4/product?cmd=updateForm&id=" + productId;
+            },
+            error: function(xhr, status, error) {
+                // 요청이 실패했을 때, 에러 처리
+                console.error(xhr.responseText);
+                alert("상품 수정에 실패했습니다.");
+            }
+        });
+    }
+}
+</script>
 
 <style>
 #container {

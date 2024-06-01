@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../layout/header.jsp"%>
 
+<!-- 메인 -->
 <div class="container">
 	<form action="/project4/buy?cmd=buyForm" method="POST" name="buy"  enctype="multipart/form-data">
 		<input type="hidden" name="userId" id="userId" value="${principal.id}">
@@ -61,11 +62,12 @@
 	    </div>
 	</form>	    
 </div>
+
+<!-- 다른 고객들이 많이 본 상품 -->
 <div class="container">
 <hr>
 <br>
 <br>
-
 <h5 class="bold-text">다른 고객들이 많이 본 상품</h5>
 <br>
 <div class="row">
@@ -88,39 +90,39 @@
 <!-- 추가 Info -->
 <br>
 <br>
-
 <ul class="nav nav-tabs nav-justified">
 	<li class="nav-item">
-		<a class="nav-link" href="#" onclick="scrollToDetail(event)">상품상세정보</a>
+		<a class="nav-link" href="#" onclick="scrollToDetail(event, 'productDetail')">상품상세정보</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="#" onclick="scrollToDetail(event)">고객리뷰</a>
+		<a class="nav-link" href="#" onclick="scrollToDetail(event, 'customerReviews')">고객리뷰</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="#">배송/반품/교환 안내</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="#">추천상품</a>
+		<a class="nav-link" href="#" onclick="scrollToDetail(event, 'suggestProducts')">추천상품</a>
 	</li>
 </ul>
-
 <br>
 <br>
 <br>
 
 <!-- 상품상세정보 -->
-<c:if test="${empty  products.explanation}"></c:if>
-<c:if test="${!empty  products.explanation}">
-	<img src="/project4/images/productImg/${products.explanation }" id="productDetail" alt="Product Detail" >
-</c:if>
-<br>
-<br>
-<hr style="border-color: lightgrey;">
-<br>
-<br>
+<div id="productDetail">
+	<c:if test="${empty  products.explanation}"></c:if>
+	<c:if test="${!empty  products.explanation}">
+		<img src="/project4/images/productImg/${products.explanation }" id="productDetail" alt="Product Detail" >
+	</c:if>
+	<br>
+	<br>
+	<hr style="border-color: lightgrey;">
+	<br>
+	<br>
+</div>
 
 <!-- 고객리뷰 -->
-<h5 class="bold-text">고객리뷰</h5>
+<h5 class="bold-text" id="customerReviews">고객리뷰</h5>
 <br>
 <c:if test="${not empty reviews}">
 	<c:forEach var="review" items="${reviews}" varStatus="status">
@@ -145,8 +147,6 @@
 	    </div>
 	</c:forEach>
 </c:if>
-
-
 <c:if test="${empty reviews}">
     <p>작성된 리뷰가 없습니다.</p>
 </c:if>
@@ -157,10 +157,11 @@
 <br>
 
 <!-- 배송/반품/교환 안내 -->
+
+
 <!-- 추천상품 -->
-<h5 class="bold-text">고객님께 추천하는 상품</h5>
+<h5 class="bold-text" id="suggestProducts">고객님께 추천하는 상품</h5>
 <br>
-<!--  동일 브랜드의 제품 나열하기-->
 <div class="row">
 	<c:forEach var="suggest" items="${suggests}" varStatus="status">
 		<div class="col-md-3">
@@ -217,7 +218,7 @@
 	}
 	
     // 상세 정보로 스크롤
-    function scrollToDetail(event) {
+    function scrollToDetail(event, elementId) {
         event.preventDefault(); // 기본 동작 막기
         document.getElementById('productDetail').scrollIntoView({behavior: 'smooth'});
     }

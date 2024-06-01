@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class SaveReqDto {
+	private int id;
 	private int userId;
 	private int price;
 	private int categoryId;

@@ -249,7 +249,7 @@ public class BuyDao {
 
 	// 장바구니 조회
 	public List<BasketReqDto> basketList(int userId) {
-		String sql = "SELECT * FROM basket WHERE userId = ?";
+		String sql = "SELECT * FROM basket WHERE userId = ? ORDER BY createDate DESC" ;
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
