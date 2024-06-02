@@ -20,6 +20,9 @@
 	<!-- 상단 버튼 -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<ul class="nav nav-pills" role="tablist">
+			<c:choose>
+				<c:when test=""></c:when>
+			</c:choose>
 			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">입금/결제</a></li>
 			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">배송중</a></li>
 			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">배송완료</a></li>
@@ -82,7 +85,16 @@
 							<span style="color: grey">${order.totalCount}개</span>
 						</td>
 						<td>
-							<span>${order.state}</span><br>
+							<span style="display: inline-block; margin-bottom: 10px;">
+								<c:if test="${order.state == 0 }">주문완료</c:if>
+								<c:if test="${order.state == 1 }">교환 신청</c:if>
+								<c:if test="${order.state == 2 }">환불 신청</c:if>
+								<c:if test="${order.state == 3 }">배송중</c:if>
+								<c:if test="${order.state == 4 }">배송완료</c:if>
+								<c:if test="${order.state == 5 }">교환 완료</c:if>
+								<c:if test="${order.state == 6 }">환불 완료</c:if>
+							</span>
+							<br>
 							<button type="button" class="btn btn-outline-info btn-sm">교환</button>
 							<button type="button" class="btn btn-outline-danger btn-sm">환불</button>
 							<!-- 리뷰 작성 -->

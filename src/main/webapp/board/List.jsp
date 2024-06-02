@@ -18,11 +18,38 @@
 <div class="container" style="text-align: center">
 
 	<!-- 상단 버튼 -->
-	<div class="d-flex justify-content-between align-items-center mb-3">
+	<div class="d-flex justify-content-between align-items-center mb-1">
 		<ul class="nav nav-pills" role="tablist">
-			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">🔥Hot 레시피</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">⏰무물 타임</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">🏆이달의 이벤트</a></li>
+			<c:choose>
+				<c:when test="${empty param.category }">
+					<li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
+				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
+				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
+				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+				</c:when>
+				<c:when test="${!empty param.category }">
+					<c:choose>
+						<c:when test="${param.category == 0 }">
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
+						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						</c:when>
+						<c:when test="${param.category == 1 }">
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
+						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						</c:when>
+						<c:when test="${param.category == 2 }">
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
+						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						</c:when>
+					</c:choose>
+				</c:when>
+			</c:choose>
 		</ul>
 		
 		<!-- 검색창 -->
@@ -34,6 +61,25 @@
 				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 60%">
 				<button class="btn btn-primary m-1">검색</button>
 			</form>
+		</div>
+	</div>
+	<br>
+
+	<div class="card">
+		<div class="card-header">
+			<c:choose>
+				<c:when test="${empty param.category }">
+					<div style="text-align:left">🔔 모든 게시글을 확인 할 수 있습니다.</div>
+				</c:when>
+				<c:when test='${!empty param.category}'>
+					<c:choose>
+						<c:when test="${param.category == 0 }"><div style="text-align:left">🔔 최근 Hot한 레시피 또는 나만의 레시피를 공유해주세요!</div></c:when>
+						<c:when test="${param.category == 1 }"><div style="text-align:left">🔔 재료 손질 방법이나 관리 방법 등 궁금한 걸 물어보세요!</div></c:when>
+						<c:when test="${param.category == 2 }"><div style="text-align:left">🔔 놓치면 아쉬운 이 달의 혜택을 확인하세요!</div></c:when>
+					</c:choose>
+				</c:when>
+			
+			</c:choose>
 		</div>
 	</div>
 	<br>
@@ -51,12 +97,6 @@
 			</thead>
 			<tbody>
 				<c:forEach var="board" items="${boards}" varStatus="loop">
-					<c:if test="${empty boards}">
-						<tr>
-							<td colspan="5">작성된 게시글이 없습니다.</td>
-						</tr>
-					</c:if>
-					
 					<c:if test="${loop.first}">
 						<tr>
 							<td colspan="5" style="padding-top: 15px;"></td>
@@ -66,10 +106,9 @@
 					<tr>
 						<td>
 							<span>
-								<c:if test="${board.category == 0}">카테고리 없음</c:if>
-								<c:if test="${board.category == 1}">1</c:if>
-								<c:if test="${board.category == 2}">2</c:if>
-								<c:if test="${board.category == 3}">3</c:if>
+								<c:if test="${board.category == 0}">🔥Hot 레시피</c:if>
+								<c:if test="${board.category == 1}">⏰무물 타임</c:if>
+								<c:if test="${board.category == 2}">🏆이달의 이벤트</c:if>
 							</span>
 						</td>
 						<td style="padding-left: 20px; text-align: left;"><strong><a href="/project4/board?cmd=detail&id=${board.id }">${board.title}</a></strong></td>
@@ -86,9 +125,25 @@
 						</tr>
 					</c:if>
 				</c:forEach>
+				<c:if test="${empty boards}">
+					<tr>
+						<td colspan="5"><p>작성된 게시글이 없습니다.</p></td>
+					</tr>
+				</c:if>
 			</tbody>
 		</table>
 	</div>
+		<c:if test="${!empty sessionScope.principal.id }">
+			<div class="d-flex justify-content-end">
+				<a href="/project4/board?cmd=saveForm" class="btn btn-primary">게시글 작성</a>
+			</div>
+		</c:if>
+		<c:if test="${empty sessionScope.principal.id }">
+			<div class="d-flex justify-content-end">
+				<button type="button" class="btn btn-secondary" disabled>게시글 작성</button>
+			</div>
+		</c:if>
+		<br>
 
 		<!-- 페이지 진척도 -->
 		<div class="progress col-md-12">
@@ -110,6 +165,20 @@
 				</c:otherwise>
 			</c:choose>
 
+		<!-- 카테고리 선택을 통해 나온 페이지 처리 -->
+			<c:choose>
+				<c:when test="${empty param.category }">
+					<%-- <c:set> : 변수 사용 --%>
+					<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
+				</c:when>
+
+				<c:otherwise>
+					<c:set var="pagePrev" value="/project4/board?cmd=ctgr&category=${param.category }&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=ctgr&category=${param.category }&page=${param.page+1 }"></c:set>
+				</c:otherwise>
+			</c:choose>
+
 			<!-- 단순 페이지 처리 -->
 			<c:choose>
 				<c:when test="${param.page == 0 }">
@@ -117,7 +186,7 @@
 				</c:when>
 				<c:otherwise>
 					<li class="page-item"><a class="page-link" href="${pageScope.pagePrev }">Previous</a></li>
-					<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
+					<%-- <li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
 				</c:otherwise>
 			</c:choose>
 
@@ -127,23 +196,12 @@
 				</c:when>
 				<c:otherwise>
 					<li class="page-item"><a class="page-link" href="${pageScope.pageNext }">Next</a></li>
-					<%-- 				<li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
+					<%-- <li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
 				</c:otherwise>
 			</c:choose>
 		</ul>
 		<!-- 페이지 처리 종료 -->
-
 </div>
-
-<script>
-	function review(id){
-		console.log('리뷰작성 버튼 클릭');
-		console.log('buy테이블의 id : ' + id);
-		
-		location.href="/project4/buy?cmd=reviewForm&id=" + id;
-		
-	}
-</script>
 
 <style>
 

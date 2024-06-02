@@ -55,7 +55,7 @@ public class BoardController extends HttpServlet {
 		// http://localhost:8080/project4/board?cmd=saveForm
 		if(cmd.equals("saveForm")) {
 			User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
-			
+			System.out.println("BoardController/saveForm/principal : " + principal);
 			if(principal != null) {
 				RequestDispatcher dis = request.getRequestDispatcher("board/saveForm.jsp");
 				dis.forward(request, response);	
@@ -84,7 +84,9 @@ public class BoardController extends HttpServlet {
 			int result = boardService.글쓰기(dto);
 			
 			if(result == 1) {	// 정상 입력 완료
-				response.sendRedirect("index.jsp");
+				//response.sendRedirect("index.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("board?cmd=list&page=0");
+				dis.forward(request, response);	
 			}else {					// 정상 입력 실패
 				Script.back(response, "글쓰기 실패");
 			}
@@ -139,11 +141,12 @@ public class BoardController extends HttpServlet {
 		}else if(cmd.equals("delete")) {
 			
 			// 1. 요청받은 JSON 데이터를 자바 오브젝트로 파싱
+			// - board 테이블 id
 			int id =Integer.parseInt(request.getParameter("id"));
-			
+			System.out.println("BoardController/delete/id : " + id);
+			System.out.println("BoardController/delete/000");
  			// 2. DB에서 id 값으로 글 삭제
 			int result = boardService.글삭제(id);
-			
 			// 3. 응답할 JSON 데이터 생성
 			CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
 			commonRespDto.setStatusCode(result);
@@ -163,7 +166,7 @@ public class BoardController extends HttpServlet {
 		// ====================================================		
 		}else if(cmd.equals("updateForm")) {
 			// 수정할 데이터를 가져가야 함
-			int id = Integer.parseInt(request.getParameter("id"));		// 수정할 게시글의 id 가져오기
+			int id = Integer.parseInt(request.getParameter("id"));		// board 테이블의 id
 			DetailRespDto dto = boardService.글상세보기(id);					// 수정한 메소드 내용을 dto에 담기
 			
 			request.setAttribute("dto", dto);											// dto 뿌리기
@@ -174,20 +177,20 @@ public class BoardController extends HttpServlet {
 		// 											게시글 수정 2
 		// ====================================================		
 		}else if(cmd.equals("update")) {
-			// updateForm에서 데이터를 받아온 name 값들 (id, title, content)
 			int id = Integer.parseInt(request.getParameter("id"));
+			int userId = Integer.parseInt(request.getParameter("userId"));
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 			int category = Integer.parseInt(request.getParameter("category"));
-			
+
 			UpdateReqDto dto = new UpdateReqDto();
 			dto.setId(id);
+			dto.setUserId(userId);
 			dto.setTitle(title);
 			dto.setContent(content);
 			dto.setCategory(category);
 			
 			int result = boardService.글수정(dto);
-			
 			if(result == 1) {
 				// ReqestDispatch 안 쓰는 이유에 대해 고민해보기 (이해 안되면 ReqestDispatch로 detail.jsp 호출해보기)
 				// - ReqestDispatch를 쓰면 id 값을 못 가져가기 때문에?!
@@ -211,6 +214,29 @@ public class BoardController extends HttpServlet {
 			
 			// 페이지 계산
 			int boardCount = boardService.글개수(keyword);
+			int lastPage = (boardCount -1)/5;
+			request.setAttribute("lastPage", lastPage);
+			
+			// 페이지 진척도
+			double currentPercent = (double)page/(lastPage)*100;
+			request.setAttribute("currentPercent", currentPercent);
+			
+			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
+			dis.forward(request, response);	
+			
+			
+		// ====================================================	
+		// 								메인 페이지 카테고리 선택 기능
+		// ====================================================		
+		}else if(cmd.equals("ctgr")) {
+			int page = Integer.parseInt(request.getParameter("page"));
+            int category = Integer.parseInt(request.getParameter("category"));
+
+            List<DetailRespDto> boards = boardService.카테고리별게시글(page, category);
+            request.setAttribute("boards", boards);
+
+        	// 페이지 계산
+			int boardCount = boardService.글개수(category);
 			int lastPage = (boardCount -1)/5;
 			request.setAttribute("lastPage", lastPage);
 			

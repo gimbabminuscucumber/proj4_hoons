@@ -85,7 +85,7 @@ CREATE TABLE buy (
     orderNum int,
     totalPrice int,
     totalCount int,
-    state varchar(100) default '주문 확인',
+    state int default 0,
     createDate timestamp
 ) engine=InnoDB default charset=utf8;
 

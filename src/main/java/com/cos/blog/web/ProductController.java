@@ -228,7 +228,7 @@ public class ProductController extends HttpServlet{
 				request.setAttribute("products", products);
 				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
 				dis.forward(request, response);	
-				
+				 
 			// ====================================================	
 			// 							 				데이터 수정 페이지
 			// ====================================================

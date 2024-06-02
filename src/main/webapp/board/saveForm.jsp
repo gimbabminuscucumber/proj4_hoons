@@ -13,7 +13,7 @@
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
 		<img src="images/icons/text.png" alt="Logo" style="width:50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">글쓰기</div>
+		<div style="color: #353A3F; font-weight: bold">게시글 작성</div>
 	</div>
 </h1>
 <br>
@@ -22,13 +22,14 @@
 <div class="container" style="width: 60%">
 	<form action="/project4/board?cmd=save" method="POST" name="saveForm">
 		<input type="hidden" name="userId" value="${sessionScope.principal.id }">
-		
 		<div class="form-group">
 		    <select name="category" class="custom-select">
-		        <option selected disabled>Category</option>
-		        <option value="0">카테고리 없음</option>
-		        <option value="1">IT 개발</option>
-		        <option value="2">퍼포먼스 마케팅</option>
+		        <option selected disabled>카테고리</option>
+		        <option value="0">🔥Hot 레시피</option>
+		        <option value="1">⏰무물 타임</option>
+		        <c:if test="${sessionScope.principal.userRole == 'ADMIN' }">
+			        <option value="2">🏆이달의 이벤트</option><!-- 관리자만 사용 가능 -->
+		        </c:if>
 		    </select>
 		</div>
 
@@ -43,26 +44,29 @@
 
 		<div class="d-flex justify-content-end">
 			<button type="button" onclick="history.back()" class="btn btn-outline-secondary" >이전</button>&nbsp;
-			<button type="button" class="btn btn-primary" onclick="nullCheck()">글쓰기 등록</button>
+			<button type="button" class="btn btn-primary" onclick="nullCheck()">게시글 등록</button>
 		</div>
 	</form>
 </div>
 
 <script>
-$('#summernote').summernote({ // summernote id를 찾아서 summersnote() 를 실행해라
-	placeholder : '내용을 작성하세요',
-	tabsize : 2,
-	height : 200
-});
-
-function nullCheck(){			// 글쓰기 등록 클릭시, content가 null 이면 작성 안되게
-	if(document.saveForm.name.value == ""){
-		alert("제목을 작성해주세요.");
-	}else if(document.saveForm.content.value == ""){
-		alert("내용을 작성해주세요.");
-	}else{
-		document.saveForm.submit();
+	$('#summernote').summernote({ // summernote id를 찾아서 summersnote() 를 실행해라
+		placeholder : '내용을 작성하세요',
+		tabsize : 2,
+		height : 400
+	});
+	
+	function nullCheck(){			// 글쓰기 등록 클릭시, content가 null 이면 작성 안되게
+		if(document.saveForm.category.value == "카테고리"){
+			alert("카테고리를 입력해주세요.");
+		}else if(document.saveForm.title.value == "" ){
+			alert("제목을 작성해주세요.");
+		}else if(document.saveForm.content.value == ""){
+			alert("내용을 작성해주세요.");
+		}else{
+			alert("게시글 작성을 완료하였습니다.");
+			document.saveForm.submit();
+		}
 	}
-}
 </script>
 <%@ include file = "../layout/footer.jsp" %>

@@ -45,7 +45,7 @@
         <br>
 		<div class="card m-2">
 			<div class="card-header">
-				<i class="mtrl-select">카테고리</i>
+				<span class="mtrl-select">카테고리</span>
 			</div>
 		</div>
         <div class="card m-2" style="width: 180px">
@@ -98,13 +98,13 @@
 			<div class="card-header">
 				<c:choose>
 					<c:when test="${empty param.keyword && empty param.categoryId }">
-						<i class="mtrl-select">모든 상품</i>
+						<span class="mtrl-select">모든 상품</span>
 					</c:when>
 					<c:when test="${!empty param.keyword }">
-						<i class="mtrl-select">'${param.keyword }' </i>로 검색한 결과
+						<span class="mtrl-select">'${param.keyword }' </span>로 검색한 결과
 					</c:when>
 					<c:when test="${!empty param.categoryId }">
-						<i class="mtrl-select">카테고리 >
+						<span class="mtrl-select">카테고리 >
 							<c:choose>
 								<c:when test="${param.categoryId == 0}">정육</c:when>
 								<c:when test="${param.categoryId == 1}">과일</c:when>
@@ -112,11 +112,8 @@
 								<c:when test="${param.categoryId == 3}">과자/간식</c:when>
 								<c:when test="${param.categoryId == 4}">밀키트</c:when>
 							</c:choose>
-						 </i>
+						 </span>
 					</c:when>
-					<c:otherwise>
-
-					</c:otherwise>
 				</c:choose>
 			</div>
 		</div>

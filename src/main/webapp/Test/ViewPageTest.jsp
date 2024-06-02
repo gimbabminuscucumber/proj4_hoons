@@ -1,173 +1,200 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../layout/header.jsp"%>
-
 
 <br>
 <br>
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
-		<img src="images/icons/star.png" alt="Logo" style="width:50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">회원가입</div>
+		<img src="images/icons/sound.png" alt="Logo" style="width: 50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">게시글 조회</div>
 	</div>
 </h1>
 <br>
 <br>
 
 <div class="container" style="text-align: center">
-	<!-- UserController의 cmd.equals("join") 으로 전달 onsubmit : submit 되면 무조건 실행되는 함수-->
-	<form action="/project4/user?cmd=join" method="post" name="join">
+
+	<!-- 상단 버튼 -->
+	<div class="d-flex justify-content-between align-items-center mb-1">
+		<ul class="nav nav-pills" role="tablist">
+			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">📑전체 게시글</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">🔥Hot 레시피</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">⏰무물 타임</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu3">🏆이달의 이벤트</a></li>
+<!-- 		    
+		    <li class="nav-item"><a class="nav-link <c:if test='${category != "0" || category != "1" || category != "2"}'>active</c:if>'" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
+		    <li class="nav-item"><a class="nav-link <c:if test='${category == "0"}'>active</c:if>'" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
+		    <li class="nav-item"><a class="nav-link <c:if test='${category == "1"}'>active</c:if>'" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
+		    <li class="nav-item"><a class="nav-link <c:if test='${category == "2"}'>active</c:if>'" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+-->
+		</ul>
 		
-
-		<div class="form-group">
-			<div class= "d-flex insert-input-container">
-				<div class="material-icons-input" style="width: 338px">
-					<span class="material-icons">local_phone</span> 
-					<input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone with (-)" required />
-				</div>
-				<div>
-					<button type="button" class="btn btn-info" onclick="phoneCheck()">중복확인</button>
-				</div>
-			</div>
-			<!-- ajax -->
-			<div><font id="checkPhone" size="2"></font></div>
+		<!-- 검색창 -->
+		<!-- - 검색 버튼 누르면 파라미터 3개가 controller로 감 (cmd, page, keyword) -->
+		<div>
+			<form class="form-inline d-flex justify-content-end" action="/project4/board">
+				<input type="hidden" name="cmd" value="search" /> <!-- <form>태그가 /project4/board?cmd=search 로 감 -->
+				<input type="hidden" name="page" value="0" /> 
+				<input type="text" name="keyword" class="form-control mr-sm-2" placeholder="Search" style="width: 60%">
+				<button class="btn btn-primary m-1">검색</button>
+			</form>
 		</div>
+	</div>
+	<br>
 
+	<div class="form-group" style="height: 360px">
+		<table>
+			<thead>
+				<tr>
+					<th style="width: 200px">카테고리</th>
+					<th style="width: 500px">제목</th>
+					<th style="width: 200px">작성자</th>
+					<th style="width: 200px">작성일</th>
+					<th style="width: 150px">조회수</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="board" items="${boards}" varStatus="loop">
+					<c:if test="${loop.first}">
+						<tr>
+							<td colspan="5" style="padding-top: 15px;"></td>
+						</tr>
+					</c:if>
+
+					<tr>
+						<td>
+							<span>
+								<c:if test="${board.category == 0}">🔥Hot 레시피</c:if>
+								<c:if test="${board.category == 1}">⏰무물 타임</c:if>
+								<c:if test="${board.category == 2}">🏆이달의 이벤트</c:if>
+							</span>
+						</td>
+						<td style="padding-left: 20px; text-align: left;"><strong><a href="/project4/board?cmd=detail&id=${board.id }">${board.title}</a></strong></td>
+						<td><span>${board.nickName }</span></td>
+						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></td>
+						<td><span>${board.readCount}</span></td>
+					</tr>
+					<!-- 각 주문 항목 아래에 선 추가 -->
+					<c:if test="${loop.last || !loop.last}">
+						<tr>
+							<td colspan="5">
+								<hr style="border-color: lightgrey;">
+							</td>
+						</tr>
+					</c:if>
+				</c:forEach>
+				<c:if test="${empty boards}">
+					<tr>
+						<td colspan="5"><p>작성된 게시글이 없습니다.</p></td>
+					</tr>
+				</c:if>
+			</tbody>
+		</table>
+	</div>
+		<c:if test="${!empty sessionScope.principal.id }">
+			<div class="d-flex justify-content-end">
+				<a href="/project4/board?cmd=saveForm" class="btn btn-primary">게시글 작성</a>
+			</div>
+		</c:if>
+		<c:if test="${empty sessionScope.principal.id }">
+			<div class="d-flex justify-content-end">
+				<button type="button" class="btn btn-secondary" disabled>게시글 작성</button>
+			</div>
+		</c:if>
 		<br>
 
-		<button type="button" class="btn btn-outline-secondary" onclick="history.back()">이전</button>
-		<button type="button" class="btn btn-primary" style="width: 128px" onclick="joinSuccess()">회원가입 완료</button>
-	</form>
+		<!-- 페이지 진척도 -->
+		<div class="progress col-md-12">
+			<div class="progress-bar" style="width: ${currentPercent}%"></div>
+		</div>
+		<br />
+		<!-- 검색을 통해 나온 페이지 처리 -->
+		<ul class="pagination justify-content-center">
+			<c:choose>
+				<c:when test="${empty param.keyword }">
+					<%-- <c:set> : 변수 사용 --%>
+					<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
+				</c:when>
 
+				<c:otherwise>
+					<c:set var="pagePrev" value="/project4/board?cmd=search&page=${param.page-1 }&keyword=${param.keyword }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=search&page=${param.page+1 }&keyword=${param.keyword }"></c:set>
+				</c:otherwise>
+			</c:choose>
+
+		<!-- 카테고리 선택을 통해 나온 페이지 처리 -->
+			<c:choose>
+				<c:when test="${empty param.category }">
+					<%-- <c:set> : 변수 사용 --%>
+					<c:set var="pagePrev" value="/project4/board?cmd=list&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=list&page=${param.page+1 }"></c:set>
+				</c:when>
+
+				<c:otherwise>
+					<c:set var="pagePrev" value="/project4/board?cmd=ctgr&category=${param.category }&page=${param.page-1 }"></c:set>
+					<c:set var="pageNext" value="/project4/board?cmd=ctgr&category=${param.category }&page=${param.page+1 }"></c:set>
+				</c:otherwise>
+			</c:choose>
+
+			<!-- 단순 페이지 처리 -->
+			<c:choose>
+				<c:when test="${param.page == 0 }">
+					<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="${pageScope.pagePrev }">Previous</a></li>
+					<%-- <li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page-1 }">Previous</a></li> --%>
+				</c:otherwise>
+			</c:choose>
+
+			<c:choose>
+				<c:when test="${lastPage == param.page}">
+					<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="${pageScope.pageNext }">Next</a></li>
+					<%-- <li class="page-item"><a class="page-link" href="/project4/board?cmd=list&page=${param.page+1 }">Next</a></li> --%>
+				</c:otherwise>
+			</c:choose>
+		</ul>
+		<!-- 페이지 처리 종료 -->
 </div>
 
-<script>
-	var isChecking = false;	
-	var phoneChecking = false;
-
-	// ====================================================	
-	// 							중복확인 체크 및 미입력 데이터 체크
-	// ====================================================	
-	function joinSuccess() {				
-		var phone = document.getElementById("phone").value;
-
-		if(phoneChecking == false){
-			alert('연락처 중복확인을 하세요');
-		} else {
-			finalCheck();
-		}
-	}	
-
-	// ====================================================	
-	// 												submit
-	// ====================================================	
-	function finalCheck(){
-		var phone = document.getElementById("phone").value;
-		
-		$.ajax({
-			type: "post",
-			url: "/project4/user?cmd=join",
-			data: {
-				phone: phone
-			}, success: function(resp){
-				console.log("데이터 전송 완료", resp);
-				alert('회원가입 완료');
-				// 로그인 화면으로 페이지 이동
-				window.location.href = "/project4/user/loginForm.jsp";
-			}, error: function(xhr, status, error){
-				console.log("데이터 전송 에러", error);
-			}
-		});
-	}
-	
-	// ====================================================	
-	// 											연락처 중복확인
-	// ====================================================	
-	function phoneCheck(){
-		
-		var phone = document.getElementById("phone").value;
-		console.log('phone : ' + phone);
-		
-		$.ajax({
-			type: "post",
-			url : "/project4/user?cmd=phoneCheck",
-			data : phone,
-			contentType : "text/plain; charset=utf-8",
-			dataType : "text" 
-		}).done(function(data){
-			console.log('phoneCheck/data : ' + data);
-			if(phone === "" ){
-				phoneChecking = false;
-				$("#checkPhone").html('(-)를 제외하여 연락처를 입력해주세요.');
-				$("#checkPhone").attr('color', 'red');
-			}else if(isNaN(phone)){
-				phoneChecking = false;
-				$("#checkPhone").html('연락처는 숫자로만 입력해주세요.');
-				$("#checkPhone").attr('color', 'red');				
-		    } else if(phone.length < 11){
-		        phoneChecking = false;
-		        $("#checkPhone").html('연락처는 11자리 이상 입력해주세요.');
-		        $("#checkPhone").attr('color', 'red');		
-			}else if(data === 'ok'){
-				phoneChecking = false;
-				$("#checkPhone").html('해당 연락처는 사용 중입니다.');
-				$("#checkPhone").attr('color', 'red');
-			}else{
-				phoneChecking = true;
-				$("#checkPhone").html('해당 연락처는 사용가능합니다.');
-				$("#checkPhone").attr('color', 'blue');
-			}
-		});
-	}
-	
-	// ====================================================	
-	// 											주소 API 실행 함수
-	// ====================================================			
-	function goPopup() {
-		console.log("goPopup()");
-		var pop = window.open("/project4/user/jusoPopup.jsp", "pop", "width=570,height=420, scrollbars=yes, resizable=yes");
-	}
-
-	function jusoCallBack(roadFullAddr) {
-		var addressElement = document.querySelector("#address");
-		addressElement.value = roadFullAddr;
-	}
-</script>
-
-</body>
-
 <style>
-.material-icons-input {
-	display: inline-block;
-	position: relative;
+
+thead th {
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
-.material-icons-input input {
-	width: 100%;
-	padding-left: 40px; 
+.nav-pills .nav-link {
+    padding: 5px 10px; 
+}
+.nav-pills .nav-item {
+    margin-right: 5px;
+}
+.nav-pills .nav-link:not(.active) {
+	color: grey;
+    background-color: #f2f2f2; 
 }
 
-.material-icons-input .material-icons { 
-	position: absolute;
-	left: 5px; 
-	top: 50%;
-	transform: translateY(-50%);
+a {
+    color: black;
+    text-decoration: none; 
 }
 
-.insert-input-container {
-	display: flex;
-	align-items: center;
-	justify-content: center; 
+a:hover {
+    color: #CB444A;
+    text-decoration: underline; 
 }
 
-.insert-input-container .form-control {
-	flex: 1; 
-	margin-right: 5px; 
-}
 
-.insert-input-container .btn {
-	flex-shrink: 0;
-}
 </style>
 
-
+<%@ include file = "../layout/footer.jsp" %>

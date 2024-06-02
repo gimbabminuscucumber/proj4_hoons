@@ -63,7 +63,8 @@ function deleteById(boardId) {
 		dataType: "json"
 	}).done(function(result) {	
 		if (result.statusCode == 1) {
-			location.href = "index.jsp";
+			console.log('게시글 삭제');
+			location.href = "/project4/board?cmd=list&page=0";
 			alert("게시글을 삭제하였습니다.");
 		} else {
 			alert("삭제에 실패하였습니다.");

@@ -40,6 +40,11 @@ public class BoardService {
 		return boardDao.count(keyword);
 	}
 
+	// 페이징 처리 (category가 추가된 페이지) - 오버로딩
+	public int 글개수(int category) {
+		return boardDao.count(category);
+	}
+
 	// 하나의 Service 안에 여러가지 DB 관련 로직이 섞인다
 	public DetailRespDto 글상세보기(int id) {
 		int result = boardDao.updateReadCount(id);
@@ -63,5 +68,10 @@ public class BoardService {
 	public List<DetailRespDto> 글검색(String keyword, int page) {
 		return boardDao.findByKeyword(keyword, page);
 	}
+
+    public List<DetailRespDto> 카테고리별게시글(int page, int category) {
+        return boardDao.findByCategory(page, category);
+    }
+
 
 }

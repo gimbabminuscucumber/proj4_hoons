@@ -76,7 +76,7 @@ public class BuyDao {
 	                    .orderNum(rs.getString("b.orderNum"))
 	                    .totalCount(rs.getInt("b.totalCount"))
 	                    .totalPrice(rs.getInt("b.totalPrice"))
-	                    .state(rs.getString("b.state"))
+	                    .state(rs.getInt("b.state"))
 	                    .createDate(rs.getTimestamp("b.createDate"))
 	                    .nickName(rs.getString("u.nickName"))
 	                    .email(rs.getString("u.email"))
@@ -117,7 +117,7 @@ public class BuyDao {
 						.orderNum(rs.getString("b.orderNum"))
 						.totalCount(rs.getInt("b.totalCount"))
 						.totalPrice(rs.getInt("b.totalPrice"))
-						.state(rs.getString("b.state"))
+						.state(rs.getInt("b.state"))
 						.createDate(rs.getTimestamp("b.createDate"))
 						.nickName(rs.getString("u.nickName"))
 						.email(rs.getString("u.email"))
@@ -160,7 +160,7 @@ public class BuyDao {
 						.orderNum(rs.getString("b.orderNum"))
 						.totalCount(rs.getInt("b.totalCount"))
 						.totalPrice(rs.getInt("b.totalPrice"))
-						.state(rs.getString("b.state"))
+						.state(rs.getInt("b.state"))
 						.createDate(rs.getTimestamp("b.createDate"))
 						.nickName(rs.getString("u.nickName"))
 						.email(rs.getString("u.email"))
@@ -201,7 +201,7 @@ public class BuyDao {
 				dto.setOrderNum(rs.getString("b.orderNum"));
 				dto.setTotalCount(rs.getInt("b.totalCount"));
 				dto.setTotalPrice(rs.getInt("b.totalPrice"));
-				dto.setState(rs.getString("b.state"));
+				dto.setState(rs.getInt("b.state"));
 				dto.setCreateDate(rs.getTimestamp("b.createDate"));
 				dto.setNickName(rs.getString("u.nickName"));
 				dto.setEmail(rs.getString("u.email"));
