@@ -4,17 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-
-import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.buy.BuyDao;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
-import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
-import com.cos.blog.domain.user.User;
 
 public class BuyService {
 	
@@ -88,6 +83,11 @@ public class BuyService {
 	public List<InfoRespDto> 리뷰정보(int id) {
 		return buyDao.findByReview(id);
 	}
+
+	public int 리뷰삭제(int reviewId) {
+		return buyDao.reviewDelete(reviewId);
+	}
+
 
 
 	

@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.buy.dto.BasketReqDto;
-import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
+import com.cos.blog.domain.review.Review;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
 import com.cos.blog.service.BuyService;
@@ -56,8 +56,8 @@ public class BuyController extends HttpServlet{
 			BuyService buyService = new BuyService();
 			HttpSession session = request.getSession();
 			User user = (User)session.getAttribute("principal");
-//	        Gson gson = new Gson();		// 날짜 형식 때문에 아래 코드로 변경
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
+			Gson gson = new Gson();		
+			//Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
 			// ====================================================	
 			// 												상품 구매
 			// ====================================================	
@@ -67,12 +67,10 @@ public class BuyController extends HttpServlet{
 				BufferedReader br = request.getReader();
 		        StringBuilder reqData = new StringBuilder();
 		        String line;
+		       
 		        while ((line = br.readLine()) != null) {
 		            reqData.append(line);
 		        }
-		        
-		        // 요청 데이터 확인
-		        System.out.println("Request Data: " + reqData.toString());
 
 //		        Gson gson = new Gson();
 		        BuyReqDto[] dtos = gson.fromJson(reqData.toString(), BuyReqDto[].class);
@@ -91,10 +89,10 @@ public class BuyController extends HttpServlet{
 		            String respData = gson.toJson(commonRespDto);
 		            Script.responseData(response, respData);
 		        }
-				
-				
-			// ====================================================	
-			// 												주문서 작성
+		    
+
+		    // ====================================================	
+			// 											주문서 작성
 			// ====================================================		
 			}else if(cmd.equals("buyForm")) {
 				String[] productIds = request.getParameterValues("productId");
@@ -102,18 +100,19 @@ public class BuyController extends HttpServlet{
 
 			    // 로그인된 사용자 정보 가져오기 (예: 세션에서 userId를 가져오는 방식)
 			    int userId = user.getId();
-
+			    
 			    List<OrderReqDto> orders = buyService.주문서작성(checkedItems, userId);
-/*
+
 			    // 구매한 상품을 basket 테이블에서 삭제
 			    for (int productId : checkedItems) {
 			        buyService.장바구니삭제(userId, productId);
 			    }
-*/
+			    
 			    request.setAttribute("orders", orders);
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm.jsp");
 			    dis.forward(request, response);
-				
+			    
+			    
 	        // ====================================================	
 			// 											주문 완료 페이지
 			//					- 주문한 제품만 보여지게 하기(이전에 구매한 제품은 안보이게 > createDate나 by id이용하면 될거같긴한데...)
@@ -121,13 +120,15 @@ public class BuyController extends HttpServlet{
 			}else if(cmd.equals("order")) {
 			    int userId = Integer.parseInt(request.getParameter("userId"));
 			    int productId = Integer.parseInt(request.getParameter("productId"));
-			    System.out.println("BuyController/order/productIds : " + productId);
+			    
 			    List<OrderReqDto> orders = buyService.주문완료(userId, productId);
+			    System.out.println("BuyController/order/orders : " + orders);
 			    request.setAttribute("orders", orders);
 
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
 			    dis.forward(request, response);
 			    
+				
 			// ====================================================	
 			// 												주문 내역
 			// ====================================================	
@@ -214,15 +215,10 @@ public class BuyController extends HttpServlet{
 			        reqData.append(line);
 			    }
 			    
-			    // 요청 데이터 확인
-			    System.out.println("Request Data: " + reqData.toString());
-
 			    // JSON 데이터를 ReviewReqDto 객체로 파싱
 			    ReviewReqDto dto = gson.fromJson(reqData.toString(), ReviewReqDto.class);
-			    System.out.println("BuyController/review/dto : " + dto);
 				
 				int result = buyService.리뷰작성(dto);
-			    System.out.println("BuyController/review/result : " + result);
 			    
 			    CommonRespDto<Integer> commonRespDto = new CommonRespDto<>();
 			    commonRespDto.setStatusCode(result != -1 ? 1 : -1);
@@ -230,8 +226,21 @@ public class BuyController extends HttpServlet{
 			    String respData = gson.toJson(commonRespDto);
 			    Script.responseData(response, respData);
 			    
-			    
-			    
+			// ====================================================	
+			// 												리뷰 삭제
+			// ====================================================
+			}else if(cmd.equals("reviewDelete")) {
+				int reviewId = Integer.parseInt(request.getParameter("id"));
+				int result = buyService.리뷰삭제(reviewId);
+				
+				CommonRespDto<Review> commonDto = new CommonRespDto<>();
+				commonDto.setStatusCode(result);
+				
+				//Gson gson = new Gson();
+				String jsonData = gson.toJson(commonDto);
+				Script.responseData(response, jsonData);
+				
+				
 			}
 
 	}

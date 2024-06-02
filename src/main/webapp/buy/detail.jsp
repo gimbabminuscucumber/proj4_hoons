@@ -60,7 +60,16 @@
 							<span style="color: grey">${detail.totalCount}개</span>
 						</td>
 						<td>
-							<span>${detail.state}</span><br>
+							<span style="display: inline-block; margin-bottom: 10px;">
+								<c:if test="${detail.state == 0 }">주문완료</c:if>	
+								<c:if test="${detail.state == 1 }">교환 신청</c:if>
+								<c:if test="${detail.state == 2 }">환불 신청</c:if>
+								<c:if test="${detail.state == 3 }">배송중</c:if>
+								<c:if test="${detail.state == 4 }">배송완료</c:if>
+								<c:if test="${detail.state == 5 }">교환 완료</c:if>
+								<c:if test="${detail.state == 6 }">환불 완료</c:if>
+							</span>
+							<br>
 							<button type="button" class="btn btn-outline-info btn-sm">교환</button>
 							<button type="button" class="btn btn-outline-danger btn-sm">환불</button>
 						</td>

@@ -40,6 +40,7 @@ public class ReplyController extends HttpServlet {
 		ReplyService replyService = new ReplyService(); 
 		HttpSession session = request.getSession();							// 세션 불러오기
 		
+		// 댓글 저장
 		if(cmd.equals("save")) {
 			
 			BufferedReader br = request.getReader();

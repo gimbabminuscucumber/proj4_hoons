@@ -30,6 +30,7 @@
 		        <c:if test="${sessionScope.principal.userRole == 'ADMIN' }">
 			        <option value="2">🏆이달의 이벤트</option><!-- 관리자만 사용 가능 -->
 		        </c:if>
+		        <option value="3">💌 고객의 소리</option>
 		    </select>
 		</div>
 

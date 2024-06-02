@@ -35,27 +35,6 @@ public class BoardDao {
 		return -1;
 	}
 	
-	/*
-	public int save(SaveReqDto dto) {			// 게시글 작성
-		String sql = "INSERT INTO board(userId, title, content, createDate) VALUES(?,?,?, now())";
-		Connection conn = DB.getConnection();
-		PreparedStatement pstmt = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getUserId());
-			pstmt.setString(2, dto.getTitle());
-			pstmt.setString(3, dto.getContent());
-			int result = pstmt.executeUpdate();
-			return result;
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			DB.close(conn, pstmt);
-		}
-		return -1;
-	}
-	*/
-	
 	// 페이징 처리 (list 페이지) 
 	public int count() {
 		String sql = "SELECT count(*) FROM board";	

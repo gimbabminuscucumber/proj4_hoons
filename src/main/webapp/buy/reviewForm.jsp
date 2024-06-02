@@ -22,9 +22,6 @@
 		<input type="hidden" id="buyId" name="buyId"  value="${reviews.id }">
 		<input type="hidden" id="productId" name="productId"  value="${reviews.productId }">
 		<input type="hidden" id="score" name="score"  value="0">
-		userId = ${sessionScope.principal.id }
-		buyId = ${reviews.id }
-		productId = ${reviews.productId }
 		<div class="form-group" style="display: flex; align-items: center;">
 			<img src="/project4/images/productImg/${reviews.img }" alt="Product Image" style="width: 100%; max-width: 100px; height: auto;">
 			<div style="padding-left: 20px">

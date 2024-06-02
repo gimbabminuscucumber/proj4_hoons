@@ -9,7 +9,7 @@
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
 		<img src="images/icons/sound.png" alt="Logo" style="width: 50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">게시글 조회</div>
+		<div style="color: #353A3F; font-weight: bold">커뮤니티</div>
 	</div>
 </h1>
 <br>
@@ -26,6 +26,7 @@
 				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
 				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
 				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+				    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=3&page=0" >💌 고객의 소리</a></li>
 				</c:when>
 				<c:when test="${!empty param.category }">
 					<c:choose>
@@ -34,18 +35,28 @@
 						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=3&page=0" >💌 고객의 소리</a></li>
 						</c:when>
 						<c:when test="${param.category == 1 }">
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
 						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=3&page=0" >💌 고객의 소리</a></li>
 						</c:when>
 						<c:when test="${param.category == 2 }">
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
 						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
 						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=3&page=0" >💌 고객의 소리</a></li>
+						</c:when>
+						<c:when test="${param.category == 3 }">
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=list&page=0" >📑전체 게시글</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=0&page=0" >🔥Hot 레시피</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=1&page=0" >⏰무물 타임</a></li>
+						    <li class="nav-item" ><a class="nav-link" href="/project4/board?cmd=ctgr&category=2&page=0" >🏆이달의 이벤트</a></li>
+						    <li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/board?cmd=ctgr&category=3&page=0" >💌 고객의 소리</a></li>
 						</c:when>
 					</c:choose>
 				</c:when>
@@ -76,6 +87,7 @@
 						<c:when test="${param.category == 0 }"><div style="text-align:left">🔔 최근 Hot한 레시피 또는 나만의 레시피를 공유해주세요!</div></c:when>
 						<c:when test="${param.category == 1 }"><div style="text-align:left">🔔 재료 손질 방법이나 관리 방법 등 궁금한 걸 물어보세요!</div></c:when>
 						<c:when test="${param.category == 2 }"><div style="text-align:left">🔔 놓치면 아쉬운 이 달의 혜택을 확인하세요!</div></c:when>
+						<c:when test="${param.category == 3 }"><div style="text-align:left">🔔 'hoons' 사용에 궁금한 점을 물어보세요!</div></c:when>
 					</c:choose>
 				</c:when>
 			
@@ -111,7 +123,7 @@
 								<c:if test="${board.category == 2}">🏆이달의 이벤트</c:if>
 							</span>
 						</td>
-						<td style="padding-left: 20px; text-align: left;"><strong><a href="/project4/board?cmd=detail&id=${board.id }">${board.title}</a></strong></td>
+						<td style="padding-left: 20px; text-align: left;"><strong><a href="/project4/board?cmd=detail&id=${board.id }">${board.title} </a></strong>(${replyCounts[board.id]})</td>
 						<td><span>${board.nickName }</span></td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createDate}"></fmt:formatDate></td>
 						<td><span>${board.readCount}</span></td>

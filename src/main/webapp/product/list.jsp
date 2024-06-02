@@ -50,31 +50,20 @@
 		</div>
         <div class="card m-2" style="width: 180px">
             <div class="list-group">
-            
-               	<div class="list-group-item list-group-item-action">
-               		<a href="/project4/product?cmd=search&categoryId=0" class="d-flex">
-               			<div><strong>정육</strong></div><div style="color:grey">&nbsp;meat</div>
-               		</a>	
+               	<div class="list-group-item list-group-item-action"><a href="/project4/product?cmd=search&categoryId=0" class="d-flex">
+               		<div><strong>정육</strong></div><div style="color:grey">&nbsp;meat</div></a>
                	</div>
-               	<div class="list-group-item list-group-item-action">
-               		<a href="/project4/product?cmd=search&categoryId=1" class="d-flex">
-               			<div><strong>과일</strong></div><div style="color:grey">&nbsp;fruit</div>
-               		</a>	
+               	<div class="list-group-item list-group-item-action"><a href="/project4/product?cmd=search&categoryId=1" class="d-flex">
+               		<div><strong>과일</strong></div><div style="color:grey">&nbsp;fruit</div></a>
                	</div>
-               	<div class="list-group-item list-group-item-action">
-               		<a href="/project4/product?cmd=search&categoryId=2" class="d-flex">
-               			<div><strong>채소</strong></div><div style="color:grey">&nbsp;vegetable</div>
-               		</a>	
+               	<div class="list-group-item list-group-item-action"><a href="/project4/product?cmd=search&categoryId=2" class="d-flex">
+               		<div><strong>채소</strong></div><div style="color:grey">&nbsp;vegetable</div></a>
                	</div>
-               	<div class="list-group-item list-group-item-action">
-               		<a href="/project4/product?cmd=search&categoryId=3" class="d-flex">
-               			<div><strong>과자/간식</strong></div><div style="color:grey">&nbsp;snack</div>
-               		</a>	
+               	<div class="list-group-item list-group-item-action"><a href="/project4/product?cmd=search&categoryId=3" class="d-flex">
+               		<div><strong>과자/간식</strong></div><div style="color:grey">&nbsp;snack</div></a>
                	</div>
-               	<div class="list-group-item list-group-item-actioon">
-               		<a href="/project4/product?cmd=search&categoryId=4" class="d-flex">
-               			<div><strong>밀키트</strong></div><div style="color:grey">&nbsp;mealkit</div>
-               		</a>	
+               	<div class="list-group-item list-group-item-actioon"><a href="/project4/product?cmd=search&categoryId=4" class="d-flex">
+               		<div><strong>밀키트</strong></div><div style="color:grey">&nbsp;mealkit</div></a>	
                	</div>
             </div>
         </div>
@@ -166,7 +155,7 @@ function updateById(productId) {
     if (confirm("해당 상품을 수정하시겠습니까?")) {
         // Ajax 요청을 통해 ProductController에 해당 상품의 정보를 요청
         $.ajax({
-            type: "GET",
+            type: "post",
             url: "/project4/product?cmd=updateForm&id=" + productId,
             success: function(response) {
                 // 요청이 성공했을 때, updateForm 페이지로 이동

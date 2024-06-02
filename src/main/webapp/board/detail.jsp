@@ -11,6 +11,7 @@
 			<c:if test="${boards.category == 0 }"><strong>🔥Hot 레시피</strong></c:if>
 			<c:if test="${boards.category == 1 }"><strong>⏰무물 타임</strong></c:if>
 			<c:if test="${boards.category == 2 }"><strong>🏆이달의 이벤트</strong></c:if>
+			<c:if test="${boards.category == 3 }"><strong>💌 고객의 소리</strong></c:if>
 		</div>
 		<div><strong><a href="#">${boards.nickName }</a></strong></div>
 			<p style="margin-left:5px; margin-right: 5px; color:grey">l</p>
@@ -48,7 +49,7 @@
 			<div class="col-md-12">
 				<div class="comment-wrapper">
 					<div class="panel panel-info">
-						<div class="panel-heading m-2"><b>Comment </b><i>(${replyCount })</i></div>
+						<div class="panel-heading m-2"><b>Comment </b>(${replyCount })</div>
 						<div class="panel-body">
 							<input type="hidden" name="userId" value="${sessionScope.principal.id }">
 							<input type="hidden" name="boardId" value="${boards.id }">

@@ -41,7 +41,7 @@
 	                	<c:if test="${products.content != null}"><h4>${products.content}</h4></c:if>
 	                	<c:if test="${products.content == null}"><h4>하단 상세설명 참조</h4></c:if>
 	                </div>
-	                <p><span id="purchase">리뷰 개수 : </span></p>
+	                <br>
 	                <h3 class="price" id="price"><fmt:formatNumber type="number" pattern="#,##0"  value="${products.price}"/>원</h3>
 	                <p>(weight : ${products.weight }원)</p>
 	               
@@ -91,18 +91,18 @@
 <br>
 <br>
 <ul class="nav nav-tabs nav-justified">
-	<li class="nav-item">
-		<a class="nav-link" href="#" onclick="scrollToDetail(event, 'productDetail')">상품상세정보</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="#" onclick="scrollToDetail(event, 'customerReviews')">고객리뷰</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="#">배송/반품/교환 안내</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="#" onclick="scrollToDetail(event, 'suggestProducts')">추천상품</a>
-	</li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="scrollToDetail(event, 'productDetail')">상품상세정보</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="scrollToDetail(event, 'customerReviews')">고객리뷰</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">배송/반품/교환 안내</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="scrollToDetail(event, 'suggestProducts')">추천상품</a>
+    </li>
 </ul>
 <br>
 <br>
@@ -220,52 +220,20 @@
     // 상세 정보로 스크롤
     function scrollToDetail(event, elementId) {
         event.preventDefault(); // 기본 동작 막기
-        document.getElementById('productDetail').scrollIntoView({behavior: 'smooth'});
+        var element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
     }
-	
-	// 주문서 작성
+
+	// 구매하기 버튼 클릭 (주문서 작성)
     function purchase() {
-		console.log('주문서 작성');
-       	var userId = document.getElementById("userId").value;
-        var nickName = document.getElementById("nickName").value;
-        var address = document.getElementById("address").value;
-        var phone = document.getElementById("phone").value;
+        var form = document.buy;
+        form.action = "/project4/buy?cmd=buyForm";
+        form.method = "POST";
+        form.submit();
+    } 
 
-        var productId = document.getElementById("productId").value;
-        var brand = document.getElementById("brand").value;
-        var content = document.getElementById("content").value;
-        var weight = document.getElementById("weight").value;
-       	var quantity = parseInt($("#quantity").val());
-        var price = parseInt(${products.price});
-        var totalPrice = price * quantity;
-        var img = document.getElementById("img").value;
-        
-        
-        var data = {			// json 타입
-            userId: userId,
-            nickName: nickName,
-            address: address,
-            phone: phone,
-            productId: productId,
-            brand: brand,
-            content: content,
-            weight: weight,
-            totalPrice: totalPrice,
-            totalCount: quantity,
-            img: img
-        };
-
-        $.ajax({
-        	type: "post",
-        	url: "/project4/buy?cmd=buyForm",	// 데이터 보낼 경로
-        	data: JSON.stringify(data),
-        	contentType: "application/json; charset=utf-8",
-        	dataType: "json"
-        }).done(function(data){	
-        	//window.location.href = "/project4/buy?cmd=buyForm"
-        });
-	}
-	
 	// 장바구니에 담기
     function basket() {
 		
@@ -288,7 +256,6 @@
             totalCount: quantity,
             totalPrice: totalPrice
         };
-
         
 		$.ajax({
 			type: "post",
@@ -305,6 +272,25 @@
 			}
 		})
     }
+	
+	// 리뷰 삭제
+	function deleteReply(reviewId	){
+		console.log('리뷰 삭제/reviewId : ' + reviewId);
+		
+		$.ajax({
+			type:"post",
+			url: "/project4/buy?cmd=reviewDelete&id="+reviewId,
+			dataType: "json"
+		}).done(function(data){
+			if(data.statusCode == 1){
+				console.log('댓글 삭제');
+				alert("댓글을 삭제했습니다.");
+				location.reload();
+			}else{
+				alert("댓글 삭제에 실패했습니다.");
+			}
+		})
+	}
 	
 </script>
 

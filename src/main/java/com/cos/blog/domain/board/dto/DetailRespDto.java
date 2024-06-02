@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DetailRespDto {		// Board 테이블 + User 테이블
+public class DetailRespDto {		// Board 테이블 + User 테이블 + Reply 테이블
 	private int id;
 	private String title;
 	private String content;
@@ -22,7 +22,9 @@ public class DetailRespDto {		// Board 테이블 + User 테이블
 	private String username;				// User 테이블 데이터 ↓
 	private String nickName;
 	private int userId;
-	
+	// 추가
+	private int replyId;						// Reply 테이블 데이터 ↓
+
 	// 게시글 작성시, 제목(title)에 <script> 코드 방어
 	// - lucy filter로도 방어 가능 (더 궁극적임)
 	// - lucy filter 사용시 라이브러리 필요

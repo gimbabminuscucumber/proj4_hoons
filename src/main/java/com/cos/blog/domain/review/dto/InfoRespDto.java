@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class InfoRespDto {
+	private int id;
 	private int buyId;
 	private int productId;
 	private int userId;
@@ -22,7 +23,6 @@ public class InfoRespDto {
 	private Timestamp createDate;
 	
 	// user 테이블
-	private int id;
 	private String nickName;
 	
 }

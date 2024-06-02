@@ -2,7 +2,9 @@ package com.cos.blog.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.board.dto.DetailRespDto;
-import com.cos.blog.domain.board.dto.ListRespDto;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.board.dto.UpdateReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
@@ -98,7 +99,19 @@ public class BoardController extends HttpServlet {
 			int page = Integer.parseInt(request.getParameter("page"));		// 최초 페이지는 0, NEXT 클릭시 1
 			List<DetailRespDto> boards = boardService.글목록보기(page);
 			request.setAttribute("boards", boards);
+			
+			// 댓글 수를 저장할 맵 생성
+		    Map<Integer, Integer> replyCounts = new HashMap<>();
 
+		    // 각 게시글의 댓글 수 계산
+		    for (DetailRespDto board : boards) {
+		        int replyCount = replyService.댓글수(board.getId());
+		        replyCounts.put(board.getId(), replyCount);
+		    }
+
+		    // 댓글 수 맵을 JSP로 전달
+		    request.setAttribute("replyCounts", replyCounts);
+		    
 			// 페이지 계산
 			int boardCount = boardService.글개수();
 			int lastPage = (boardCount -1)/5;
@@ -118,8 +131,8 @@ public class BoardController extends HttpServlet {
 		// ====================================================	
 		// 											게시글 상세보기
 		// ====================================================		
-		}else if(cmd.equals("detail")) {			// 게시글 상세보기
-			int id = Integer.parseInt(request.getParameter("id"));	// 게시글 id 가져오기
+		}else if(cmd.equals("detail")) {		
+			int id = Integer.parseInt(request.getParameter("id"));	// board id 가져오기
 			DetailRespDto boards = boardService.글상세보기(id);			// board 테이블 + user 테이블 = 조인된 데이터 필요
 
 			List<ReplyRespDto> replys = replyService.댓글목록(id);		// 댓글 목록 + 유저의 username

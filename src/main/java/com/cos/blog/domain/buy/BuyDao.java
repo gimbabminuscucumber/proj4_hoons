@@ -11,7 +11,6 @@ import java.util.List;
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
-import com.cos.blog.domain.buy.dto.BuyFormReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.review.dto.InfoRespDto;
@@ -55,11 +54,11 @@ public class BuyDao {
 
 	// 주문 완료 (buy, user, product 테이블 조인)
 	public List<OrderReqDto> findByOrder(int userId, int productId) {
-	    List<OrderReqDto> orders = new ArrayList<>();
 	    String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE u.id =? AND p.id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
+	    List<OrderReqDto> orders = new ArrayList<>();
 
 	    try {
 	        conn = DB.getConnection();
@@ -321,6 +320,7 @@ public class BuyDao {
 	    return dto;
 	}
 
+	
 	// 장바구니를 통해 구매한 상품은 구매완료 후, 장바구니에서 상품 목록 삭제하기
 	public int basketDelete(int userId, int productId) {
 	    String sql = "DELETE FROM basket WHERE userId = ? AND productId = ?";
@@ -414,7 +414,8 @@ public class BuyDao {
 			
 			while(rs.next()) {
 				InfoRespDto dto = InfoRespDto.builder()	
-						.buyId(rs.getInt("r.id"))
+						.id(rs.getInt("r.id"))
+						.buyId(rs.getInt("r.buyId"))
 						.productId(rs.getInt("r.productId"))
 						.userId(rs.getInt("r.userId"))
 						.score(rs.getInt("r.score"))
@@ -432,6 +433,27 @@ public class BuyDao {
 		}
 		return reviews;
 	}
+
+	// 리뷰 삭제
+	public int reviewDelete(int reviewId) {
+		String sql = "DELETE FROM review WHERE id = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, reviewId);
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+
+
 	
 	
 }

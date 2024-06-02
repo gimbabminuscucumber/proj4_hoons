@@ -9,13 +9,13 @@ function deleteReply(id){
 	}).done(function(result) {		// ReplyController의 jsonData에 {"statusCode": 1}가 result에 담김 
 		if (result.statusCode == 1) {
 			console.log(result);
-			alert("댓글을 삭제하였습니다.");
+			alert("댓글을 삭제했습니다.");
 			// 방법 1. 화면 새로고침
 			// 방법 2. ajax
-			$("#reply-"+id).remove();
+			//$("#reply-"+id).remove();
 			location.reload();
 		} else {
-			alert("댓글 삭제에 실패하였습니다.");
+			alert("댓글 삭제에 실패했습니다.");
 		}
 	});
 }

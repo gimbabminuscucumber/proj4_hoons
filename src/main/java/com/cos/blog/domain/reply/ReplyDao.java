@@ -27,6 +27,7 @@ public class ReplyDao {
 			pstmt.setString(3, dto.getContent());
 			int result = pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
+			
 			if(rs.next()) {
 				generateKey = rs.getInt(1	);
 				System.out.println("생성된 키 : " + generateKey);
@@ -34,6 +35,7 @@ public class ReplyDao {
 					return generateKey;
 				}
 			}
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {

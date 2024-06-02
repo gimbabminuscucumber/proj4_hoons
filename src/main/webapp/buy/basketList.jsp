@@ -70,8 +70,9 @@
 							</td>
 							<td>
 								<div class="d-flex justify-content-center">
+									id = ${basket.id }
 									<button type="button"	 class="btn btn-outline-info btn-sm" >변경</button>&nbsp;
-									<button type="button" class="btn btn-outline-danger btn-sm" >삭제</button>
+									<button type="button" class="btn btn-outline-danger btn-sm"  onclick="productDelete(${basket.id})">삭제</button>
 								</div>
 							</td>
 						</tr>
@@ -145,6 +146,17 @@
             }
         });
     });
+    
+    function productDelete(basketId){
+    	console.log('삭제 버튼 클릭/id : ' + basketId);
+    	
+    	$.ajax().done(function(data){
+    		if(data.statusCode == 1){
+    			console.log('장바구니 상품 삭제');
+    			alert("상품을 삭제했습니다.");
+    		}
+    	})
+    }
 </script>
 
 <style>

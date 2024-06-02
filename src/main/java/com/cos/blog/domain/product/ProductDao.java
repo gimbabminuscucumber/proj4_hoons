@@ -449,16 +449,6 @@ public class ProductDao {
 		String sql = "UPDATE product SET userId=?, price=?, categoryId=?, brand=?, content=?, weight=?, img=?, explanation=? WHERE id=?";
 	    Connection conn = DB.getConnection();
 	    PreparedStatement pstmt = null;
-	    System.out.println("ProductDao/update 000");
-	    System.out.println("ProductDao/update/dto.getId : " + dto.getId());
-	    System.out.println("ProductDao/update/dto.getUserId : " + dto.getUserId());
-	    System.out.println("ProductDao/update/dto.getPrice : " + dto.getPrice());
-	    System.out.println("ProductDao/update/dto.getCategoryId : " + dto.getCategoryId());
-	    System.out.println("ProductDao/update/dto.getBrand : " + dto.getBrand());
-	    System.out.println("ProductDao/update/dto.getContent : " + dto.getContent());
-	    System.out.println("ProductDao/update/dto.getWeight : " + dto.getWeight());
-	    System.out.println("ProductDao/update/dto.getImgFileName : " + dto.getImgFileName());
-	    System.out.println("ProductDao/update/dto.getExplainFileName : " + dto.getExplainFileName());
 	    
 	    try {
 	        pstmt = conn.prepareStatement(sql);
