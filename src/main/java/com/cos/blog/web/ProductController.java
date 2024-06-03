@@ -149,27 +149,59 @@ public class ProductController extends HttpServlet{
 			// 												상품 목록
 			// ====================================================	
 			}else if(cmd.equals("list")) {
-				//int page = Integer.parseInt(request.getParameter("page"));
+				int page = Integer.parseInt(request.getParameter("page"));
 				User principal = (User)session.getAttribute("principal");	// 세션에 principal이 있는지 확인 (로그인된 세션엔 princpal이 있으니까)
 				request.setAttribute("principal", principal);
-				//int page = Integer.parseInt(request.getParameter("page"));
-				//List<DetailRespDto> products = productService.상품목록(page);
-				List<DetailRespDto> products = productService.상품목록();
+		
+				List<DetailRespDto> products = productService.상품목록(page);
 				request.setAttribute("products", products);
 				
-				/*
 				// 페이지 계산
 				int productCount = productService.상품개수();
-				int lastPage = (productCount -1)/4;
+				int lastPage = (productCount -1)/16;
 				request.setAttribute("lastPage", lastPage);
-				
-				// 페이지 진척도
-				double currentPercent = (double)page/(lastPage)*100;		// 진척도별 바 게이지
-				request.setAttribute("currentPercent", currentPercent);	
-				*/
+				System.out.println("ProductController/list/등록된 상품 총 개수 : " + productCount);
+				System.out.println("ProductController/list/마지막 페이지(0부터) : " + lastPage);
+
 				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
 				dis.forward(request, response);	
 			
+			// ====================================================	
+			// 								상품 목록 (검색 & 카테고리)
+			// ====================================================
+			}else if(cmd.equals("search")) {
+				String keyword = request.getParameter("keyword");
+				String categoryIdStr = request.getParameter("categoryId");
+				int page = Integer.parseInt(request.getParameter("page"));
+				List<DetailRespDto> products;
+				
+				// 카테고리 페이지
+				if(categoryIdStr != null && !categoryIdStr.isEmpty()) {
+					int categoryId = Integer.parseInt(categoryIdStr);
+					products = productService.카테고리상품목록(categoryId, page);
+					System.out.println("ProductController/search/카테고리/products : " + products);
+					
+					// 페이지 계산
+					int productCount = productService.카테고리상품개수(categoryId);
+					request.setAttribute("products", products);
+					int lastPage = (productCount -1)/16;
+					request.setAttribute("lastPage", lastPage);
+				}
+				
+				// 검색 페이지
+				if(keyword != null && !keyword.isEmpty()) {
+					products = productService.키워드상품목록(keyword, page);
+					System.out.println("ProductController/search/검색/products : " + products);
+					
+					// 페이지 계산
+					int productCount = productService.키워드상품개수(keyword);
+					request.setAttribute("products", products);
+					int lastPage = (productCount -1)/16;
+					request.setAttribute("lastPage", lastPage);
+				}
+				
+				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
+				dis.forward(request, response);	
 			// ====================================================	
 			// 												상품 상세
 			// ====================================================
@@ -210,25 +242,6 @@ public class ProductController extends HttpServlet{
 				out.print(respData);
 				out.flush();
 				
-			// ====================================================	
-			// 							메인 페이지 검색 && 카테고리 별 리스트
-			// ====================================================
-			}else if(cmd.equals("search")) {
-				String keyword = request.getParameter("keyword");
-				String categoryIdStr = request.getParameter("categoryId");
-				System.out.println("ProductController/search/categoryIdStr000 : " + categoryIdStr);
-				List<DetailRespDto> products;
-
-				if(categoryIdStr != null && !categoryIdStr.isEmpty()) {
-					int categoryId = Integer.parseInt(categoryIdStr);
-					products = productService.카테고리별상품목록(categoryId);
-				}else {
-					products = productService.상품검색(keyword);
-				}
-				
-				request.setAttribute("products", products);
-				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
-				dis.forward(request, response);	
 				 
 			// ====================================================	
 			// 							 				데이터 수정 페이지

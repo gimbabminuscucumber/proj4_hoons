@@ -3,8 +3,7 @@
 
 <%
  	// filter를 안타게 하기
-	RequestDispatcher dis =
-		request.getRequestDispatcher("product?cmd=list");
+	RequestDispatcher dis = request.getRequestDispatcher("product?cmd=list&page=0");
 	dis.forward(request, response);		// 톰켓이 생성하는 request와 response를 재사용한다 (= 다시 접근하는게 아니라 내부적으로 움직인다)
 	
 	/*

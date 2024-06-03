@@ -47,31 +47,31 @@
 		<div class="card m-2" style="width: 180px">
 			<div class="list-group">
 				<div class="list-group-item list-group-item-action">
-					<a href="/project4/product?cmd=search&categoryId=0" class="d-flex">
+					<a href="/project4/product?cmd=search&categoryId=0&page=0" class="d-flex">
 						<div><strong>정육</strong></div>
 						<div style="color: grey">&nbsp;meat</div>
 					</a>
 				</div>
 				<div class="list-group-item list-group-item-action">
-					<a href="/project4/product?cmd=search&categoryId=1" class="d-flex">
+					<a href="/project4/product?cmd=search&categoryId=1&page=0" class="d-flex">
 						<div><strong>과일</strong></div>
 						<div style="color: grey">&nbsp;fruit</div>
 					</a>
 				</div>
 				<div class="list-group-item list-group-item-action">
-					<a href="/project4/product?cmd=search&categoryId=2" class="d-flex">
+					<a href="/project4/product?cmd=search&categoryId=2&page=0" class="d-flex">
 						<div><strong>채소</strong></div>
 						<div style="color: grey">&nbsp;vegetable</div>
 					</a>
 				</div>
 				<div class="list-group-item list-group-item-action">
-					<a href="/project4/product?cmd=search&categoryId=3" class="d-flex">
+					<a href="/project4/product?cmd=search&categoryId=3&page=0" class="d-flex">
 						<div><strong>과자/간식</strong></div>
 						<div style="color: grey">&nbsp;snack</div>
 					</a>
 				</div>
 				<div class="list-group-item list-group-item-actioon">
-					<a href="/project4/product?cmd=search&categoryId=4" class="d-flex">
+					<a href="/project4/product?cmd=search&categoryId=4&page=0" class="d-flex">
 						<div><strong>밀키트</strong></div>
 						<div style="color: grey">&nbsp;mealkit</div>
 					</a>
@@ -99,16 +99,16 @@
 						<span class="mtrl-select">모든 상품</span>
 					</c:when>
 					<c:when test="${!empty param.keyword }">
-						<span class="mtrl-select">'${param.keyword }' </span>로 검색한 결과
+						<span class="mtrl-select">'<strong>${param.keyword }</strong>' </span>로 검색한 결과
 					</c:when>
 					<c:when test="${!empty param.categoryId }">
 						<span class="mtrl-select">카테고리 > 
 							<c:choose>
-								<c:when test="${param.categoryId == 0}">정육</c:when>
-								<c:when test="${param.categoryId == 1}">과일</c:when>
-								<c:when test="${param.categoryId == 2}">채소</c:when>
-								<c:when test="${param.categoryId == 3}">과자/간식</c:when>
-								<c:when test="${param.categoryId == 4}">밀키트</c:when>
+								<c:when test="${param.categoryId == 0}"><strong>정육</strong></c:when>
+								<c:when test="${param.categoryId == 1}"><strong>과일</strong></c:when>
+								<c:when test="${param.categoryId == 2}"><strong>채소</strong></c:when>
+								<c:when test="${param.categoryId == 3}"><strong>과자/간식</strong></c:when>
+								<c:when test="${param.categoryId == 4}"><strong>밀키트</strong></c:when>
 							</c:choose>
 						</span>
 					</c:when>
@@ -157,8 +157,78 @@
 			</c:forEach>
 		</div>
 	</div>
-	<!-- 중앙 섹션 종료 -->
+	
+</div>
+	
+<!-- 중앙 섹션 종료 -->
 </section>
+<br><br>
+<section class="container">
+	<!-- 검색을 통해 나온 페이지 처리 -->
+	<ul class="pagination justify-content-center">
+		<!-- 상황별 변수 설정 -->
+		<c:choose>
+			<c:when test="${empty param.keyword && empty param.categoryId}">
+				<c:set var="pagePrev" value="/project4/product?cmd=list&page=${param.page-1}"/>
+				<c:set var="pageNext" value="/project4/product?cmd=list&page=${param.page+1}"/>
+			</c:when>
+			
+			<c:when test="${!empty param.keyword}">
+				<c:set var="pagePrev" value="/project4/product?cmd=search&page=${param.page-1}&keyword=${param.keyword}"/>
+				<c:set var="pageNext" value="/project4/product?cmd=search&page=${param.page+1}&keyword=${param.keyword}"/>
+			</c:when>
+			
+			<c:when test="${!empty param.categoryId}">
+				<c:set var="pagePrev" value="/project4/product?cmd=search&page=${param.page-1}&categoryId=${param.categoryId}"/>
+				<c:set var="pageNext" value="/project4/product?cmd=search&page=${param.page+1}&categoryId=${param.categoryId}"/>
+			</c:when>
+		</c:choose>
+	
+		<c:choose>
+			<c:when test="${param.page == 0}">
+				<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			</c:when>
+			<c:otherwise>
+				<li class="page-item"><a class="page-link" href="${pagePrev}">Previous</a></li>
+			</c:otherwise>
+		</c:choose>
+	
+		<!-- 페이지 번호 생성 -->
+		<c:forEach var="i" begin="0" end="${lastPage}">
+			<c:choose>
+				<c:when test="${i == param.page}">
+					<li class="page-item active"><a class="page-link" href="#">${i + 1}</a></li>
+				</c:when>
+				<c:otherwise>
+					<c:choose>
+						<c:when test="${!empty param.keyword}">
+							<c:set var="pageLink" value="/project4/product?cmd=search&page=${i}&keyword=${param.keyword}"/>
+						</c:when>
+						<c:when test="${!empty param.categoryId}">
+							<c:set var="pageLink" value="/project4/product?cmd=search&page=${i}&categoryId=${param.categoryId}"/>
+						</c:when>
+						<c:otherwise>
+							<c:set var="pageLink" value="/project4/product?cmd=list&page=${i}"/>
+						</c:otherwise>
+					</c:choose>
+					<li class="page-item"><a class="page-link" href="${pageLink}">${i + 1}</a></li>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+	
+		<c:choose>
+			<c:when test="${param.page == lastPage}">
+				<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			</c:when>
+			<c:otherwise>
+				<!-- <li class="page-item"><a class="page-link" href="${pageNext}">Next</a></li> -->
+				<li class="page-item"><a class="page-link" href="${pageNext}">Next</a></li>
+			</c:otherwise>
+		</c:choose>
+	</ul>
+</section>
+
+
 
 
 <script src="/project4/js/productInfo.js"></script>

@@ -19,7 +19,6 @@ public class ProductDao {
 
 	// 상품 등록
 	public int save(SaveReqDto dto) throws IOException {			
-
 		// 이미지 파일 경로 저장
 		String imagePath = uploadImage(dto.getImgInputStream(), dto.getImgFileName());
 		String explainPath = uploadImage(dto.getExplainInputStream(), dto.getExplainFileName());
@@ -53,7 +52,6 @@ public class ProductDao {
 		return -1;
 	}
 	
-	
 	// 이미지 파일 업로드 및 경로 변환 메소드
 	public String uploadImage(InputStream fileInputStream, String fileName) throws IOException {
 	    String uploadPath = "/Users/gimdong-eun/Desktop/STS/Workspace2_JSP/project4/src/main/webapp/images/productImg/";
@@ -68,7 +66,7 @@ public class ProductDao {
 	    return path.toString();
 	}
 	
-	// 페이징 처리
+	// 페이징 처리 (기본 페이지에서의 상품개수)
 	public int count() {
 		String sql = "SELECT count(*) FROM product";	
 		Connection conn = DB.getConnection();
@@ -89,18 +87,18 @@ public class ProductDao {
  		return -1; 
 	}
 
-	/*
-	// 페이징 처리 (search가 추가된 페이지) - 오버로딩 
-	public int count(String keyword) {
-		String sql = "SELECT count(*) FROM product WHERE name LIKE ?";	
+	// 페이징 처리 (검색 페이지)
+	public int keywordCount(String keyword) {
+		String sql = "SELECT count(*) FROM product WHERE brand LIKE ? OR content LIKE ? ";	
 		Connection conn = DB.getConnection();
-		PreparedStatement pstmt = null;		// PreparedStatement 사용하는 이유 : 외부로 부터 오는 injection 공격을 막기 위해
+		PreparedStatement pstmt = null;		
 		ResultSet rs = null;
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%"+keyword+"%");
-			rs = pstmt.executeQuery();				// rs : 위에서 select 한 결과를 담고 있음
+			pstmt.setString(2, "%"+keyword+"%");
+			rs = pstmt.executeQuery();				
 		
 			if(rs.next()) {
 				return rs.getInt(1);
@@ -112,47 +110,34 @@ public class ProductDao {
 		}
  		return -1; 
 	}
-
-	public List<DetailRespDto> findAll(int page) {
-		String sql = "SELECT * FROM product ORDER BY id DESC LIMIT ?,4"; 
+	
+	// 페이징 처리 (카테고리 페이지)
+	public int categoryCount(int categoryId) {
+		String sql = "SELECT count(*) FROM product WHERE categoryId LIKE ?";	
 		Connection conn = DB.getConnection();
-		PreparedStatement pstmt = null;
+		PreparedStatement pstmt = null;	
 		ResultSet rs = null;
-		List<DetailRespDto>products = new ArrayList<>();
-		
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, page*4);
-			rs = pstmt.executeQuery();
+			pstmt.setInt(1, categoryId);
+			rs = pstmt.executeQuery();				
 			
-			while(rs.next()) {
-				DetailRespDto dto = DetailRespDto.builder()
-						.id(rs.getInt("id"))
-						.userId(rs.getInt("userId"))
-						.price(rs.getInt("price"))
-						.categoryId(rs.getInt("categoryId"))
-						.weight(rs.getString("weight"))
-						.name(rs.getString("name"))
-						.img(rs.getString("img"))
-						.content(rs.getString("content"))
-						.createDate(rs.getTimestamp("createDate"))
-						.build();
-				products.add(dto);
+			if(rs.next()) {
+				return rs.getInt(1);
 			}
-			return products;
 		}catch(Exception e) {
 			e.printStackTrace();
-		}finally {
+		}finally { 
 			DB.close(conn, pstmt, rs);
 		}
-		return null;
+		return -1; 
 	}
-	 */	
+
 	
 	// 상품 리스트
-	public List<DetailRespDto> findAll() {
-		String sql = "SELECT * FROM product ORDER BY id DESC"; 
+	public List<DetailRespDto> findAll(int page) {
+		String sql = "SELECT * FROM product ORDER BY id DESC LIMIT ?,16";		// 16 : 페이지에 출력할 객체 최대개수 
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -160,6 +145,7 @@ public class ProductDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, page*16);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -263,8 +249,8 @@ public class ProductDao {
 	}
 
 	// 상품 검색
-	public List<DetailRespDto> findByKeyword(String keyword) {
-		String sql = "SELECT * FROM product WHERE brand LIKE ? OR content LIKE ? ORDER BY id DESC";
+	public List<DetailRespDto> findByKeyword(String keyword, int page) {
+		String sql = "SELECT * FROM product WHERE brand LIKE ? OR content LIKE ? ORDER BY id DESC LIMIT ?, 16";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -274,6 +260,7 @@ public class ProductDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%"+keyword+"%");
 			pstmt.setString(2, "%"+keyword+"%");
+			pstmt.setInt(3, page*16);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -303,8 +290,8 @@ public class ProductDao {
 	}
 
 	// 카테고리별 상품 목록
-	public List<DetailRespDto> findByCategory(int categoryId) {
-		String sql = "SELECT * FROM product WHERE categoryId = ? ORDER BY id DESC";
+	public List<DetailRespDto> findByCategory(int categoryId, int page) {
+		String sql = "SELECT * FROM product WHERE categoryId = ? ORDER BY id DESC LIMIT ?, 16";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -313,6 +300,7 @@ public class ProductDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, categoryId);
+			pstmt.setInt(2, page*16);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {

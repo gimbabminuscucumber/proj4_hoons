@@ -25,11 +25,28 @@ public class ProductService {
 		return productDao.findAll(page);
 	}
 	 */
-	public List<DetailRespDto> 상품목록() {
-		return productDao.findAll();
+	public List<DetailRespDto> 상품목록(int page) {
+		return productDao.findAll(page);
 	}
+	
+	public List<DetailRespDto> 키워드상품목록(String keyword, int page) {
+		return productDao.findByKeyword(keyword, page);
+	}
+	
+	public List<DetailRespDto> 카테고리상품목록(int categoryId, int page) {
+		return productDao.findByCategory(categoryId, page);
+	}
+
 	public int 상품개수() {
 		return productDao.count();
+	}
+
+	public int 카테고리상품개수(int categoryId) {
+		return productDao.categoryCount(categoryId);
+	}
+	
+	public int 키워드상품개수(String keyword) {
+		return productDao.keywordCount(keyword);
 	}
 
 	public int 상품삭제(int id) {
@@ -44,14 +61,6 @@ public class ProductService {
 		}else {
 			return null;
 		}
-	}
-
-	public List<DetailRespDto> 상품검색(String keyword) {
-		return productDao.findByKeyword(keyword);
-	}
-
-	public List<DetailRespDto> 카테고리별상품목록(int categoryId) {
-		return productDao.findByCategory(categoryId);
 	}
 
 	public List<DetailRespDto> 많이본상품() {
@@ -69,6 +78,8 @@ public class ProductService {
 	public int 상품수정(SaveReqDto dto) throws IOException {
 		return productDao.update(dto);
 	}
+
+
 
 
 

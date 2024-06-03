@@ -37,7 +37,7 @@
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
 	
 		<!-- 로고 -->
-		<a class="navbar-brand" href="<%=request.getContextPath()%>/index.jsp">
+		<a class="navbar-brand" href="<%=request.getContextPath()%>/product?cmd=list&page=0">
 			<img src="images/hoons2.png" alt="Logo" style="width:90px;">
 		</a>
 		<!-- 사이트 좌우간격 줄이면 나오는 세 줄 버튼 -->
@@ -53,7 +53,7 @@
 						<c:if test="${sessionScope.principal.userRole == 'ADMIN'}">
                             <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
                         </c:if>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/index.jsp">상품 목록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list&page=0">상품 목록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list&page=0">커뮤니티</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=basketList&id=${principal.id }" >장바구니</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=list&id=${principal.id }" >주문 내역</a></li>
@@ -86,7 +86,7 @@
 					<ul class="navbar-nav">
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=joinForm">회원가입</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/index.jsp">상품 목록</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list&page=0">상품 목록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list&page=0">커뮤니티</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
 					</ul>
