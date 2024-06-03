@@ -109,8 +109,10 @@ public class ReplyDao {
 				dto.setUserId(rs.getInt("r.userId"));
 				dto.setBoardId(rs.getInt("r.boardId"));
 				dto.setContent(rs.getString("r.content"));
+				dto.setCreateDate(rs.getTimestamp("r.createDate"));
 				dto.setId(rs.getInt("u.id"));
 				dto.setUsername(rs.getString("u.username"));
+				dto.setNickName(rs.getString("u.nickName"));
 				replys.add(dto);
 			}
 			return replys;

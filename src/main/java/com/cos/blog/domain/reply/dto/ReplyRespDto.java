@@ -1,5 +1,7 @@
 package com.cos.blog.domain.reply.dto;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +18,6 @@ public class ReplyRespDto {
 	private String content;			// Reply 테이블 ↑
 	private int id;							// User 테이블 ↓
 	private String username;		
+	private String nickName;
+	private Timestamp createDate;
 }

@@ -144,6 +144,8 @@ public class BoardController extends HttpServlet {
 				request.setAttribute("boards", boards);
 				request.setAttribute("replys", replys);
 				request.setAttribute("replyCount", replyCount);
+				
+				System.out.println("BoardController/detail/replys : " + replys);
 				RequestDispatcher dis = request.getRequestDispatcher("board/detail.jsp");
 				dis.forward(request, response);	
 			}
@@ -225,6 +227,19 @@ public class BoardController extends HttpServlet {
 			//List<Board> boards = boardService.글검색(keyword, page);
 			request.setAttribute("boards", boards);
 			
+			// 댓글 수를 저장할 맵 생성
+		    Map<Integer, Integer> replyCounts = new HashMap<>();
+
+		    // 각 게시글의 댓글 수 계산
+		    for (DetailRespDto board : boards) {
+		        int replyCount = replyService.댓글수(board.getId());
+		        replyCounts.put(board.getId(), replyCount);
+		    }
+
+		    // 댓글 수 맵을 JSP로 전달
+		    request.setAttribute("replyCounts", replyCounts);
+			
+			
 			// 페이지 계산
 			int boardCount = boardService.글개수(keyword);
 			int lastPage = (boardCount -1)/5;
@@ -248,6 +263,18 @@ public class BoardController extends HttpServlet {
             List<DetailRespDto> boards = boardService.카테고리별게시글(page, category);
             request.setAttribute("boards", boards);
 
+			// 댓글 수를 저장할 맵 생성
+		    Map<Integer, Integer> replyCounts = new HashMap<>();
+
+		    // 각 게시글의 댓글 수 계산
+		    for (DetailRespDto board : boards) {
+		        int replyCount = replyService.댓글수(board.getId());
+		        replyCounts.put(board.getId(), replyCount);
+		    }
+
+		    // 댓글 수 맵을 JSP로 전달
+		    request.setAttribute("replyCounts", replyCounts);
+            
         	// 페이지 계산
 			int boardCount = boardService.글개수(category);
 			int lastPage = (boardCount -1)/5;

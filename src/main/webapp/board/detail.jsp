@@ -68,11 +68,14 @@
 							<!-- 댓글 리스트-->
 							<ul id="reply__list" class="media-list">
 								<!-- 댓글 -->
+								<br>
 								<c:forEach var="reply" items="${replys }">
 									<li id="reply-${reply.id }" class="media ">
-										<!-- <img onerror="#" src="/project4/images/user.png" style="height: 45px " alt="" class="img-circle"></img> -->
+										<img onclick="#" src="/project4/images/user.png" style="height: 45px; margin-right: 10px;" alt="회원프로필 이미지" class="img-circle"></img>
 										<div class="media-body">
-											<strong class="text-primary">${reply.username }</strong>
+											<strong class="text-primary">${reply.nickName }</strong>
+											<span style="color:grey; margin-right:5px; margin-left:5px">l</span>
+											<span style="color:grey"><fmt:formatDate pattern="yyyy-MM-dd" value="${reply.createDate}"></fmt:formatDate></span>
 											<p>${reply.content }</p>
 										</div>
 										<div class="m-2">
@@ -81,6 +84,7 @@
 											</c:if>
 										</div>
 									</li>
+								<br>
 								</c:forEach>
 							</ul>
 							<!-- 댓글 리스트 끝-->
