@@ -99,7 +99,7 @@
 						<span class="mtrl-select">모든 상품</span>
 					</c:when>
 					<c:when test="${!empty param.keyword }">
-						<span class="mtrl-select">'<strong>${param.keyword }</strong>' </span>로 검색한 결과
+						<span class="mtrl-select">'<strong>${param.keyword }</strong>' </span>(으)로 검색한 결과
 					</c:when>
 					<c:when test="${!empty param.categoryId }">
 						<span class="mtrl-select">카테고리 > 

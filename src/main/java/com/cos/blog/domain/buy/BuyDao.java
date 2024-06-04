@@ -439,10 +439,69 @@ public class BuyDao {
 		String sql = "DELETE FROM review WHERE id = ?";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, reviewId);
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+
+	public List<OrderReqDto> findByManage() {
+		String sql = "SELECT * FROM buy b INNER JOIN product p ON b.productId = p.id INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<OrderReqDto> orders = new ArrayList<>();
+
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				OrderReqDto dto = OrderReqDto.builder()
+						.id(rs.getInt("b.id"))
+						.userId(rs.getInt("b.userId"))
+						.productId(rs.getInt("b.productId"))
+						.totalPrice(rs.getInt("b.totalPrice"))
+						.totalCount(rs.getInt("b.totalCount"))
+						.state(rs.getInt("b.state"))
+						.orderNum(rs.getString("b.orderNum"))
+						.createDate(rs.getTimestamp("b.createDate"))
+						.nickName(rs.getString("u.nickName"))
+						.email(rs.getString("u.email"))
+						.address(rs.getString("u.address"))
+						.phone(rs.getString("u.phone"))
+						.brand(rs.getString("p.brand"))
+						.img(rs.getString("p.img"))
+						.content(rs.getString("p.content"))
+						.price(rs.getInt("p.price"))
+						.build();
+				orders.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return orders;
+	}
+
+	public int updateState(int id, int state) {
+		String sql = "UPDATE buy SET state =? WHERE id = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, state);
+			pstmt.setInt(2, id);
 			int result = pstmt.executeUpdate();
 			return result;
 		}catch(Exception e) {

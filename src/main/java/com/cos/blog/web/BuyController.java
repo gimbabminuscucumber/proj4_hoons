@@ -135,6 +135,7 @@ public class BuyController extends HttpServlet{
 			}else if(cmd.equals("list")) {
 				int userId = Integer.parseInt(request.getParameter("id"));
 				List<OrderReqDto> orders = buyService.주문내역(userId);
+				System.out.println("BuyController/list/orders : " + orders);
 				request.setAttribute("orders", orders);
 				
 				RequestDispatcher dis = request.getRequestDispatcher("buy/list.jsp");
@@ -240,7 +241,31 @@ public class BuyController extends HttpServlet{
 				String jsonData = gson.toJson(commonDto);
 				Script.responseData(response, jsonData);
 				
+			// ====================================================	
+			// 									주문 관리 (관리자 전용)
+			// ====================================================
+			}else if(cmd.equals("manage")) {
+				List<OrderReqDto> orders = buyService.주문관리();
 				
+				request.setAttribute("orders", orders);
+				RequestDispatcher dis = request.getRequestDispatcher("buy/manage.jsp");
+				dis.forward(request, response);
+			
+			// ====================================================	
+			// 									처리 현황 (관리자 전용)
+			// ====================================================
+			}else if(cmd.equals("stateChange")) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				int state = Integer.parseInt(request.getParameter("state"));
+
+				int result = buyService.주문처리(id, state);
+				System.out.println("BuyController/result : " + result);
+				
+				if(result ==1 ) {
+					response.sendRedirect("/project4/buy?cmd=manage");
+				}else {
+					Script.back(response, "처리 현황 수정에 실패했습니다.");
+				}
 			}
 
 	}

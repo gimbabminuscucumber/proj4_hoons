@@ -8,8 +8,8 @@
 <br>
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
-		<img src="images/icons/bag.png" alt="Logo" style="width: 50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">주문내역 조회</div>
+		<img src="images/icons/trophy.png" alt="Logo" style="width: 50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">주문 관리</div>
 	</div>
 </h1>
 <br>
@@ -23,11 +23,10 @@
 			<c:choose>
 				<c:when test=""></c:when>
 			</c:choose>
-			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">입금/결제</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">배송중</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">배송완료</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu3">교환</a></li>
-			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu4">환불</a></li>
+			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">주문 내역</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">배송</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu2">교환</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu3">환불</a></li>
 		</ul>
 		
 		<!-- 날짜 선택란 -->
@@ -51,7 +50,7 @@
 					<th style="width: 170px">주문 번호</th>
 					<th style="width: 170px">주문 금액(수량)</th>
 					<th style="width: 150px">주문 상태</th>
-					<th style="width: 150px">주문 관리</th>
+					<th style="width: 150px">처리 현황</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -89,7 +88,7 @@
 							<span style="display: inline-block;">
 								<c:if test="${order.state == 0 }">주문 완료</c:if>
 								<c:if test="${order.state == 1 }">배송중</c:if>
-								<c:if test="${order.state == 2}">배송 완료</c:if>
+								<c:if test="${order.state == 2 }">배송 완료</c:if>
 								
 								<c:if test="${order.state == 3 }">교환 신청</c:if>
 								<c:if test="${order.state == 4 }">교환 완료</c:if>
@@ -101,29 +100,50 @@
 							</span>
 						</td>
 						<td>
-							<span style="display: inline-block; ">
+							<span style="display: inline-block">
+
 								<c:choose>
-									<c:when test="${order.status != 1 }">
-										<button type="button" class="btn btn-outline-info btn-sm">교환</button>
-										<button type="button" class="btn btn-outline-danger btn-sm">환불</button><br>
+									<c:when test="${order.state == 0}">
+										<button type="button" class="btn btn-outline-primary btn-sm" onclick="stateChange(${order.id}, 1)" >배송 전달</button>
 									</c:when>
-									<c:otherwise>
-										<button type="button" class="btn btn-outline-info btn-sm" disabled>교환</button>
-										<button type="button" class="btn btn-outline-danger btn-sm" disabled>환불</button><br>
-									</c:otherwise>
+									<c:when test="${order.state == 1}">
+										<button type="button" class="btn btn-outline-primary btn-sm" onclick="stateChange(${order.id}, 2)" >배송 완료</button>
+									</c:when>
+									<c:when test="${order.state == 2}">
+										<button type="button" class="btn btn-secondary btn-sm" disabled>배송 완료</button>
+									</c:when>
 								</c:choose>
-								<!-- 리뷰 작성 -->
+
 								<c:choose>
-									<c:when test="${order.status == 1}">
-										<button type="button" style="margin-top:5px" class="btn btn-secondary btn-sm" disabled>작성 완료</button>
+									<c:when test="${order.state == 3}">
+										<button type="button" class="btn btn-outline-info btn-sm" onclick="stateChange(${order.id}, 4)" >교환 승인</button>
+										<button type="button" class="btn btn-outline-danger btn-sm" onclick="stateChange(${order.id}, 5)" >교환 불가</button>
 									</c:when>
-									<c:otherwise>
-										<button type="button" style="margin-top:5px" class="btn btn-outline-primary btn-sm" onclick="review(${order.id})">리뷰 작성</button>
-									</c:otherwise>
+									<c:when test="${order.state == 4}">
+										<button type="button" class="btn btn-secondary btn-sm" disabled>교환 승인</button>
+									</c:when>
+									<c:when test="${order.state == 5}">
+										<button type="button" class="btn btn-secondary btn-sm" disabled>교환 불가</button>
+									</c:when>
 								</c:choose>
-							</span>	
+
+								<c:choose>
+									<c:when test="${order.state == 6}">
+										<button type="button" class="btn btn-outline-info btn-sm" onclick="stateChange(${order.id}, 7)" >환불 승인</button>
+										<button type="button" class="btn btn-outline-danger btn-sm" onclick="stateChange(${order.id}, 8)" >환불 불가</button>
+									</c:when>
+									<c:when test="${order.state == 7}">
+										<button type="button" class="btn btn-secondary btn-sm" disabled>환불 승인</button>
+									</c:when>
+									<c:when test="${order.state == 8}">
+										<button type="button" class="btn btn-secondary btn-sm" disabled>환불 불가</button>
+									</c:when>
+								</c:choose>
+
+							</span>
 						</td>
 					</tr>
+					
 					<!-- 각 주문 항목 아래에 선 추가 -->
 					<c:if test="${loop.last || !loop.last}">
 						<tr>
@@ -145,11 +165,11 @@
 </div>
 
 <script>
-	function review(id){
-		console.log('리뷰작성 버튼 클릭');
-		console.log('buy테이블의 id : ' + id);
+	function stateChange(id, state){
+		console.log('주문 관리 버튼 클릭');
+		console.log('id : ' + id + "   state : " + state);
 		
-		location.href="/project4/buy?cmd=reviewForm&id=" + id;
+		location.href="/project4/buy?cmd=stateChange&id=" + id + "&state=" + state;
 		
 	}
 </script>

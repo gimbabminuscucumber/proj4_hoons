@@ -88,6 +88,14 @@ public class BuyService {
 		return buyDao.reviewDelete(reviewId);
 	}
 
+	public List<OrderReqDto> 주문관리() {
+		return buyDao.findByManage();
+	}
+
+	public int 주문처리(int id, int state) {
+		return buyDao.updateState(id, state);
+	}
+
 
 
 	
