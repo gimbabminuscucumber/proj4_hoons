@@ -107,6 +107,10 @@
 										<button type="button" class="btn btn-outline-info btn-sm">교환</button>
 										<button type="button" class="btn btn-outline-danger btn-sm">환불</button><br>
 									</c:when>
+									<c:when test="${order.state == 5 || order.state == 8 }">
+										<button type="button" class="btn btn-outline-info btn-sm" disabled>교환</button>
+										<button type="button" class="btn btn-outline-danger btn-sm" disabled>환불</button><br>
+									</c:when>
 									<c:otherwise>
 										<button type="button" class="btn btn-outline-info btn-sm" disabled>교환</button>
 										<button type="button" class="btn btn-outline-danger btn-sm" disabled>환불</button><br>
@@ -116,6 +120,9 @@
 								<c:choose>
 									<c:when test="${order.status == 1}">
 										<button type="button" style="margin-top:5px" class="btn btn-secondary btn-sm" disabled>작성 완료</button>
+									</c:when>
+									<c:when test="${order.state == 0 || order.state == 1}">
+										<button type="button" style="margin-top:5px" class="btn btn-outline-primary btn-sm" disabled>리뷰 작성</button>
 									</c:when>
 									<c:otherwise>
 										<button type="button" style="margin-top:5px" class="btn btn-outline-primary btn-sm" onclick="review(${order.id})">리뷰 작성</button>

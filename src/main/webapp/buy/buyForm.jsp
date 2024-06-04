@@ -18,10 +18,12 @@
     <form action="/project4/buy?cmd=buy" method="post" id="buyProduct">
     	<input type="hidden" id="userId" value="${sessionScope.principal.id }">
     	<input type="hidden" id="address" value="${sessionScope.principal.address }">
+    	
         <div class="form-group">
             <!-- 유저 정보 -->
             <p style="text-align:left"><strong>배송지 정보</strong></p>
 			<hr style="border-color:black">
+			
 			<c:forEach var="order" items="${orders}" varStatus="loop">
 				<input type="hidden" id="productId" value="${order.productId }">
 				<input type="hidden" id="totalPrice" value="${order.totalPrice }">
@@ -45,6 +47,7 @@
 			            </div>
 			        </div>
 			        <hr style="border-color: lightgrey;">
+			    
 			        <div class="d-flex">
 			            <div style="width:150px; font-size:13px; text-align:left">배송지</div>
 			            <div style="font-size:13px; text-align:left">${order.address}</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -52,6 +55,7 @@
 			        </div>
 			        <hr style="border-color: lightgrey; margin-top: 10px">
 			    </c:if>
+			    
 			</c:forEach>
 		<div>
 			<li style="color:grey; font-size:12px; text-align:left">결제 전 배송지 주소를 한 번 더 확인해주세요.</li>
@@ -167,21 +171,18 @@
             data.push(product);
         </c:forEach>
 		
-        console.log('JSON.stringify(data) : ' + JSON.stringify(data));
-        console.log('userId : ' + userId);
-        console.log('data.productId : ' + data.productId);
-        console.log('product.productId : ' + product.productId);
-        console.log('productId : ' + productId);
-	    
-        
 		$.ajax({
 		    type: "post",
 		    url: "/project4/buy?cmd=buy",
 		    data: JSON.stringify(data),
 		    contentType: "application/json",
 		    success: function(resp){
+		    	var orderNum = resp.data;	 
+		    	var buyId = resp.statusCode;		 
+		    	console.log('orderNum : ' + orderNum);
+		    	console.log('buyId : ' + buyId);
 		        alert("구매를 완료했습니다.")
-		        window.location.href = "/project4/buy?cmd=order&userId="+userId + "&productId=" + product.productId;
+		        window.location.href = "/project4/buy?cmd=order&orderNum="+orderNum;
 		    },error: function(error){
 		        alert("구매에 실패했습니다.")
 		    }

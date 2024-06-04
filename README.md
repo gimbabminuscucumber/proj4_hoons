@@ -102,6 +102,20 @@ CREATE TABLE basket (
     createDate timestamp
 ) engine=InnoDB default charset=utf8;
 
+CREATE TABLE orderSheet (
+    id int primary key auto_increment,
+    userId int,
+    productId int,
+    totalCount int,
+    totalPrice int,
+    img longtext,
+    brand varchar(100),
+    content longtext,
+    price int,
+    createDate timestamp
+) engine=InnoDB default charset=utf8;
+
+
 CREATE TABLE review(
 	id int primary key auto_increment,
     userId int,

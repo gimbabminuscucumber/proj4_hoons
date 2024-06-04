@@ -6,7 +6,7 @@
 
 <!-- 메인 -->
 <div class="container">
-	<form action="/project4/buy?cmd=buyForm" method="POST" name="buy"  enctype="multipart/form-data">
+	<form action="/project4/buy?cmd=buyForm" method="POST" name="buy" id="buyForm" enctype="multipart/form-data">
 		<input type="hidden" name="userId" id="userId" value="${principal.id}">
 		<input type="hidden" name="nickName" id="nickName" value="${principal.nickName}">
 		<input type="hidden" name="address" id="address" value="${principal.address}">
@@ -61,6 +61,7 @@
 	        </div>
 	    </div>
 	</form>	    
+	
 </div>
 
 <!-- 다른 고객들이 많이 본 상품 -->
@@ -266,14 +267,76 @@
         }
     }
 
+		/*
 	// 구매하기 버튼 클릭 (주문서 작성)
     function purchase() {
-        var form = document.buy;
+		var form = document.buy;
         form.action = "/project4/buy?cmd=buyForm";
         form.method = "POST";
         form.submit();
     } 
+        */
 
+     // 구매하기 버튼 클릭 (주문서 작성)
+        function purchase() {
+            console.log('구매하기 버튼 클릭');
+            var userId = document.getElementById("userId").value;
+            var productId = document.getElementById("productId").value;
+            var img = document.getElementById("img").value;
+            var brand = document.getElementById("brand").value;
+            var quantity = parseInt($("#quantity").val());
+            var price = parseInt(${products.price});
+            var totalPrice = price * quantity;
+            var content = document.getElementById("content").value;
+
+            var data = {
+                userId: userId,
+                productId: productId,
+                img: img,
+                brand: brand,
+                price: price,
+                content: content,
+                totalCount: quantity,
+                totalPrice: totalPrice
+            };
+            
+            $.ajax({
+                type: "post",
+                url: "/project4/buy?cmd=orderSheet",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }).done(function(resp){
+                console.log('오더지 저장 완료');
+                console.log('resp.data.id : ' + resp.data.totalPrice);
+                //console.log('resp.dto : ' + resp.dto);
+                //console.log('resp.statusCode : ' + resp.statusCode);
+                
+			/*
+                if(resp.statusCode == 1){
+                    $.ajax({
+                        type: "post",
+                        url: "/project4/buy?cmd=buyForm2",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json"
+                    }).done(function(data){
+                        if(data.statusCode == 1){
+                            alert('주문서 작성으로 이동합니다.');
+							location.href = "/project4/buy?cmd=buyForm2&id=" + id;		// id = orderSheet id
+                        } else {
+                            alert('주문서 작성 페이지 로딩에 실패했습니다.');
+                        }
+                    });
+                } else {
+                    alert('장바구니 저장에 실패했습니다.');
+                }
+			*/
+			
+            });
+        }
+        
+        
 	// 장바구니에 담기
     function basket() {
 		

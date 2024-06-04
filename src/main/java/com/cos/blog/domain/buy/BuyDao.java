@@ -13,6 +13,7 @@ import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
@@ -35,12 +36,12 @@ public class BuyDao {
 			pstmt.setInt(4, dto.getTotalCount());
 			pstmt.setString(5, dto.getOrderNum());
 			int result = pstmt.executeUpdate();
-
+		
 			// 추가
 			if(result == 1) {
 				rs = pstmt.getGeneratedKeys();		// 생성된 id 값 반환
 				if(rs.next()) {
-					return rs.getInt(1);		// 생성된 id 리턴		// 수정 전
+					return rs.getInt(1);		// 생성된 id 리턴
 				}
 			}
 			return result;
@@ -53,8 +54,8 @@ public class BuyDao {
 	}
 
 	// 주문 완료 (buy, user, product 테이블 조인)
-	public List<OrderReqDto> findByOrder(int userId, int productId) {
-	    String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE u.id =? AND p.id = ?";
+	public List<OrderReqDto> findByOrder(String orderNum) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.orderNum =?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
@@ -63,8 +64,7 @@ public class BuyDao {
 	    try {
 	        conn = DB.getConnection();
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, userId);
-	        pstmt.setInt(2, productId);
+	        pstmt.setString(1, orderNum);
 	        rs = pstmt.executeQuery();
 
 	        while (rs.next()) {
@@ -282,8 +282,8 @@ public class BuyDao {
 	}
 
 	// 주문서 작성
-	public OrderReqDto buyForm(int productId, int userId) {
-		String sql = "SELECT * FROM basket b INNER JOIN user u ON b.userId = u.id WHERE b.productId = ? AND u.id = ?";
+	public OrderReqDto buyForm(int basketId, int userId) {
+		String sql = "SELECT * FROM basket b INNER JOIN user u ON b.userId = u.id WHERE b.id = ? AND u.id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
@@ -292,12 +292,13 @@ public class BuyDao {
 	    try {
 	        conn = DB.getConnection();
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, productId);
+	        pstmt.setInt(1, basketId);
 	        pstmt.setInt(2, userId);
 	        rs = pstmt.executeQuery();
 	
 	        if (rs.next()) {
 	        	dto = OrderReqDto.builder()
+	        		.id(rs.getInt("id"))
 	                .productId(rs.getInt("productId"))
 	                .userId(rs.getInt("userId"))
 	                .totalCount(rs.getInt("totalCount"))
@@ -320,10 +321,9 @@ public class BuyDao {
 	    return dto;
 	}
 
-	
 	// 장바구니를 통해 구매한 상품은 구매완료 후, 장바구니에서 상품 목록 삭제하기
-	public int basketDelete(int userId, int productId) {
-	    String sql = "DELETE FROM basket WHERE userId = ? AND productId = ?";
+	public int basketDelete(int userId, int basketId) {
+	    String sql = "DELETE FROM basket WHERE userId = ? AND id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 
@@ -331,7 +331,7 @@ public class BuyDao {
 	        conn = DB.getConnection();
 	        pstmt = conn.prepareStatement(sql);
 	        pstmt.setInt(1, userId);
-	        pstmt.setInt(2, productId);
+	        pstmt.setInt(2, basketId);
 	        int result = pstmt.executeUpdate();
 	        return result;
 	    } catch (Exception e) {
@@ -453,6 +453,7 @@ public class BuyDao {
 		return -1;
 	}
 
+	// 주문 관리 (관리자 전용)
 	public List<OrderReqDto> findByManage() {
 		String sql = "SELECT * FROM buy b INNER JOIN product p ON b.productId = p.id INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC";
 		Connection conn = DB.getConnection();
@@ -493,6 +494,7 @@ public class BuyDao {
 		return orders;
 	}
 
+	// 주문 관리의 '처리 현황' (관리자 전용)
 	public int updateState(int id, int state) {
 		String sql = "UPDATE buy SET state =? WHERE id = ?";
 		Connection conn = DB.getConnection();
@@ -510,6 +512,33 @@ public class BuyDao {
 			DB.close(conn, pstmt);
 		}
 		return -1;
+	}
+	
+	// 오더지 담기
+	public int orderSheet(OrderSheetReqDto dto) {
+		String sql = "INSERT INTO orderSheet(userId, productId, totalCount, totalPrice, img, brand, content, price, createDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, now())";
+	    Connection conn = DB.getConnection();
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, dto.getUserId());
+	        pstmt.setInt(2, dto.getProductId());
+	        pstmt.setInt(3, dto.getTotalCount());
+	        pstmt.setInt(4, dto.getTotalPrice());
+	        pstmt.setString(5, dto.getImg());
+	        pstmt.setString(6, dto.getBrand());
+	        pstmt.setString(7, dto.getContent());
+	        pstmt.setInt(8, dto.getPrice());
+	        int result = pstmt.executeUpdate();
+	        System.out.println("BuyDao/orderSheet/pstmt : " + pstmt);
+	        return result;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt);
+	    }
+	    return -1;
 	}
 
 

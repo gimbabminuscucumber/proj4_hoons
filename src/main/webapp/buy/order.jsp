@@ -44,12 +44,12 @@
 	            </div>
 	        </div>
 	        <br>
-	        <div class="d-flex">
-	        	<button type="button"  class="btn btn-danger" style="width: 50%">주문 취소</button> &nbsp;
-	        	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=list&id=${order.userId}'">주문 내역 바로가기</button>
-	        </div>
 		</div>
 	</c:forEach>
+    <div class="d-flex">
+    	<button type="button"  class="btn btn-danger" style="width: 50%">주문 취소</button> &nbsp;
+    	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=list&id=${userId}'">주문 내역 바로가기</button>
+    </div>
 </div>
 
 <%@ include file = "../layout/footer.jsp" %>

@@ -160,8 +160,6 @@ public class ProductController extends HttpServlet{
 				int productCount = productService.상품개수();
 				int lastPage = (productCount -1)/16;
 				request.setAttribute("lastPage", lastPage);
-				System.out.println("ProductController/list/등록된 상품 총 개수 : " + productCount);
-				System.out.println("ProductController/list/마지막 페이지(0부터) : " + lastPage);
 
 				RequestDispatcher dis = request.getRequestDispatcher("product/list.jsp");
 				dis.forward(request, response);	

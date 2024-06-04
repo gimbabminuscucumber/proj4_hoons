@@ -8,6 +8,7 @@ import com.cos.blog.domain.buy.BuyDao;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
+import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 
@@ -20,7 +21,6 @@ public class BuyService {
 	}
 	
 	public int 상품구매(BuyReqDto dto) {
-		System.out.println("BuyService/상품구매");
 		return buyDao.buy(dto);						// MyBatis 또는 직접 작성한 SQL 쿼리를 사용하여 데이터를 관리 / 데이터베이스와 직접 상호작용
 		//return buyRepository.save(dto);		// JPA/Hibernate를 사용하여 ORM 방식으로 데이터를 관리 / 객체와 관계형 데이터베이스 간의 매핑을 자동으로 처리
 	}
@@ -33,10 +33,10 @@ public class BuyService {
 		return dateNum + randomNum;
 	}
 
-	public List<OrderReqDto> 주문완료(int userId, int productId) {
-		return buyDao.findByOrder(userId, productId);
+	public List<OrderReqDto> 주문완료(String orderNum) {
+		return buyDao.findByOrder(orderNum);
 	}
-    
+	
 	public List<OrderReqDto> 주문내역(int userId) {
 		return buyDao.findByOrderList(userId);
 	}
@@ -58,17 +58,22 @@ public class BuyService {
 		return buyDao.basketList(userId);
 	}
 
+	public int 오더지담기(OrderSheetReqDto dto) {
+		int result = buyDao.orderSheet(dto);
+		return result;
+	}
+
 	public List<OrderReqDto> 주문서작성(int[] checkedItems, int userId) {
 	    List<OrderReqDto> orders = new ArrayList<>();
-	    for (int productId : checkedItems) {
-	        OrderReqDto dto = buyDao.buyForm(productId, userId);
+	    for (int basketId : checkedItems) {
+	        OrderReqDto dto = buyDao.buyForm(basketId, userId);
 	        orders.add(dto);
 	    }
 	    return orders;
 	}
-
-	public int 장바구니삭제(int userId, int productId) {
-	    return buyDao.basketDelete(userId, productId);
+	
+	public int 장바구니삭제(int userId, int basketId) {
+	    return buyDao.basketDelete(userId, basketId);
 	}
 
 	public OrderReqDto 리뷰상품(int id) {
@@ -95,6 +100,7 @@ public class BuyService {
 	public int 주문처리(int id, int state) {
 		return buyDao.updateState(id, state);
 	}
+
 
 
 

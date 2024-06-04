@@ -35,6 +35,7 @@
 				<tbody>
 					<c:set var="totalCount" value="0" />
 					<c:forEach var="basket" items="${baskets}" varStatus="loop">
+						<input type="hidden" name="basketId" id="basketId" value="${basket.id }">
 						<c:set var="totalCount" value="${totalCount + 1}" />
 						<c:if test="${loop.first}">
 							<tr>
@@ -47,7 +48,7 @@
 								${loop.index + 1}
 							</td>
 							<td>
-								<input type="checkbox" class="productCheck" name="productCheck" id="productCheck" value="${basket.productId}">
+								<input type="checkbox" class="productCheck" name="productCheck" id="productCheck" value="${basket.productId}"> 
 							</td>
 							<td style="padding-left: 20px; text-align: left;">
 								<div style="display: flex; align-items: center;">
@@ -70,7 +71,6 @@
 							</td>
 							<td>
 								<div class="d-flex justify-content-center">
-									id = ${basket.id }
 									<button type="button"	 class="btn btn-outline-info btn-sm" >변경</button>&nbsp;
 									<button type="button" class="btn btn-outline-danger btn-sm"  onclick="productDelete(${basket.id})">삭제</button>
 								</div>
@@ -145,6 +145,7 @@
                 alert("주문할 상품을 선택하세요.");
             }
         });
+       
     });
     
     function productDelete(basketId){
