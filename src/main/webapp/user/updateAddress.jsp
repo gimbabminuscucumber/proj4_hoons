@@ -26,8 +26,8 @@
     <br>
     <br>
     <div>
-        <button type="button" class="btn btn-primary" onclick="updateAddress()">수정하기</button>
         <button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="updateAddress()">수정하기</button>
     </div>
 </div> 
 
@@ -51,10 +51,10 @@
         var address = document.getElementById("address").value;
 
         // URL 생성
-        var url = "/project4/user?cmd=updateForm&id=" + userId;
+        //var url = "/project4/user?cmd=updateForm&id=" + userId;
 
         // 페이지 이동
-        window.location.href = url;
+        window.location.href = "/project4/user?cmd=updateForm&id=" + userId;
     }
     
     

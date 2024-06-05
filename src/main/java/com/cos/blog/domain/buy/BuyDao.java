@@ -321,6 +321,7 @@ public class BuyDao {
 	    return dto;
 	}
 	
+	// 주문서 작성 2
 	public OrderReqDto buyForm2(int productId, int userId) {
 		String sql = "SELECT * FROM orderSheet o INNER JOIN user u ON o.userId = u.id WHERE o.productId = ? AND u.id = ?";
 	    Connection conn = null;
@@ -362,6 +363,7 @@ public class BuyDao {
 
 	// 장바구니를 통해 구매한 상품은 구매완료 후, 장바구니에서 상품 목록 삭제하기
 	public int basketDelete(int userId, int basketId) {
+		System.out.println("BuyDao/basketDelete 진입");
 	    String sql = "DELETE FROM basket WHERE userId = ? AND id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
@@ -372,6 +374,7 @@ public class BuyDao {
 	        pstmt.setInt(1, userId);
 	        pstmt.setInt(2, basketId);
 	        int result = pstmt.executeUpdate();
+	        System.out.println("BuyDao/basketDelete/result : " + result);
 	        return result;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -588,6 +591,42 @@ public class BuyDao {
 	    return -1;
 	}
 
+	// 장바구니 제품 수량 변경
+	public int basketUpdate(int basketId, int totalCount) {
+		String sql = "UPDATE basket SET totalCount = ?, totalPrice = price * ? WHERE id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DB.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, totalCount);
+            pstmt.setInt(2, totalCount);
+            pstmt.setInt(3, basketId);
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DB.close(conn, pstmt);
+        }
+        return -1;
+	}
+
+	public boolean basketProductDelete(int userId, int basketId) {
+		   String sql = "DELETE FROM basket WHERE userId = ? AND id = ?";
+		    try (
+		        Connection conn = DB.getConnection();
+		        PreparedStatement pstmt = conn.prepareStatement(sql);
+		    ) {
+		        pstmt.setInt(1, userId);
+		        pstmt.setInt(2, basketId);
+		        int result = pstmt.executeUpdate();
+		        return result > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return false;
+		}
 
 
 	

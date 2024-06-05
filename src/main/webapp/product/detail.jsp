@@ -267,48 +267,46 @@
         }
     }
 
-     // 구매하기 버튼 클릭 (주문서 작성)
-        function purchase() {
-            console.log('구매하기 버튼 클릭');
-            var userId = document.getElementById("userId").value;
-            var productId = document.getElementById("productId").value;
-            var img = document.getElementById("img").value;
-            var brand = document.getElementById("brand").value;
-            var quantity = parseInt($("#quantity").val());
-            var price = parseInt(${products.price});
-            var totalPrice = price * quantity;
-            var content = document.getElementById("content").value;
-
-            var data = {
-                userId: userId,
-                productId: productId,
-                img: img,
-                brand: brand,
-                price: price,
-                content: content,
-                totalCount: quantity,
-                totalPrice: totalPrice
-            };
-            
-            $.ajax({
-                type: "post",
-                url: "/project4/buy?cmd=orderSheet",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
-            }).done(function(resp){
-                if(resp.statusCode == 1){
-                    // 생성된 id 값 가져오기
-                    var id = resp.data;
-                    // detail.jsp로 새로운 URL 생성
-                    location.href = "/project4/buy?cmd=buyForm2&userId=" + userId + "&productId=" + productId;
-                } else {
-                    alert('주문서 작성에 실패했습니다.');
-                }
-            });
-
-        }
-        
+	// 구매하기 버튼 클릭 (주문서 작성)
+	function purchase() {
+	    console.log('구매하기 버튼 클릭');
+	    var userId = document.getElementById("userId").value;
+	    var productId = document.getElementById("productId").value;
+	    var img = document.getElementById("img").value;
+	    var brand = document.getElementById("brand").value;
+	    var quantity = parseInt($("#quantity").val());
+	    var price = parseInt(${products.price});
+	    var totalPrice = price * quantity;
+	    var content = document.getElementById("content").value;
+	
+	    var data = {
+	        userId: userId,
+	        productId: productId,
+	        img: img,
+	        brand: brand,
+	        price: price,
+	        content: content,
+	        totalCount: quantity,
+	        totalPrice: totalPrice
+	    };
+	    
+	    $.ajax({
+	        type: "post",
+	        url: "/project4/buy?cmd=orderSheet",
+	        data: JSON.stringify(data),
+	        contentType: "application/json; charset=utf-8",
+	        dataType: "json"
+	    }).done(function(resp){
+	        if(resp.statusCode == 1){
+	            // 생성된 id 값 가져오기
+	            var id = resp.data;
+	            // detail.jsp로 새로운 URL 생성
+	            location.href = "/project4/buy?cmd=buyForm2&userId=" + userId + "&productId=" + productId;
+	        } else {
+	            alert('주문서 작성에 실패했습니다.');
+	        }
+	    });
+	}
         
 	// 장바구니에 담기
     function basket() {

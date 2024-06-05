@@ -21,6 +21,7 @@ import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
+import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.review.Review;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
@@ -136,7 +137,8 @@ public class BuyController extends HttpServlet{
 
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm2.jsp");
 			    dis.forward(request, response);
-		    // ====================================================	
+		   
+			// ====================================================	
 			// 											오더지 담기
 			// ====================================================		
 			}else if(cmd.equals("orderSheet")) {
@@ -172,7 +174,6 @@ public class BuyController extends HttpServlet{
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/order.jsp");
 			    dis.forward(request, response);
 			    
-				
 			// ====================================================	
 			// 												주문 내역
 			// ====================================================	
@@ -247,7 +248,6 @@ public class BuyController extends HttpServlet{
 				RequestDispatcher dis = request.getRequestDispatcher("buy/reviewForm.jsp");
 				dis.forward(request, response);
 					
-				
 			// ====================================================	
 			// 												리뷰 저장
 			// ====================================================		
@@ -309,7 +309,70 @@ public class BuyController extends HttpServlet{
 				}else {
 					Script.back(response, "처리 현황 수정에 실패했습니다.");
 				}
-			}
+				
+			// ====================================================	
+			// 										장바구니 상품 삭제
+			// ====================================================
+			}else if(cmd.equals("productDelete")) {
+				int basketId = Integer.parseInt(request.getParameter("basketId"));
+				int userId = Integer.parseInt(request.getParameter("userId"));
+				System.out.println("BuyController/productDelete/basketId : " + basketId + " & userId : " + userId);
+				int result = buyService.장바구니삭제(userId, basketId);
+				System.out.println("BuyController/productDelete/result : " + result);
+				
+				CommonRespDto<Integer> commonDto = new CommonRespDto<>();
+				commonDto.setStatusCode(result);
+				
+				String jsonData = gson.toJson(commonDto);
+				System.out.println("BuyController/productDelete/jsonData : " + jsonData);
+				Script.responseData(response, jsonData);
+				
+			// ====================================================	
+			// 										장바구니 상품 변경
+			// ====================================================
+			}else if(cmd.equals("basketUpdate")) {
+				int basketId = Integer.parseInt(request.getParameter("basketId"));
+	            int totalCount = Integer.parseInt(request.getParameter("totalCount"));
+	            System.out.println("BuyController/basketUpdate/basketId : " + basketId + " & totalCount : " + totalCount);
+	            
+	            int result = buyService.장바구니수정(basketId, totalCount);
 
+	            CommonRespDto<String> commonRespDto = new CommonRespDto<>();
+	            commonRespDto.setStatusCode(result == 1 ? 1 : -1);
+	            String respData = new Gson().toJson(commonRespDto);
+	            response.setContentType("application/json");
+	            response.setCharacterEncoding("UTF-8");
+	            response.getWriter().write(respData);
+				
+			// ====================================================	
+			// 									장바구니 상품 선택 삭제
+			// ====================================================
+			}else if(cmd.equals("basketProductDelete")) {
+				String[] basketIds = request.getParameterValues("basketIds");
+			    int[] ids = Arrays.stream(basketIds).mapToInt(Integer::parseInt).toArray();
+			    int userId = user.getId();
+			    boolean success = true;
+			    for (int id : ids) {
+			        boolean deleted = buyService.장바구니선택삭제(userId, id);
+			        if (!deleted) {
+			            success = false;
+			            break;
+			        }
+			    }
+
+			    // JSON 형식으로 응답을 보내기 위해 content type 설정
+			    response.setContentType("application/json");
+			    response.setCharacterEncoding("UTF-8");
+			    PrintWriter out = response.getWriter();
+
+			    // 삭제 성공 여부에 따라 JSON 응답 작성
+			    if (success) {
+			        out.print("{\"success\": true}");
+			    } else {
+			        out.print("{\"success\": false}");
+			    }
+			    out.flush();
+			}
+			
 	}
 }

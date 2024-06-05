@@ -70,7 +70,7 @@
 							</td>
 							<td>
 								<div class="d-flex justify-content-center">
-									<button type="button"	 class="btn btn-outline-info btn-sm" >변경</button>&nbsp;
+									<button type="button"	 class="btn btn-outline-info btn-sm"  onclick="productUpdate(${basket.id}, ${basket.totalCount})">변경</button>&nbsp;
 									<button type="button" class="btn btn-outline-danger btn-sm"  onclick="productDelete(${basket.id})">삭제</button>
 								</div>
 							</td>
@@ -96,7 +96,7 @@
 		
 		<c:if test="${!empty baskets}">
 			<div class="form-group">
-				<button type="button"	 class="btn btn-outline-danger btn-sm d-flex justify-content-start">선택삭제</button>
+				<button type="button"	 class="btn btn-outline-danger btn-sm d-flex justify-content-start" onclick="deleteSelected()">선택삭제</button>
 			</div>
 		</c:if>
 		
@@ -107,7 +107,6 @@
 		<br>
 	
 		<br>
-		
 		<c:if test="${empty baskets}">
 			<div class="form-group container"><button type="button" class="btn btn-primary btn-lg" id="buy" style="width:200px" disabled>주문하기</button></div>
 		</c:if>
@@ -154,18 +153,64 @@
 	    
 	}
 
-       
-       
+     // 장바구니 상품 삭제
     function productDelete(basketId){
-    	console.log('삭제 버튼 클릭/id : ' + basketId);
+    	var userId = ${sessionScope.principal.id}
+    	console.log('삭제 버튼 클릭/basketId : ' + basketId  );
+    	console.log('삭제 버튼 클릭/userId : ' + userId  );
     	
-    	$.ajax().done(function(data){
+    	$.ajax({
+    		type: "post",
+    		url: "/project4/buy?cmd=productDelete&basketId="+basketId + "&userId="+ userId,
+    		dataType: "json"		// json으로 보내야지 done() 으로 받을 때도, json 으로 받을 수 있다.
+    	}).done(function(data){
+    		console.log('data : ' + data);
     		if(data.statusCode == 1){
-    			console.log('장바구니 상품 삭제');
     			alert("상품을 삭제했습니다.");
+    			location.reload();
+    		}else{
+    			alert('상품 삭제에 실패했습니다.');
     		}
     	})
     }
+    
+	// 장바구니 상품 변경
+    function productUpdate(basketId, totalCount){
+        console.log('변경 버튼 클릭/id : ' + basketId);
+        var pop = window.open("/project4/buy/basketForm.jsp?basketId="+basketId + "&totalCount="+encodeURIComponent(totalCount),"pop","width=280,height=270, scrollbars=yes, resizable=yes");
+    
+    }
+	
+    // 선택 삭제 버튼 클릭 이벤트 리스너 함수
+    function deleteSelected() {
+        let checkboxes = document.querySelectorAll(".productCheck:checked");
+        if (checkboxes.length > 0) {
+            let formData = new FormData();
+            checkboxes.forEach(function(checkbox) {
+                formData.append("basketIds", checkbox.value);
+            });
+
+            fetch("/project4/buy?cmd=basketProductDelete", {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("선택한 상품 삭제를 완료했습니다.");
+                        location.reload(); // 페이지 새로 고침
+                    } else {
+                        alert("삭제 중 오류가 발생했습니다.");
+                    }
+                }).catch(error => {
+                console.error("Error:", error);
+                alert("삭제 중 오류가 발생했습니다.");
+            });
+        } else {
+            alert("삭제할 상품을 선택하세요.");
+        }
+    }
+	
+	
 </script>
 
 <style>

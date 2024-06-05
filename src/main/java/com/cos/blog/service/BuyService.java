@@ -105,6 +105,16 @@ public class BuyService {
 		return buyDao.updateState(id, state);
 	}
 
+	public int 장바구니수정(int basketId, int totalCount) {
+		return buyDao.basketUpdate(basketId, totalCount);
+	}
+
+	public boolean 장바구니선택삭제(int userId, int basketId) {
+		return buyDao.basketProductDelete(userId, basketId);
+	}
+
+
+
 
 
 

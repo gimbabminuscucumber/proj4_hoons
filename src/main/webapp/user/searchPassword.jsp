@@ -35,8 +35,8 @@
 	
 		<br>
 	
-		<button type="button" class="btn btn-primary" onclick="passwordCheck()">비밀번호 찾기</button>
 		<button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
+		<button type="button" class="btn btn-primary" onclick="passwordCheck()">비밀번호 찾기</button>
 </div>	
 <script>
 

@@ -157,7 +157,6 @@
 		console.log('buy테이블의 id : ' + id);
 		
 		location.href="/project4/buy?cmd=reviewForm&id=" + id;
-		
 	}
 </script>
 

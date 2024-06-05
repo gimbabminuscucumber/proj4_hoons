@@ -30,8 +30,8 @@
 	
 		<br>
 		<div>
-			<button type="button" class="btn btn-primary" onclick="userCheck(${email})">아이디 찾기</button>
 			<button type="button" class="btn btn-danger" onclick="window.close()">닫기</button>
+			<button type="button" class="btn btn-primary" onclick="userCheck(${email})">아이디 찾기</button>
 		</div>
 </div>	
 <script>
