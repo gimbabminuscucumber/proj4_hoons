@@ -103,8 +103,11 @@ public class BuyController extends HttpServlet{
 			// ====================================================		
 			}else if(cmd.equals("buyForm")) {
 			    String[] basketIds = request.getParameterValues("basketId");
-			    int[] checkedItems = Arrays.stream(basketIds).mapToInt(Integer::parseInt).toArray();
-
+			    int[] checkedItems = Arrays.stream(basketIds).mapToInt(Integer::parseInt).toArray();		
+			    	// Arrays.stream(basketIds) : 가져온 문자열 배열을 스트림으로 변환
+					// mapToInt(Integer::parseInt) : 각 문자열을 정수로 변환하여 IntStream을 생성
+			    	// toArray() : IntStream의 요소들을 배열로 변환
+			    System.out.println("checkedItems" + Arrays.toString(basketIds));
 			    int userId = user.getId();
 			    
 			    List<OrderReqDto> orders = buyService.주문서작성(checkedItems, userId);
@@ -122,38 +125,37 @@ public class BuyController extends HttpServlet{
 		    // 											주문서 작성2
 		    // ====================================================		
 			}else if(cmd.equals("buyForm2")) {
-				System.out.println("BuyController/buyForm2 진입");
-				BufferedReader br = request.getReader();
-		        StringBuilder reqData = new StringBuilder();
-		        String line;
-		       
-		        while ((line = br.readLine()) != null) {
-		            reqData.append(line);
-		        }
+			    System.out.println("BuyController/buyForm2 진입");
+			    // 생성된 id 값과 상품 id를 받아옴
+			    int userId = Integer.parseInt(request.getParameter("userId"));
+			    int productId = Integer.parseInt(request.getParameter("productId"));
+			    
+			    OrderReqDto orders = buyService.주문서작성2(productId, userId);
+			    System.out.println("orders : " + orders);
+			    request.setAttribute("orders", orders);
 
-//		        Gson gson = new Gson();
-		        OrderSheetReqDto dto = gson.fromJson(reqData.toString(), OrderSheetReqDto.class);
-		        System.out.println("BuyController/buyForm/dto : " + dto);
-	
+			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm2.jsp");
+			    dis.forward(request, response);
 		    // ====================================================	
 			// 											오더지 담기
 			// ====================================================		
 			}else if(cmd.equals("orderSheet")) {
 				BufferedReader br = request.getReader();
-				String reqData = br.readLine();
-				
-				//Gson gson = new Gson();
-				OrderSheetReqDto dto = gson.fromJson(reqData, OrderSheetReqDto.class);
-				int result = buyService.오더지담기(dto);
-				CommonRespDto<String> commonRespDto = new CommonRespDto<>()	;
-				if(result == 1) {
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("ok");
-				}else {
-					commonRespDto.setStatusCode(result);
-					commonRespDto.setData("fail");
-				}
+			    String reqData = br.readLine();
 			    
+			    //Gson gson = new Gson();
+			    OrderSheetReqDto dto = gson.fromJson(reqData, OrderSheetReqDto.class);
+			    int id = buyService.오더지담기(dto); // 생성된 id 값을 받아옴
+			    CommonRespDto<Integer> commonRespDto = new CommonRespDto<>();
+			    if(id != -1) {
+			        commonRespDto.setStatusCode(1);
+			        commonRespDto.setData(id); // 생성된 id 값을 설정하여 응답
+			    } else {
+			        commonRespDto.setStatusCode(-1);
+			        commonRespDto.setData(-1);
+			    }
+			    response.getWriter().write(gson.toJson(commonRespDto));
+				
 	        // ====================================================	
 			// 											주문 완료 페이지
 			//					- 주문한 제품만 보여지게 하기(이전에 구매한 제품은 안보이게 > createDate나 by id이용하면 될거같긴한데...)

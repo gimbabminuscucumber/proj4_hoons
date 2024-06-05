@@ -72,6 +72,10 @@ public class BuyService {
 	    return orders;
 	}
 	
+	public OrderReqDto 주문서작성2(int productId, int userId) {
+		return buyDao.buyForm2(productId, userId);
+	}
+	
 	public int 장바구니삭제(int userId, int basketId) {
 	    return buyDao.basketDelete(userId, basketId);
 	}
@@ -100,6 +104,8 @@ public class BuyService {
 	public int 주문처리(int id, int state) {
 		return buyDao.updateState(id, state);
 	}
+
+
 
 
 

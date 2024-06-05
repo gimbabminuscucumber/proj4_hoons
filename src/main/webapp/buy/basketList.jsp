@@ -23,7 +23,7 @@
 				<thead>
 					<tr>
 						<th style="width: 100px">전체 <span id="totalItems"></span>개</th>
-						<th style="width: 100px"><input type="checkbox" id="selectAll"></th>
+						<th style="width: 100px"><input type="checkbox" id="selectAll" onclick="checkAll()"></th>
 						<th style="width: 450px">상품정보</th>
 						<th style="width: 200px">판매가</th>
 						<th style="width: 200px">수량</th>
@@ -35,11 +35,10 @@
 				<tbody>
 					<c:set var="totalCount" value="0" />
 					<c:forEach var="basket" items="${baskets}" varStatus="loop">
-						<input type="hidden" name="basketId" id="basketId" value="${basket.id }">
 						<c:set var="totalCount" value="${totalCount + 1}" />
 						<c:if test="${loop.first}">
 							<tr>
-								<td colspan="7" style="padding-top: 10px;"></td>
+								<td colspan="7" style="padding-top: 16px;"></td>
 							</tr>
 						</c:if>
 	
@@ -48,7 +47,7 @@
 								${loop.index + 1}
 							</td>
 							<td>
-								<input type="checkbox" class="productCheck" name="productCheck" id="productCheck" value="${basket.productId}"> 
+								<input type="checkbox" class="productCheck" name="productCheck" id="productCheck_${basket.id}" value="${basket.id}"> 
 							</td>
 							<td style="padding-left: 20px; text-align: left;">
 								<div style="display: flex; align-items: center;">
@@ -95,9 +94,11 @@
 			</table>
 		</div>
 		
-		<div class="form-group">
-			<button type="button"	 class="btn btn-outline-danger btn-sm d-flex justify-content-start">선택삭제</button>
-		</div>
+		<c:if test="${!empty baskets}">
+			<div class="form-group">
+				<button type="button"	 class="btn btn-outline-danger btn-sm d-flex justify-content-start">선택삭제</button>
+			</div>
+		</c:if>
 		
 		<div class="container" style="text-align: left; color:grey; font-size:12px">
 			<li>주문완료 후 출고 전 배송지 변경은 동일 권역(일반, 제주, 제주 외 도서산간 지역) 내에서만 가능합니다.</li>
@@ -106,48 +107,55 @@
 		<br>
 	
 		<br>
-		<div class="form-group container">
-			<button type="button"	 class="btn btn-primary btn-lg" id="buy" style="width:200px" >주문하기</button>
-		</div>
-	
+		
+		<c:if test="${empty baskets}">
+			<div class="form-group container"><button type="button" class="btn btn-primary btn-lg" id="buy" style="width:200px" disabled>주문하기</button></div>
+		</c:if>
+		<c:if test="${!empty baskets}">
+			<div class="form-group container"><button type="button" onclick="buyClick()" class="btn btn-primary btn-lg" id="buy" style="width:200px" >주문하기</button></div>
+		</c:if>
 	</form>	
 	
 </div>
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-	    // 1. 첫 번째 <th>에 총 항목 개수 표시
-	    document.getElementById("totalItems").textContent = "${totalCount}";
-	    
-	    // 2. checkbox 모두 체크하기
-        document.getElementById("selectAll").addEventListener("change", function() {
-            let checkboxes = document.querySelectorAll(".productCheck");
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = document.getElementById("selectAll").checked;
-            });
-        });
 
-	    // 3. checkbox에 check된 상품 '주문서 작성' 페이지로 데이터 넘기기 
-        document.getElementById("buy").addEventListener("click", function() {
-            let form = document.getElementById("buyForm");
-            let checkboxes = document.querySelectorAll(".productCheck:checked");
-            if (checkboxes.length > 0) {
-                checkboxes.forEach(function(checkbox) {
-                    let hiddenInput = document.createElement("input");
-                    hiddenInput.type = "hidden";
-                    hiddenInput.name = "productId";
-                    hiddenInput.value = checkbox.value;
-                    form.appendChild(hiddenInput);
-                });
-                form.submit();
-            } else {
-                alert("주문할 상품을 선택하세요.");
-            }
-        });
+	document.getElementById("totalItems").textContent = "${totalCount}";
+	
+	// selectAll 체크박스 이벤트 리스너 함수
+	function checkAll() {
+	    let checkboxes = document.querySelectorAll(".productCheck");
+	    checkboxes.forEach(function(checkbox) {
+	        checkbox.checked = document.getElementById("selectAll").checked;
+	    });
+	}
+	
+	// 주문 버튼 클릭 이벤트 리스너 함수
+	function buyClick() {
+		console.log('구매버튼 클릭');
+		
+	    let form = document.getElementById("buyForm");
+	    let checkboxes = document.querySelectorAll(".productCheck:checked");
+	    if (checkboxes.length > 0) {
+	        checkboxes.forEach(function(checkbox) {
+	            let hiddenInput = document.createElement("input");
+	            hiddenInput.type = "hidden";
+	            hiddenInput.name = "basketId";
+	            hiddenInput.value = checkbox.value;
+	            form.appendChild(hiddenInput);
+		        //console.log('hidden input value: ' + hiddenInput.value);	// form에 담긴 값을 확인
+	        });
+	        //console.log('form : ' + form);
+	        form.submit();
+	    } else {
+	        alert("주문할 상품을 선택하세요.");
+	    }
+	    
+	}
+
        
-    });
-    
+       
     function productDelete(basketId){
     	console.log('삭제 버튼 클릭/id : ' + basketId);
     	

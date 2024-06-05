@@ -320,6 +320,45 @@ public class BuyDao {
 	    }
 	    return dto;
 	}
+	
+	public OrderReqDto buyForm2(int productId, int userId) {
+		String sql = "SELECT * FROM orderSheet o INNER JOIN user u ON o.userId = u.id WHERE o.productId = ? AND u.id = ?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    OrderReqDto dto = null;
+	
+	    try {
+	        conn = DB.getConnection();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, productId);
+	        pstmt.setInt(2, userId);
+	        rs = pstmt.executeQuery();
+	
+	        if (rs.next()) {
+	        	dto = OrderReqDto.builder()
+	        		.id(rs.getInt("id"))
+	                .productId(rs.getInt("productId"))
+	                .userId(rs.getInt("userId"))
+	                .totalCount(rs.getInt("totalCount"))
+	                .totalPrice(rs.getInt("totalPrice"))
+	                .img(rs.getString("img"))
+	                .brand(rs.getString("brand"))
+	                .content(rs.getString("content"))
+	                .nickName(rs.getString("nickName"))
+	                .email(rs.getString("email"))
+	                .address(rs.getString("address"))
+	                .phone(rs.getString("phone"))
+	                .price(rs.getInt("price"))
+	                .build();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt, rs);
+	    }
+	    return dto;
+	}
 
 	// 장바구니를 통해 구매한 상품은 구매완료 후, 장바구니에서 상품 목록 삭제하기
 	public int basketDelete(int userId, int basketId) {
@@ -516,12 +555,13 @@ public class BuyDao {
 	
 	// 오더지 담기
 	public int orderSheet(OrderSheetReqDto dto) {
-		String sql = "INSERT INTO orderSheet(userId, productId, totalCount, totalPrice, img, brand, content, price, createDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, now())";
+	    String sql = "INSERT INTO orderSheet(userId, productId, totalCount, totalPrice, img, brand, content, price, createDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, now())";
 	    Connection conn = DB.getConnection();
 	    PreparedStatement pstmt = null;
+	    ResultSet rs = null; // 생성된 키 값을 가져오기 위한 ResultSet
 
 	    try {
-	        pstmt = conn.prepareStatement(sql);
+	        pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // 생성된 키 값 반환 설정
 	        pstmt.setInt(1, dto.getUserId());
 	        pstmt.setInt(2, dto.getProductId());
 	        pstmt.setInt(3, dto.getTotalCount());
@@ -531,15 +571,23 @@ public class BuyDao {
 	        pstmt.setString(7, dto.getContent());
 	        pstmt.setInt(8, dto.getPrice());
 	        int result = pstmt.executeUpdate();
-	        System.out.println("BuyDao/orderSheet/pstmt : " + pstmt);
+
+	        if (result == 1) {
+	            // 생성된 키 값을 가져옴
+	            rs = pstmt.getGeneratedKeys();
+	            if (rs.next()) {
+	                return rs.getInt(1); // 생성된 id 값을 반환
+	            }
+	        }
 	        return result;
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    } finally {
-	        DB.close(conn, pstmt);
+	        DB.close(conn, pstmt, rs); 
 	    }
 	    return -1;
 	}
+
 
 
 	

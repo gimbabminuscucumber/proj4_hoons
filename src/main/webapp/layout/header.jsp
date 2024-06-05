@@ -54,9 +54,9 @@
                             <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=saveForm">상품 등록</a></li>
                         </c:if>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list&page=0">상품 목록</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list&page=0">커뮤니티</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=basketList&id=${principal.id }" >장바구니</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=list&id=${principal.id }" >주문 내역</a></li>
+						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list&page=0">커뮤니티</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
 					</ul>
@@ -70,9 +70,9 @@
 					        </li>
 					        <div class="dropdown-menu ">
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=updateForm&id=${sessionScope.principal.id}">회원정보</a>
-					            <a class="dropdown-item" href="<%=request.getContextPath()%>/board?cmd=saveForm">게시글 작성</a>
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/buy?cmd=basketList&id=${principal.id }" >장바구니</a>
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/buy?cmd=list&id=${principal.id }" >주문 내역</a>
+					            <a class="dropdown-item" href="<%=request.getContextPath()%>/board?cmd=saveForm">게시글 작성</a>
 					            <a class="dropdown-item" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a>
 					            <c:if test="${sessionScope.principal.userRole == 'ADMIN'}">
 						            <div class="dropdown-divider"></div>

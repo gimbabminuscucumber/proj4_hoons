@@ -88,7 +88,7 @@
                         <c:set var="totalSum" value="${totalSum + order.totalPrice}" />
                         <c:if test="${loop.first}">
                             <tr>
-                                <td colspan="5" style="padding-top: 10px;"></td>
+                                <td colspan="5" style="padding-top: 16px;"></td>
                             </tr>
                         </c:if>
                         <tr>

@@ -17,14 +17,18 @@
 
 <div class="container" style="width: 500px">
 
+	<!-- 주문번호 -->
+	<c:if test="${!empty orders}">
+		<div class="form-group">
+			<strong>주문번호</strong> 
+			<a href="/project4/buy?cmd=detail&orderNum=${orders[0].orderNum }">${orders[0].orderNum }</a>
+			<hr style="border-color: lightgrey;">
+		</div>
+	</c:if>
+	
 	<!-- 상품 정보 -->
     <c:forEach var="order" items="${orders}" varStatus="loop">
-		<div class="form-group">
-			<hr style="border-color: lightgrey;">
-		    <div><strong>주문번호</strong> 
-		    	<a href="/project4/buy?cmd=detail&orderNum=${order.orderNum }">${order.orderNum }</a>
-		    </div>
-			<br>
+		<div class="form-group" style="margin-top: 20px; margin-bottom: 20px;">
 	        <div style="display: flex; align-items: center;">
 	            <div>
 	            	<a href="/project4/product?cmd=detail&id=${order.productId }">
@@ -43,13 +47,14 @@
 					</div>
 	            </div>
 	        </div>
-	        <br>
+			<hr style="border-color: lightgrey;">
 		</div>
 	</c:forEach>
-    <div class="d-flex">
-    	<button type="button"  class="btn btn-danger" style="width: 50%">주문 취소</button> &nbsp;
-    	<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=list&id=${userId}'">주문 내역 바로가기</button>
-    </div>
+	<br>
+	<div class="d-flex">
+		<button type="button"  class="btn btn-danger" style="width: 50%">주문 취소</button> &nbsp;
+		<button type="button"  class="btn btn-primary" style="width: 50%" onclick="location.href='/project4/buy?cmd=list&id=${userId}'">주문 내역 바로가기</button>
+	</div>
 </div>
 
 <%@ include file = "../layout/footer.jsp" %>
