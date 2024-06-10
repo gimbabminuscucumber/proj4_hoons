@@ -14,6 +14,7 @@ import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
+import com.cos.blog.domain.refund.dto.RefundReqDto;
 import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 import com.cos.blog.domain.user.User;
@@ -96,8 +97,8 @@ public class BuyDao {
 	}
 	
 	// 주문 내역
-	public List<OrderReqDto> findByOrderList(int userId) {
-		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id LEFT JOIN review r ON b.id = r.buyId WHERE b.userId = ? ORDER BY b.id DESC";
+	public List<OrderReqDto> findByOrderList(int userId, int page) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id LEFT JOIN review r ON b.id = r.buyId WHERE b.userId = ? ORDER BY b.id DESC LIMIT ?, 10";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
@@ -106,6 +107,7 @@ public class BuyDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, userId);
+			pstmt.setInt(2, page*10);			// 페이지당 객체 10개씩
 			rs = pstmt.executeQuery();		// 실행한 SQL 쿼리의 결과를 pstmt를 통해 rs에 할당
 			
 			while(rs.next()){
@@ -496,8 +498,8 @@ public class BuyDao {
 	}
 
 	// 주문 관리 (관리자 전용)
-	public List<OrderReqDto> findByManage() {
-		String sql = "SELECT * FROM buy b INNER JOIN product p ON b.productId = p.id INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC";
+	public List<OrderReqDto> findByManage(int page) {
+		String sql = "SELECT * FROM buy b INNER JOIN product p ON b.productId = p.id INNER JOIN user u ON b.userId = u.id ORDER BY b.id DESC LIMIT ?, 10";
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -505,6 +507,7 @@ public class BuyDao {
 
 		try {
 			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, page*10);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -612,6 +615,7 @@ public class BuyDao {
         return -1;
 	}
 
+	// 장바구니 상품 삭제
 	public boolean basketProductDelete(int userId, int basketId) {
 		   String sql = "DELETE FROM basket WHERE userId = ? AND id = ?";
 		    try (
@@ -628,6 +632,224 @@ public class BuyDao {
 		    return false;
 		}
 
+	// 주문 개수
+	public int count(int userId) {
+		String sql = "SELECT count(*) FROM buy WHERE userId =?";	
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();				
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally { 
+			DB.close(conn, pstmt, rs);
+		}
+ 		return -1; 
+	}
+
+	// 상태별 주문내역
+	public List<OrderReqDto> findByState(int userId, int page, int state) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.userId = ? AND b.state =? ORDER BY b.id DESC LIMIT ?, 10";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		List<OrderReqDto> orders = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, state);
+			pstmt.setInt(3, page*10);			// 페이지당 객체 10개씩
+			rs = pstmt.executeQuery();		// 실행한 SQL 쿼리의 결과를 pstmt를 통해 rs에 할당
+			
+			while(rs.next()){
+				OrderReqDto dto = OrderReqDto.builder()
+						.id(rs.getInt("b.id"))
+						.userId(rs.getInt("b.userId"))
+						.productId(rs.getInt("b.productId"))
+						.orderNum(rs.getString("b.orderNum"))
+						.totalCount(rs.getInt("b.totalCount"))
+						.totalPrice(rs.getInt("b.totalPrice"))
+						.state(rs.getInt("b.state"))
+						.createDate(rs.getTimestamp("b.createDate"))
+						.nickName(rs.getString("u.nickName"))
+						.email(rs.getString("u.email"))
+						.address(rs.getString("u.address"))
+						.phone(rs.getString("u.phone"))
+						.brand(rs.getString("p.brand"))
+						.img(rs.getString("p.img"))
+						.content(rs.getString("p.content"))
+						.build();
+					orders.add(dto);
+			}
+			return orders;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+	// 주문개수(state)
+	public int count(int userId, int state) {
+		String sql = "SELECT count(*) FROM buy WHERE userId =? AND state =?";	
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, state);
+			rs = pstmt.executeQuery();				
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally { 
+			DB.close(conn, pstmt, rs);
+		}
+ 		return -1; 
+	}
+
+	// 주문개수(관리자 전용)
+	public int orderCount() {
+		String sql = "SELECT count(*) FROM buy";	
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();				
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally { 
+			DB.close(conn, pstmt, rs);
+		}
+ 		return -1; 
+	}
+
+	// 주문개수(상태별) (관리자 전용)
+	public int orderCount(int state) {
+		String sql = "SELECT count(*) FROM buy WHERE state = ?";	
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;		
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, state);
+			rs = pstmt.executeQuery();				
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally { 
+			DB.close(conn, pstmt, rs);
+		}
+ 		return -1; 
+	}
+	
+	// 주문처리 (관리자 전용)
+	public List<OrderReqDto> findByManageState(int page, int state) {
+		String sql = "SELECT * FROM buy b INNER JOIN user u ON b.userId = u.id INNER JOIN product p ON b.productId = p.id WHERE b.state =? ORDER BY b.id DESC LIMIT ?, 10";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		List<OrderReqDto> orders = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, state);
+			pstmt.setInt(2, page*10);			// 페이지당 객체 10개씩
+			rs = pstmt.executeQuery();		// 실행한 SQL 쿼리의 결과를 pstmt를 통해 rs에 할당
+			
+			while(rs.next()){
+				OrderReqDto dto = OrderReqDto.builder()
+						.id(rs.getInt("b.id"))
+						.userId(rs.getInt("b.userId"))
+						.productId(rs.getInt("b.productId"))
+						.orderNum(rs.getString("b.orderNum"))
+						.totalCount(rs.getInt("b.totalCount"))
+						.totalPrice(rs.getInt("b.totalPrice"))
+						.state(rs.getInt("b.state"))
+						.createDate(rs.getTimestamp("b.createDate"))
+						.nickName(rs.getString("u.nickName"))
+						.email(rs.getString("u.email"))
+						.address(rs.getString("u.address"))
+						.phone(rs.getString("u.phone"))
+						.brand(rs.getString("p.brand"))
+						.img(rs.getString("p.img"))
+						.content(rs.getString("p.content"))
+						.build();
+					orders.add(dto);
+			}
+			return orders;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+	// 환불 신청
+	public int refund(RefundReqDto dto) {
+		String sql = "INSERT INTO refund(buyId, userReason, manageReason, text, createDate) VALUES(?,?,?,?,now())";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getBuyId());
+			pstmt.setInt(2, dto.getUserReason());
+			pstmt.setInt(3, dto.getManageReason());
+			pstmt.setString(4, dto.getText());
+			int result = pstmt.executeUpdate();
+			System.out.println("BuyDao/refund/result : " + result);
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+
+	public int refundCancel(int id, int state, int userId) {
+		String sql = "UPDATE buy SET state =? WHERE id = ? AND userId = ?";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, state);
+			pstmt.setInt(2, id);
+			pstmt.setInt(3, userId);
+			int result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt);
+		}
+		return -1;
+	}
+	
 
 	
 	

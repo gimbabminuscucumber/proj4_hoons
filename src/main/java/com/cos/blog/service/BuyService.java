@@ -9,6 +9,7 @@ import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
+import com.cos.blog.domain.refund.dto.RefundReqDto;
 import com.cos.blog.domain.review.dto.InfoRespDto;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
 
@@ -37,8 +38,8 @@ public class BuyService {
 		return buyDao.findByOrder(orderNum);
 	}
 	
-	public List<OrderReqDto> 주문내역(int userId) {
-		return buyDao.findByOrderList(userId);
+	public List<OrderReqDto> 주문내역(int userId, int page) {
+		return buyDao.findByOrderList(userId, page);
 	}
 
 	public List<OrderReqDto> 주문상세(String orderNum) {
@@ -80,6 +81,10 @@ public class BuyService {
 	    return buyDao.basketDelete(userId, basketId);
 	}
 
+	public OrderReqDto 주문변경(int buyId) {
+		return buyDao.findByProduct(buyId);
+	}
+	
 	public OrderReqDto 리뷰상품(int id) {
 		return buyDao.findByProduct(id);
 	}
@@ -97,8 +102,8 @@ public class BuyService {
 		return buyDao.reviewDelete(reviewId);
 	}
 
-	public List<OrderReqDto> 주문관리() {
-		return buyDao.findByManage();
+	public List<OrderReqDto> 주문관리(int page) {
+		return buyDao.findByManage(page);
 	}
 
 	public int 주문처리(int id, int state) {
@@ -112,6 +117,45 @@ public class BuyService {
 	public boolean 장바구니선택삭제(int userId, int basketId) {
 		return buyDao.basketProductDelete(userId, basketId);
 	}
+
+	public int 상품개수(int userId) {
+		return buyDao.count(userId);
+	}
+
+	public int 상품개수(int userId, int state) {
+		return buyDao.count(userId, state);
+	}
+
+	public List<OrderReqDto> 상태별주문내역(int userId, int page, int state) {
+		return buyDao.findByState(userId, page, state);
+	}
+
+	public int 주문개수() {
+		return buyDao.orderCount();
+	}
+
+	public int 주문개수(int state) {
+		return buyDao.orderCount(state);
+	}
+	
+	public List<OrderReqDto> 상태별주문관리(int page, int state) {
+		return buyDao.findByManageState(page, state);
+	}
+
+	public int 환불신청(RefundReqDto dto) {
+	    int result = buyDao.refund(dto);
+	    if(result == 1) {
+	        buyDao.updateState(dto.getBuyId(), 6); // 환불 신청 후 상태 변경
+	    }
+	    return result;
+	}
+
+	public int 환불취소(int id, int state, int userId) {
+		return buyDao.refundCancel(id, state, userId);
+	}
+
+
+
 
 
 

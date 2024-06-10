@@ -173,7 +173,7 @@ public class ProductController extends HttpServlet{
 				int page = Integer.parseInt(request.getParameter("page"));
 				List<DetailRespDto> products;
 				
-				// 카테고리 페이지
+				// [1] 카테고리 페이지
 				if(categoryIdStr != null && !categoryIdStr.isEmpty()) {
 					int categoryId = Integer.parseInt(categoryIdStr);
 					products = productService.카테고리상품목록(categoryId, page);
@@ -186,7 +186,7 @@ public class ProductController extends HttpServlet{
 					request.setAttribute("lastPage", lastPage);
 				}
 				
-				// 검색 페이지
+				// [2] 검색 페이지
 				if(keyword != null && !keyword.isEmpty()) {
 					products = productService.키워드상품목록(keyword, page);
 					System.out.println("ProductController/search/검색/products : " + products);

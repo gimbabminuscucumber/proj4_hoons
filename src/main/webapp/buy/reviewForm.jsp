@@ -110,7 +110,7 @@ function nullCheck() {
         	if(data.statusCode === 1){
         		console.log('리뷰 작성 성공/data.data : ' + data.data);
         		alert("리뷰 작성을 완료했습니다.");
-        		location.href="buy?cmd=list&id=" + document.getElementById("userId").value;
+        		location.href="buy?cmd=list&page=0&userId=" + document.getElementById("userId").value;
         	}else{
         		console.log('리뷰 작성 실패/data.data : ' + data.data);
         		alert("리뷰 작성에 실패했습니다.");

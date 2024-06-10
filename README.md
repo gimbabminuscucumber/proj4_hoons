@@ -127,4 +127,15 @@ CREATE TABLE review(
     createDate timestamp
 ) engine=InnoDB default charset=utf8;
 
+CREATE TABLE refund(
+	id int primary key auto_increment,
+    buyId int,
+    productId int,
+    userReason int,
+    ManageReason int,
+    text varchar(250),
+    createDate timestamp
+) engine=InnoDB default charset=utf8;
+
+
 ```

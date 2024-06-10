@@ -21,6 +21,7 @@ import com.cos.blog.domain.buy.dto.BuyReqDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
+import com.cos.blog.domain.refund.dto.RefundReqDto;
 import com.cos.blog.domain.reply.Reply;
 import com.cos.blog.domain.review.Review;
 import com.cos.blog.domain.review.dto.ReviewReqDto;
@@ -178,10 +179,39 @@ public class BuyController extends HttpServlet{
 			// 												주문 내역
 			// ====================================================	
 			}else if(cmd.equals("list")) {
-				int userId = Integer.parseInt(request.getParameter("id"));
-				List<OrderReqDto> orders = buyService.주문내역(userId);
-				System.out.println("BuyController/list/orders : " + orders);
+				int userId = Integer.parseInt(request.getParameter("userId"));
+				int page = Integer.parseInt(request.getParameter("page"));
+				
+				List<OrderReqDto> orders = buyService.주문내역(userId, page);
 				request.setAttribute("orders", orders);
+
+				// List형태의 OrderReqDto 객체 담긴 데이터에서 특정 변수의 값을 확인
+//				for (OrderReqDto order : orders) {
+//				    System.out.println("BuyController/list/orders.getState() : " + order.getState());
+//				}
+				
+				// 페이지 계산
+				int buyCount = buyService.상품개수(userId);
+				int lastPage = (buyCount -1)/10;
+				request.setAttribute("lastPage", lastPage);
+				
+				RequestDispatcher dis = request.getRequestDispatcher("buy/list.jsp");
+				dis.forward(request, response);	
+				
+			// ====================================================	
+			// 												주문 상태
+			// ====================================================	
+			}else if(cmd.equals("state")) {
+				int page = Integer.parseInt(request.getParameter("page"));
+				int state = Integer.parseInt(request.getParameter("state"));
+				int userId = Integer.parseInt(request.getParameter("userId"));
+				List<OrderReqDto> orders = buyService.상태별주문내역(userId, page, state);
+				request.setAttribute("orders", orders);
+				
+				// 페이지 계산
+				int buyCount = buyService.상품개수(userId, state);
+				int lastPage = (buyCount -1)/10;
+				request.setAttribute("lastPage", lastPage);
 				
 				RequestDispatcher dis = request.getRequestDispatcher("buy/list.jsp");
 				dis.forward(request, response);	
@@ -221,7 +251,6 @@ public class BuyController extends HttpServlet{
 				}
 				
 				String data = gson.toJson(commonRespDto);
-				
 				PrintWriter out = response.getWriter();		// response 반환
 				out.print(data);
 				out.flush();
@@ -287,17 +316,41 @@ public class BuyController extends HttpServlet{
 			// ====================================================	
 			// 									주문 관리 (관리자 전용)
 			// ====================================================
-			}else if(cmd.equals("manage")) {
-				List<OrderReqDto> orders = buyService.주문관리();
-				
+			}else if(cmd.equals("manageOrder")) {
+				int page = Integer.parseInt(request.getParameter("page"));
+				List<OrderReqDto> orders = buyService.주문관리(page);
 				request.setAttribute("orders", orders);
-				RequestDispatcher dis = request.getRequestDispatcher("buy/manage.jsp");
+				
+				// 페이지 계산
+				int orderCount = buyService.주문개수();
+				int lastPage = (orderCount -1)/10;
+				request.setAttribute("lastPage", lastPage);
+				
+				RequestDispatcher dis = request.getRequestDispatcher("buy/manageOrder.jsp");
 				dis.forward(request, response);
 			
 			// ====================================================	
-			// 									처리 현황 (관리자 전용)
+			// 								상단 주문 상태별 목록 (관리자 전용)
+			// ====================================================
+			}else if(cmd.equals("manageState")) {
+				int page = Integer.parseInt(request.getParameter("page"));
+				int state = Integer.parseInt(request.getParameter("state"));
+				List<OrderReqDto> orders = buyService.상태별주문관리(page, state);
+				request.setAttribute("orders", orders);
+				
+				// 페이지 계산
+				int orderCount = buyService.주문개수(state);
+				int lastPage = (orderCount -1)/10;
+				request.setAttribute("lastPage", lastPage);
+				
+				RequestDispatcher dis = request.getRequestDispatcher("buy/manageOrder.jsp");
+				dis.forward(request, response);
+				
+			// ====================================================	
+			// 									주문 처리 (관리자 전용)
 			// ====================================================
 			}else if(cmd.equals("stateChange")) {
+				//int page = Integer.parseInt(request.getParameter("page"));
 				int id = Integer.parseInt(request.getParameter("id"));
 				int state = Integer.parseInt(request.getParameter("state"));
 
@@ -305,7 +358,7 @@ public class BuyController extends HttpServlet{
 				System.out.println("BuyController/result : " + result);
 				
 				if(result ==1 ) {
-					response.sendRedirect("/project4/buy?cmd=manage");
+					response.sendRedirect("/project4/buy?cmd=manageOrder&page=0");
 				}else {
 					Script.back(response, "처리 현황 수정에 실패했습니다.");
 				}
@@ -372,6 +425,63 @@ public class BuyController extends HttpServlet{
 			        out.print("{\"success\": false}");
 			    }
 			    out.flush();
+			    
+			// ====================================================	
+			// 												환불 신청 1
+			// ====================================================
+			}else if(cmd.equals("refundForm")) {
+				System.out.println("BuyController/refundForm/환불신청");
+				int buyId = Integer.parseInt(request.getParameter("buyId"));
+				int state = Integer.parseInt(request.getParameter("state"));
+				
+				System.out.println("BuyController/refundForm/환불신청/buyId : " + buyId + " state : " + state);
+				
+				OrderReqDto refund = buyService.주문변경(buyId);
+				request.setAttribute("refund", refund);
+				RequestDispatcher dis = request.getRequestDispatcher("buy/refundForm.jsp");
+				dis.forward(request, response);
+				
+			// ====================================================	
+			// 												환불 신청 2
+			// ====================================================
+			}else if(cmd.equals("refund")) {
+				BufferedReader br = request.getReader();
+			    StringBuilder reqData = new StringBuilder();
+			    String line;
+			    while ((line = br.readLine()) != null) {
+			        reqData.append(line);
+			    }
+			    
+			    RefundReqDto dto = gson.fromJson(reqData.toString(), RefundReqDto.class);
+				
+				int result = buyService.환불신청(dto);
+			    System.out.println("BuyController/refund/dto : " + dto);
+			    System.out.println("BuyController/refund/result : " + result);
+
+			    CommonRespDto<Integer> commonRespDto = new CommonRespDto<>();
+			    commonRespDto.setStatusCode(result != -1 ? 1 : -1);
+			    commonRespDto.setData(result);
+			    String respData = gson.toJson(commonRespDto);
+			    Script.responseData(response, respData);
+			    
+			// ====================================================	
+			// 												환불 신청 취소
+			// ====================================================
+			}else if(cmd.equals("refundCancel")) {
+				int userId = Integer.parseInt(request.getParameter("userId"));
+				int id = Integer.parseInt(request.getParameter("id"));
+				int state = Integer.parseInt(request.getParameter("state"));
+
+				int result = buyService.환불취소(id, state, userId);
+				System.out.println("BuyController/result : " + result);
+				
+				if(result ==1 ) {
+					response.sendRedirect("/project4/buy?cmd=list&page=0&userId="+userId);
+				}else {
+					Script.back(response, "처리 현황 수정에 실패했습니다.");
+				}
+					
+			
 			}
 			
 	}

@@ -8,203 +8,267 @@
 <br>
 <h1 style="text-align: center">
 	<div class="d-flex justify-content-center">
-		<img src="images/icons/cart.png" alt="Logo" style="width: 50px;">&nbsp;
-		<div style="color: #353A3F; font-weight: bold">장바구니</div>
+		<img src="images/icons/bag.png" alt="Logo" style="width: 50px;">&nbsp;
+		<div style="color: #353A3F; font-weight: bold">주문내역 조회</div>
 	</div>
 </h1>
 <br>
 <br>
 
 <div class="container" style="text-align: center">
- 	<form action="/project4/buy?cmd=buyForm" method="post" id="buyForm"> 
- 		<input type="hidden" id="userId" value="${sessionScope.principal.id }">
-		<div class="form-group">
-			<table>
-				<thead>
-					<tr>
-						<th style="width: 100px">전체 <span id="totalItems"></span>개</th>
-						<th style="width: 100px"><input type="checkbox" id="selectAll"></th>
-						<th style="width: 450px">상품정보</th>
-						<th style="width: 200px">판매가</th>
-						<th style="width: 200px">수량</th>
-						<th style="width: 200px">주문금액</th>
-						<th style="width: 200px">주문관리</th>
-					</tr>
-				</thead>
+
+	<!-- 상단 버튼 -->
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<ul class="nav nav-pills" role="tablist">
+			<c:choose>
+				<c:when test="${empty param.state }">
+					<li class="nav-item" ><a style="background-color: #007bff; color:white" class="nav-link" href="/project4/buy?cmd=list&page=0&userId=${sessionScope.principal.id }" >전체</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=0">주문완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=1">배송중</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=2">배송완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=9">구매완료</a></li>
+				</c:when>
+				<c:when test="${param.state == 0 }">
+					<li class="nav-item" ><a class="nav-link" href="/project4/buy?cmd=list&page=0&userId=${sessionScope.principal.id }" >전체</a></li>
+					<li class="nav-item"><a  style="background-color: #007bff; color:white" class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=0">주문완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=1">배송중</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=2">배송완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=9">구매완료</a></li>
+				</c:when>
+				<c:when test="${param.state == 1 }">
+					<li class="nav-item" ><a class="nav-link" href="/project4/buy?cmd=list&page=0&userId=${sessionScope.principal.id }" >전체</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=0">주문완료</a></li>
+					<li class="nav-item"><a  style="background-color: #007bff; color:white" class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=1">배송중</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=2">배송완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=9">구매완료</a></li>
+				</c:when>
+				<c:when test="${param.state == 2 }">
+					<li class="nav-item" ><a class="nav-link" href="/project4/buy?cmd=list&page=0&userId=${sessionScope.principal.id }" >전체</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=0">주문완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=1">배송중</a></li>
+					<li class="nav-item"><a  style="background-color: #007bff; color:white" class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=2">배송완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=9">구매완료</a></li>
+				</c:when>
+				<c:when test="${param.state == 9 }">
+					<li class="nav-item" ><a class="nav-link" href="/project4/buy?cmd=list&page=0&userId=${sessionScope.principal.id }" >전체</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=0">주문완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=1">배송중</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=2">배송완료</a></li>
+					<li class="nav-item"><a  style="background-color: #007bff; color:white"class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=9">구매완료</a></li>
+				</c:when>
+				<c:when test="${param.state == 3 || param.state == 4 || param.state == 5 || param.state == 6 || param.state == 7 || param.state == 8}">
+					<li class="nav-item" ><a class="nav-link" href="/project4/buy?cmd=list&page=0&userId=${sessionScope.principal.id }" >전체</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=0">주문완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=1">배송중</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=2">배송완료</a></li>
+					<li class="nav-item"><a class="nav-link" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=9">구매완료</a></li>
+				</c:when>
+			</c:choose>
+			<span style="margin-left:10px; margin-right:10px; padding-top: 5px;color:lightgrey" >l</span>
+			<div class="dropdown">
+				<button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" style="height: 33px; padding-top:4px; ">교환</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=3">교환 신청</a>
+					<a class="dropdown-item" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=4">교환 완료</a>
+					<a class="dropdown-item" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=5">교환 불가</a>
+				</div>
+			</div>
+			&nbsp;
+			<div class="dropdown">
+				<button type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" style="height: 33px; padding-top:4px; ">환불</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=6">환불 신청</a>
+					<a class="dropdown-item" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=7">환불 완료</a>
+					<a class="dropdown-item" href="/project4/buy?cmd=state&page=0&userId=${sessionScope.principal.id }&state=8">환불 불가</a>
+				</div>
+			</div>
+		</ul>
+		
+		<!-- 날짜 선택란 -->
+		<form action="orderList" method="get" class="form-inline">
+			<div class="form-group" >
+				<input type="date" id="startDate" name="startDate" >&nbsp;
+				<input type="date" id="endDate" name="endDate" >&nbsp;
+				<button type="button" class="btn btn-primary btn-sm" onclick="">조회하기</button>
+			</div>
+		</form>
+	</div>
 	
-				<tbody>
-					<c:set var="totalCount" value="0" />
-					<c:forEach var="basket" items="${baskets}" varStatus="loop">
-						<input type="hidden" name="basketId" id="basketId" value="${basket.id }">
-						<c:set var="totalCount" value="${totalCount + 1}" />
-						<c:if test="${loop.first}">
-							<tr>
-								<td colspan="7" style="padding-top: 16px;"></td>
-							</tr>
-						</c:if>
-	
+	<br>
+
+	<div class="form-group">
+		<table>
+			<thead>
+				<tr>
+					<th style="width: 450px">상품 정보</th>
+					<th style="width: 170px">주문 일자</th>
+					<th style="width: 170px">주문 번호</th>
+					<th style="width: 170px">주문 금액(수량)</th>
+					<th style="width: 150px">주문 상태</th>
+					<th style="width: 150px">주문 관리</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="order" items="${orders}" varStatus="loop">
+					<input type="hidden" id="userId" value="${sessionScope.principal.id }">
+					<c:if test="${loop.first}">
 						<tr>
-							<td>
-								${loop.index + 1}
-							</td>
-							<td>
-								<!-- <input type="checkbox" class="productCheck" name="productCheck" id="productCheck" value="${basket.productId}"> --> 
-								<input type="checkbox" class="productCheck" name="productCheck" id="productCheck_${basket.id}" value="${basket.id}"> 
-							</td>
-							<td style="padding-left: 20px; text-align: left;">
-								<div style="display: flex; align-items: center;">
-									<a href="/project4/product?cmd=detail&id=${basket.productId }">
-										<img src="/project4/images/productImg/${basket.img}" alt="Product Image" style="width: 70px; height: auto; margin-right: 10px;">
-									</a>
-									<div>
-										<strong>${basket.brand}</strong><br> ${basket.content}
-									</div>
-								</div>
-							</td>
-							<td>
-								<fmt:formatNumber type="number" pattern="#,##0" value="${basket.price}" />원 <br> 
-							</td>
-							<td>
-								<span>${basket.totalCount}개</span>
-							</td>
-							<td>
-								<fmt:formatNumber type="number" pattern="#,##0" value="${basket.totalPrice}" />원 <br> 
-							</td>
-							<td>
-							basket.id = ${basket.id}
-								<div class="d-flex justify-content-center">
-									<button type="button"	 class="btn btn-outline-info btn-sm" >변경</button>&nbsp;
-									<button type="button" class="btn btn-outline-danger btn-sm"  onclick="productDelete(${basket.id})">삭제</button>
-								</div>
-							</td>
-						</tr>
-						<!-- 각 주문 항목 아래에 선 추가 -->
-						<c:if test="${loop.last || !loop.last}">
-							<tr>
-								<td colspan="7">
-									<hr style="border-color: lightgrey;">
-								</td>
-							</tr>
-						</c:if>
-					</c:forEach>
-					
-					<c:if test="${empty baskets}">
-						<tr>
-							<td colspan="7"><br><p>장바구니에 상품이 없습니다.</p></td>
+							<td colspan="6" style="padding-top: 10px;"></td>
 						</tr>
 					</c:if>
-				</tbody>
-			</table>
-		</div>
+
+					<tr>
+						<td style="padding-left: 20px; text-align: left;">
+							<div style="display: flex; align-items: center;">
+								<a href="/project4/product?cmd=detail&id=${order.productId }">
+									<img src="/project4/images/productImg/${order.img}" alt="Product Image" style="width: 70px; height: auto; margin-right: 10px;">
+								</a>
+								<div>
+									<a href="/product4/product?cmd=brandSearch&brand=${order.brand }&userId=${sessionScope.principal.id}&page=0"><strong>${order.brand}</strong></a><br>
+									<a href="/project4/product?cmd=detail&id=${order.productId }">${order.content}</a>
+								</div>
+							</div>
+						</td>
+						<td>
+							<fmt:formatDate pattern="yyyy-MM-dd" value="${order.createDate}"></fmt:formatDate>
+						</td>
+						<td>
+							<span><a href="/project4/buy?cmd=detail&orderNum=${order.orderNum }">${order.orderNum}</a></span>
+						</td>
+						<td>
+							<fmt:formatNumber type="number" pattern="#,##0" value="${order.totalPrice}" />원 <br> 
+							<span style="color: grey">${order.totalCount}개</span>
+						</td>
+						<td>
+						param.state = ${param.state }<br>
+						order.state = ${order.state }<br>
+							<span style="display: inline-block;">
+								<c:if test="${order.state == 0 }">주문 완료</c:if>
+								<c:if test="${order.state == 1 }">배송중</c:if>
+								<c:if test="${order.state == 2 }">배송 완료</c:if>
+								
+								<c:if test="${order.state == 3 }">교환 신청</c:if>
+								<c:if test="${order.state == 4 }">교환 완료</c:if>
+								<c:if test="${order.state == 5 }">교환 불가</c:if>
+								
+								<c:if test="${order.state == 6 }">환불 신청</c:if>
+								<c:if test="${order.state == 7 }">환불 완료</c:if>
+								<c:if test="${order.state == 8 }">환불 불가</c:if>
+
+								<c:if test="${order.state == 9 }">구매 완료</c:if>
+							</span>
+						</td>
+						<td>
+							<span style="display: inline-block; ">
+								<c:choose>
+									<c:when test="${order.status != 1}"> <!-- 리뷰를 작성하지 않았으면 -->
+										<button type="button" class="btn btn-outline-info btn-sm">교환</button>
+										<button type="button" class="btn btn-outline-danger btn-sm">환불</button><br>
+									</c:when>
+									<c:when test="${order.state == 5 || order.state == 8 || order.state == 9}"> 
+										<button type="button" class="btn btn-outline-info btn-sm" disabled>교환</button>
+										<button type="button" class="btn btn-outline-danger btn-sm" disabled>환불</button><br>
+									</c:when>
+								</c:choose>
+								<!-- 리뷰 작성 -->
+								<c:choose>
+									<c:when test="${order.status == 1}">
+										<button type="button" style="margin-top:5px" class="btn btn-secondary btn-sm" disabled>작성 완료</button>
+									</c:when>
+									<c:when test="${order.state == 0 || order.state == 1}">
+										<button type="button" style="margin-top:5px" class="btn btn-outline-primary btn-sm" disabled>리뷰 작성</button>
+									</c:when>
+									<c:otherwise>
+										<button type="button" style="margin-top:5px" class="btn btn-outline-primary btn-sm" onclick="review(${order.id})">리뷰 작성</button>
+									</c:otherwise>
+								</c:choose>
+							</span>	
+						</td>
+					</tr>
+					<!-- 각 주문 항목 아래에 선 추가 -->
+					<c:if test="${loop.last || !loop.last}">
+						<tr>
+							<td colspan="6">
+								<hr style="border-color: lightgrey;">
+							</td>
+						</tr>
+					</c:if>
+				</c:forEach>
+				<c:if test="${empty orders}">
+					<tr>
+						<td colspan="6">주문 내역이 없습니다.</td>
+					</tr>
+				</c:if>
+			</tbody>
+		</table>
+	<!-- 검색을 통해 나온 페이지 처리 -->
+	<br><br>
+	<section class="container">
+		<ul class="pagination justify-content-center">
+			<!-- 상황별 변수 설정 -->
+			<c:choose>
+				<c:when test="${empty param.state}">
+					<c:set var="pagePrev" value="/project4/buy?cmd=list&page=${param.page-1}&userId=${sessionScope.principal.id }"/>
+					<c:set var="pageNext" value="/project4/buy?cmd=list&page=${param.page+1}&userId=${sessionScope.principal.id }"/>
+				</c:when>
+				
+				<c:when test="${!empty param.state}">
+					<c:set var="pagePrev" value="/project4/buy?cmd=search&page=${param.page-1}&userId=${sessionScope.principal.id }&state=${param.state }"/>
+					<c:set var="pageNext" value="/project4/buy?cmd=search&page=${param.page+1}&userId=${sessionScope.principal.id }&state=${param.state }"/>
+				</c:when>
+			</c:choose>
 		
-		<c:if test="${!empty baskets}">
-			<div class="form-group">
-				<button type="button"	 class="btn btn-outline-danger btn-sm d-flex justify-content-start">선택삭제</button>
-			</div>
-		</c:if>
+			<c:choose>
+				<c:when test="${param.page == 0}">
+					<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="${pagePrev}">Previous</a></li>
+				</c:otherwise>
+			</c:choose>
 		
-		<div class="container" style="text-align: left; color:grey; font-size:12px">
-			<li>주문완료 후 출고 전 배송지 변경은 동일 권역(일반, 제주, 제주 외 도서산간 지역) 내에서만 가능합니다.</li>
-			<li>장바구니에는 최대 100개의 상품을 보관할 수 있으며, 주문당 한번에 주문 가능한 상품수는 100개로 제한됩니다.</li>
-		</div>
-		<br>
-	
-		<br>
+			<!-- 페이지 번호 생성 -->
+			<c:forEach var="i" begin="0" end="${lastPage}">
+				<c:choose>
+					<c:when test="${i == param.page}">
+						<li class="page-item active"><a class="page-link" href="#">${i + 1}</a></li>
+					</c:when>
+					<c:otherwise>
+						<c:choose>
+							<c:when test="${!empty param.state}">
+								<c:set var="pageLink" value="/project4/buy?cmd=search&page=${i}&userId=${sessionScope.principal.id }&state=${param.state }"/>
+							</c:when>
+							<c:otherwise>
+								<c:set var="pageLink" value="/project4/buy?cmd=list&page=${i}&userId=${sessionScope.principal.id }"/>
+							</c:otherwise>
+						</c:choose>
+						<li class="page-item"><a class="page-link" href="${pageLink}">${i + 1}</a></li>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
 		
-		<c:if test="${empty baskets}">
-			<div class="form-group container"><button type="button"	 class="btn btn-primary btn-lg" id="buy" style="width:200px" disabled>주문하기</button></div>
-		</c:if>
-		<c:if test="${!empty baskets}">
-			<div class="form-group container"><button type="button"	 class="btn btn-primary btn-lg" id="buy" style="width:200px" >주문하기</button></div>
-		</c:if>
-	</form>	
-	
+			<c:choose>
+				<c:when test="${param.page == lastPage}">
+					<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+				</c:when>
+				<c:otherwise>
+					<!-- <li class="page-item"><a class="page-link" href="${pageNext}">Next</a></li> -->
+					<li class="page-item"><a class="page-link" href="${pageNext}">Next</a></li>
+				</c:otherwise>
+			</c:choose>
+		</ul>
+	</section>
+	</div>
+
 </div>
 
-
 <script>
-            /*
-    document.addEventListener("DOMContentLoaded", function() {		// 해당 페이지 내의 모든 DOM 요소를 이벤트 리스너로 활성화
-	    // 1. 첫 번째 <th>에 총 항목 개수 표시
-	    document.getElementById("totalItems").textContent = "${totalCount}";
-	    
-	    // 2. checkbox 모두 체크하기
-        document.getElementById("selectAll").addEventListener("change", function() {		// ID가 "selectAll"인 요소에서 변경 이벤트가 발생했을 때 이벤트 리스너가 활성화됩니다.
-            let checkboxes = document.querySelectorAll(".productCheck");								// 모든 클래스가 "productCheck"인 체크박스 요소들을 선택하여 checkboxes 변수에 할당
-            checkboxes.forEach(function(checkbox) {																	// checkboxes 배열의 각 요소에 대해 반복문을 실행
-                checkbox.checked = document.getElementById("selectAll").checked;					// 각 체크박스의 체크 상태를 "selectAll" 체크박스의 체크 상태와 동일하게 설정
-            });
-        });
-
-	    // 3. checkbox에 check된 상품 '주문서 작성' 페이지로 데이터 넘기기 
-        document.getElementById("buy").addEventListener("click", function() {					// id가 buy인 요소 클릭시 이벤트 리스터 활성
-            let form = document.getElementById("buyForm");
-            let checkboxes = document.querySelectorAll(".productCheck:checked");				// class가 productCheck인 요소 중 체크 된 모든 요소들을 checkboxes에 할당
-           	console.log('checkboxes[0].value : ' + checkboxes[0].value);		// value : ${basket.id}
-            console.log('checkboxes[1].value : ' + checkboxes[1].value);
-            console.log('checkboxes[2].value : ' + checkboxes[2].value);
-            if (checkboxes.length > 0) {
-                checkboxes.forEach(function(checkbox) {
-                	
-                    let hiddenInput = document.createElement("input");
-                    hiddenInput.type = "hidden";
-                    //hiddenInput.name = "productId";
-                    hiddenInput.name = "basketId";
-                    hiddenInput.value = checkbox.value;
-                    form.appendChild(hiddenInput);
-                });
-                form.submit();
-            } else {
-                alert("주문할 상품을 선택하세요.");
-            }
-        });
-    });
-       */
-    // 총 항목 개수 표시 함수
-    document.addEventListener("DOMContentLoaded", function() {		// 해당 페이지 내의 모든 DOM 요소를 이벤트 리스너로 활성화
-	    // 1. 첫 번째 <th>에 총 항목 개수 표시
-		function displayTotalItemCount() {
-			document.getElementById("totalItems").textContent = "${totalCount}";
-		}
-       
-       // selectAll 체크박스 이벤트 리스너 함수
-       function checkAllCheckboxes() {
-           let checkboxes = document.querySelectorAll(".productCheck");
-           checkboxes.forEach(function(checkbox) {
-               checkbox.checked = document.getElementById("selectAll").checked;
-           });
-       }
-
-       // 주문 버튼 클릭 이벤트 리스너 함수
-       function submitCheckedProducts() {
-           let form = document.getElementById("buyForm");
-           let checkboxes = document.querySelectorAll(".productCheck:checked");
-           if (checkboxes.length > 0) {
-               checkboxes.forEach(function(checkbox) {
-                   let hiddenInput = document.createElement("input");
-                   hiddenInput.type = "hidden";
-                   hiddenInput.name = "basketId";
-                   hiddenInput.value = checkbox.value;
-                   form.appendChild(hiddenInput);
-               });
-               form.submit();
-           } else {
-               alert("주문할 상품을 선택하세요.");
-           }
-       }
-
-       
-       
-    function productDelete(basketId){
-    	console.log('삭제 버튼 클릭/id : ' + basketId);
-    	
-    	$.ajax().done(function(data){
-    		if(data.statusCode == 1){
-    			console.log('장바구니 상품 삭제');
-    			alert("상품을 삭제했습니다.");
-    		}
-    	})
-    }
+	function review(id){
+		console.log('리뷰작성 버튼 클릭');
+		console.log('buy테이블의 id : ' + id);
+		
+		location.href="/project4/buy?cmd=reviewForm&id=" + id;
+	}
 </script>
 
 <style>
@@ -236,6 +300,7 @@ a:hover {
     color: #CB444A;
     text-decoration: underline; 
 }
+
 
 </style>
 
