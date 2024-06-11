@@ -12,6 +12,7 @@ import com.cos.blog.config.DB;
 import com.cos.blog.domain.board.dto.SaveReqDto;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
+import com.cos.blog.domain.buy.dto.ManageRespDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.refund.dto.RefundReqDto;
@@ -324,8 +325,8 @@ public class BuyDao {
 	}
 	
 	// 주문서 작성 2
-	public OrderReqDto buyForm2(int productId, int userId) {
-		String sql = "SELECT * FROM orderSheet o INNER JOIN user u ON o.userId = u.id WHERE o.productId = ? AND u.id = ?";
+	public OrderReqDto buyForm2(int orderSheetId, int userId) {
+		String sql = "SELECT * FROM orderSheet o INNER JOIN user u ON o.userId = u.id WHERE o.id = ? AND u.id = ?";
 	    Connection conn = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
@@ -334,7 +335,7 @@ public class BuyDao {
 	    try {
 	        conn = DB.getConnection();
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, productId);
+	        pstmt.setInt(1, orderSheetId);
 	        pstmt.setInt(2, userId);
 	        rs = pstmt.executeQuery();
 	
@@ -539,6 +540,62 @@ public class BuyDao {
 		return orders;
 	}
 
+	public List<ManageRespDto> findByManage2(int page) {
+	    String sql = "SELECT b.id, b.userId, b.productId, b.totalPrice, b.totalCount, b.state, b.orderNum, b.createDate, " +
+	                 "u.nickName, u.email, u.address, u.phone, u.username, " +
+	                 "p.brand, p.img, p.content, p.price, p.categoryId, p.view, p.count, " +
+	                 "r.status, r.score, r.text FROM buy b " +
+	                 "INNER JOIN product p ON b.productId = p.id "+
+	                 "INNER JOIN user u ON b.userId = u.id "+
+	                 "LEFT JOIN review r ON b.productId = r.productId "+
+	                 "ORDER BY b.id DESC LIMIT ?, 10";
+	    
+	    Connection conn = DB.getConnection();
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    List<ManageRespDto> orders = new ArrayList<>();
+
+	    try {
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, page * 10);
+	        rs = pstmt.executeQuery();
+	        
+	        while (rs.next()) {
+	            ManageRespDto dto = ManageRespDto.builder()
+	                    .id(rs.getInt("b.id"))
+	                    .userId(rs.getInt("b.userId"))
+	                    .productId(rs.getInt("b.productId"))
+	                    .totalPrice(rs.getInt("b.totalPrice"))
+	                    .totalCount(rs.getInt("b.totalCount"))
+	                    .state(rs.getInt("b.state"))
+	                    .orderNum(rs.getString("b.orderNum"))
+	                    .createDate(rs.getTimestamp("b.createDate"))
+	                    .nickName(rs.getString("u.nickName"))
+	                    .email(rs.getString("u.email"))
+	                    .address(rs.getString("u.address"))
+	                    .phone(rs.getString("u.phone"))
+	                    .brand(rs.getString("p.brand"))
+	                    .img(rs.getString("p.img"))
+	                    .content(rs.getString("p.content"))
+	                    .price(rs.getInt("p.price"))
+	                    .categoryId(rs.getInt("p.categoryId"))
+	                    .view(rs.getInt("p.view"))
+	                    .count(rs.getInt("p.count"))
+	                    .status(rs.getInt("r.status"))
+	                    .score(rs.getInt("r.score"))
+	                    .text(rs.getString("r.text"))
+	                    .build();
+	            orders.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DB.close(conn, pstmt, rs);
+	    }
+	    return orders;
+	}
+	
+	
 	// 주문 관리의 '처리 현황' (관리자 전용)
 	public int updateState(int id, int state) {
 		String sql = "UPDATE buy SET state =? WHERE id = ?";
@@ -830,6 +887,7 @@ public class BuyDao {
 		return -1;
 	}
 
+	// 환불 취소
 	public int refundCancel(int id, int state, int userId) {
 		String sql = "UPDATE buy SET state =? WHERE id = ? AND userId = ?";
 		Connection conn = DB.getConnection();
@@ -849,6 +907,23 @@ public class BuyDao {
 		}
 		return -1;
 	}
+
+	public int orderSheetDelete(int id) {
+		String sql = "DELETE FROM orderSheet WHERE id = ?";
+		
+		try (
+				Connection conn = DB.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+		) {
+			pstmt.setInt(1, id);
+			int result = pstmt.executeUpdate();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	
 
 	

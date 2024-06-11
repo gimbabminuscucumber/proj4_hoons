@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
+import com.cos.blog.domain.buy.dto.ManageRespDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.common.dto.CommonRespDto;
@@ -114,6 +115,8 @@ public class BuyController extends HttpServlet{
 			    
 			    List<OrderReqDto> orders = buyService.주문서작성(checkedItems, userId);
 
+			    System.out.println("BuyController/buyForm/orders : " + orders);
+			    
 			    request.setAttribute("orders", orders);
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm.jsp");
 			    dis.forward(request, response);
@@ -130,15 +133,17 @@ public class BuyController extends HttpServlet{
 			    System.out.println("BuyController/buyForm2 진입");
 			    // 생성된 id 값과 상품 id를 받아옴
 			    int userId = Integer.parseInt(request.getParameter("userId"));
-			    int productId = Integer.parseInt(request.getParameter("productId"));
+			    int orderSheetId = Integer.parseInt(request.getParameter("id"));	 // orderSheet 테이블 id
 			    
-			    OrderReqDto orders = buyService.주문서작성2(productId, userId);
-			    System.out.println("orders : " + orders);
+			    OrderReqDto orders = buyService.주문서작성2(orderSheetId, userId);
+			    System.out.println("BuyController/buyForm2/orders : " + orders);
 			    request.setAttribute("orders", orders);
-
 			    RequestDispatcher dis = request.getRequestDispatcher("buy/buyForm2.jsp");
 			    dis.forward(request, response);
-		   
+			    
+			    // orderSheet 테이블의 데이터 삭제
+		    	int result = buyService.오더지삭제(orderSheetId);
+		    	System.out.println("BuyController/orderSheet/result : " + result);
 			// ====================================================	
 			// 											오더지 담기
 			// ====================================================		
@@ -148,17 +153,24 @@ public class BuyController extends HttpServlet{
 			    
 			    //Gson gson = new Gson();
 			    OrderSheetReqDto dto = gson.fromJson(reqData, OrderSheetReqDto.class);
+			    System.out.println("BuyController/orderSheet/dto : " + dto );
+			    
 			    int id = buyService.오더지담기(dto); // 생성된 id 값을 받아옴
+			    System.out.println("BuyController/orderSheet/id : " + id );
+			    
 			    CommonRespDto<Integer> commonRespDto = new CommonRespDto<>();
 			    if(id != -1) {
 			        commonRespDto.setStatusCode(1);
 			        commonRespDto.setData(id); // 생성된 id 값을 설정하여 응답
+			        System.out.println("BuyController/orderSheet/0000");
 			    } else {
 			        commonRespDto.setStatusCode(-1);
 			        commonRespDto.setData(-1);
+			        System.out.println("BuyController/orderSheet/1111");
 			    }
 			    response.getWriter().write(gson.toJson(commonRespDto));
-				
+		   
+			    
 	        // ====================================================	
 			// 											주문 완료 페이지
 			// ====================================================		
@@ -317,7 +329,8 @@ public class BuyController extends HttpServlet{
 			// ====================================================
 			}else if(cmd.equals("manageOrder")) {
 				int page = Integer.parseInt(request.getParameter("page"));
-				List<OrderReqDto> orders = buyService.주문관리(page);
+				//List<OrderReqDto> orders = buyService.주문관리(page);
+				List<ManageRespDto> orders = buyService.주문관리2(page);
 				request.setAttribute("orders", orders);
 				
 				// 페이지 계산

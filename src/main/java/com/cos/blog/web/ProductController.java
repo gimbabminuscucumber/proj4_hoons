@@ -211,6 +211,8 @@ public class ProductController extends HttpServlet{
 				List<InfoRespDto> reviews = buyService.리뷰정보(id);
 				List<DetailRespDto> suggests = productService.추천상품(brand);
 				
+				System.out.println("ProductController/detail/products : " + products);
+				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");
 				}else {

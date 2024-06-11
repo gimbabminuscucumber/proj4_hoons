@@ -270,6 +270,7 @@
 	// 구매하기 버튼 클릭 (주문서 작성)
 	function purchase() {
 	    console.log('구매하기 버튼 클릭');
+
 	    var userId = document.getElementById("userId").value;
 	    var productId = document.getElementById("productId").value;
 	    var img = document.getElementById("img").value;
@@ -290,6 +291,12 @@
 	        totalPrice: totalPrice
 	    };
 	    
+	    console.log('data.userId : ' + data.userId);
+	    console.log('data.productId : ' + data.productId);
+	    console.log('data.price : ' + data.price);
+	    console.log('data.totalCount : ' + data.totalCount);
+	    console.log('data.totalPrice : ' + data.totalPrice);
+	    
 	    $.ajax({
 	        type: "post",
 	        url: "/project4/buy?cmd=orderSheet",
@@ -299,9 +306,9 @@
 	    }).done(function(resp){
 	        if(resp.statusCode == 1){
 	            // 생성된 id 값 가져오기
-	            var id = resp.data;
+	            var id = resp.data;		// orderSheet 테이블 id
 	            // detail.jsp로 새로운 URL 생성
-	            location.href = "/project4/buy?cmd=buyForm2&userId=" + userId + "&productId=" + productId;
+	            location.href = "/project4/buy?cmd=buyForm2&userId=" + userId + "&id=" + id;
 	        } else {
 	            alert('주문서 작성에 실패했습니다.');
 	        }

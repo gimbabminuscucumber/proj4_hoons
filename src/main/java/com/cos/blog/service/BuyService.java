@@ -7,6 +7,7 @@ import java.util.List;
 import com.cos.blog.domain.buy.BuyDao;
 import com.cos.blog.domain.buy.dto.BasketReqDto;
 import com.cos.blog.domain.buy.dto.BuyReqDto;
+import com.cos.blog.domain.buy.dto.ManageRespDto;
 import com.cos.blog.domain.buy.dto.OrderReqDto;
 import com.cos.blog.domain.buy.dto.OrderSheetReqDto;
 import com.cos.blog.domain.refund.dto.RefundReqDto;
@@ -73,8 +74,8 @@ public class BuyService {
 	    return orders;
 	}
 	
-	public OrderReqDto 주문서작성2(int productId, int userId) {
-		return buyDao.buyForm2(productId, userId);
+	public OrderReqDto 주문서작성2(int orderSheetId, int userId) {
+		return buyDao.buyForm2(orderSheetId, userId);
 	}
 	
 	public int 장바구니삭제(int userId, int basketId) {
@@ -106,6 +107,10 @@ public class BuyService {
 		return buyDao.findByManage(page);
 	}
 
+	public List<ManageRespDto> 주문관리2(int page) {
+		return buyDao.findByManage2(page);
+	}
+	
 	public int 주문처리(int id, int state) {
 		return buyDao.updateState(id, state);
 	}
@@ -154,16 +159,10 @@ public class BuyService {
 		return buyDao.refundCancel(id, state, userId);
 	}
 
+	public int 오더지삭제(int id) {
+		return buyDao.orderSheetDelete(id);
+	}
 
 
-
-
-
-
-
-
-
-
-	
 	
 }

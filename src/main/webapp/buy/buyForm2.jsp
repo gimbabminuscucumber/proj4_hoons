@@ -144,7 +144,12 @@
             totalCount: ${orders.totalCount}
         };
         data.push(product);
-		
+        
+        console.log('product.userId : ' + product.userId);
+        console.log('product.productId : ' + product.productId);
+        console.log('product.totalPrice : ' + product.totalPrice);
+        console.log('product.totalCount : ' + product.totalCount);
+	/*	
 		$.ajax({
 		    type: "post",
 		    url: "/project4/buy?cmd=buy",
@@ -161,6 +166,7 @@
 		        alert("구매에 실패했습니다.")
 		    }
 		});
+	*/
     }
     
     // 배송지 수정
