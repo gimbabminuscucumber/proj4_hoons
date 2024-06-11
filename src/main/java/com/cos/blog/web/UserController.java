@@ -3,6 +3,7 @@ package com.cos.blog.web;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -352,7 +353,47 @@ public class UserController extends HttpServlet {
 				out.print("error");
 			}
 			out.flush();
+			
+		// ====================================================	
+		// 									주문 관리 (관리자 전용)
+		// ====================================================
+		}else if(cmd.equals("manageUser")) {
+			int page = Integer.parseInt(request.getParameter("page"));
+			List<User> users = userService.유저관리(page);
+			request.setAttribute("users", users);
+			
+			// 페이지 계산
+			int userCount = userService.회원수();
+			int lastPage = (userCount -1)/10;
+			request.setAttribute("lastPage", lastPage);
+			request.setAttribute("userCount", userCount);
+			
+			RequestDispatcher dis = request.getRequestDispatcher("user/manageUser.jsp");
+			dis.forward(request, response);
+			
+		// ====================================================	
+		// 									주문 관리 (관리자 전용)
+		// ====================================================
+		}else if(cmd.equals("search")) {
+			int page = Integer.parseInt(request.getParameter("page"));
+			String keyword = request.getParameter("keyword");
+			System.out.println("UserController/search/page : " + page + ", keyword : " + keyword);
+
+			List<User> users = userService.키워드유저목록(keyword, page);
+			request.setAttribute("users", users);
+			
+			// 페이지 계산
+			int userCount = userService.회원수(keyword);
+			int lastPage = (userCount -1)/10;
+			request.setAttribute("lastPage", lastPage);
+			request.setAttribute("userCount", userCount);
+			
+			RequestDispatcher dis = request.getRequestDispatcher("user/manageUser.jsp");
+			dis.forward(request, response);
+		
 		}
 		
 	}
+
+
 }

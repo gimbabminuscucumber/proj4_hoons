@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cos.blog.config.DB;
 import com.cos.blog.domain.user.dto.JoinReqDto;
@@ -353,6 +355,123 @@ public class UserDao {
 		}
 		return -1;	// 중복 아님
 	}
+
+	// 유저 관리 (관리자 전용)
+	public List<User> findByManage(int page) {
+		String sql = "SELECT * FROM user ORDER BY id ASC LIMIT ?, 10";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<User> users = new ArrayList<>();
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, page*10);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				User dto = User.builder()
+						.id(rs.getInt("id"))
+						.username(rs.getString("username"))
+						.nickName(rs.getString("nickName"))
+						.email(rs.getString("email"))
+						.address(rs.getString("address"))
+						.phone(rs.getString("phone"))
+						.userRole(rs.getString("userRole"))
+						.createDate(rs.getTimestamp("createDate"))
+						.build();
+				users.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return users;
+	}
+
+	// 유저관리 검색목록 (관리자 전용)
+	public List<User> findByKeyword(String keyword, int page) {
+		String sql = "SELECT * FROM user WHERE nickName LIKE ? OR username LIKE ? OR email LIKE ? ORDER BY id ASC LIMIT ?, 10";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<User> users = new ArrayList<>();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
+			pstmt.setString(2, "%"+keyword+"%");
+			pstmt.setString(3, "%"+keyword+"%");
+			pstmt.setInt(4, page*10);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				User dto = User.builder()
+						.id(rs.getInt("id"))
+						.username(rs.getString("username"))
+						.nickName(rs.getString("nickName"))
+						.email(rs.getString("email"))
+						.address(rs.getString("address"))
+						.phone(rs.getString("phone"))
+						.userRole(rs.getString("userRole"))
+						.createDate(rs.getTimestamp("createDate"))
+						.build();
+				users.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt, rs);
+		}
+		return users;
+	}
+
+	// 회원수
+	public int userCount() {
+		String sql = "SELECT count(*) FROM user";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt,rs);
+		}
+		return -1;
+	}
+
+	// 회원수 오버로딩
+	public int userCount(String keyword) {
+		String sql = "SELECT count(*) FROM user WHERE nickName LIKE ? OR username LIKE ? OR email LIKE ? ";
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
+			pstmt.setString(2, "%"+keyword+"%");
+			pstmt.setString(3, "%"+keyword+"%");
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DB.close(conn, pstmt,rs);
+		}
+		return -1;
+	}
+
 
 
 	

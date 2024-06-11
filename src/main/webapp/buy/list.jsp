@@ -251,6 +251,7 @@
 			</c:choose>
 		</ul>
 	</section>
+	
 	</div>
 </div>
 

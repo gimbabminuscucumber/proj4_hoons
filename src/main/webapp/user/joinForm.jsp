@@ -60,7 +60,7 @@
 			<div class= "d-flex insert-input-container">
 				<div class="material-icons-input" style="width: 338px">
 					<span class="material-icons">local_phone</span> 
-					<input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone with (-)" required />
+					<input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone without (-)" required />
 				</div>
 				<div>
 					<button type="button" class="btn btn-info" onclick="phoneCheck()">중복확인</button>
@@ -121,7 +121,7 @@
 		var nickName = document.getElementById("nickName").value;
 		var password = document.getElementById("password").value;
 		var phone = document.getElementById("phone").value;
-		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
+		var email = document.getElementById("email").value;
 		var address = document.getElementById("address").value;
 
 		if (userChecking == false) {
@@ -130,13 +130,15 @@
 		} else if(nickNameChecking == false){
 			console.log('nickName : ' + nickName);
 			alert('닉네임 중복확인을 하세요');
+			isChecking = false;
 		} else if(password === ''){
 			console.log('password : ' + password);
 			alert('비밀번호를 입력하세요');
+			isChecking = false;
 		} else if(phoneChecking == false){
 			alert('연락처 중복확인을 하세요');
+			isChecking = false;
 		} else if (emailChecking == false) {
-			console.log('password : ' + password);
 			alert('이메일 중복확인을 하세요');
 			isChecking = false;
 		} else if(userChecking == true && emailChecking == true && nickNameChecking == true) {
@@ -153,7 +155,7 @@
 		var nickName = document.getElementById("nickName").value;
 		var password = document.getElementById("password").value;
 		var phone = document.getElementById("phone").value;
-		var email = document.getElementById("inputEmail").value + document.getElementById("domain").value;
+		var email = document.getElementById("email").value /*+ document.getElementById("domain").value*/;
 		var address = document.getElementById("address").value;
 		
 		$.ajax({
@@ -170,7 +172,7 @@
 				console.log("데이터 전송 완료", resp);
 				alert('회원가입 완료');
 				// 로그인 화면으로 페이지 이동
-				window.location.href = "/project4/user/loginForm.jsp";
+				window.location.href = "/project4/user?cmd=loginForm";
 			}, error: function(xhr, status, error){
 				console.log("데이터 전송 에러", error);
 			}

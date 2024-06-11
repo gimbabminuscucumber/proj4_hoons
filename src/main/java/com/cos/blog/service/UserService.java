@@ -1,5 +1,7 @@
 package com.cos.blog.service;
 
+import java.util.List;
+
 import com.cos.blog.domain.user.User;
 import com.cos.blog.domain.user.UserDao;
 import com.cos.blog.domain.user.dto.JoinReqDto;
@@ -80,10 +82,24 @@ public class UserService {
 
 	public int 연락처중복체크(String phone) {
 		int result = userDao.findByPhone(phone);		// 1 이면 중복
-		//System.out.println("UserService/phone : " + result);
 		return result;
 	}
+
+	public List<User> 유저관리(int page) {
+		return userDao.findByManage(page);
+	}
+
+	public List<User> 키워드유저목록(String keyword, int page){
+		return userDao.findByKeyword(keyword, page);
+	}
+
+	public int 회원수() {
+		return userDao.userCount();
+	}
 	
-	
+	public int 회원수(String keyword) {
+		return userDao.userCount(keyword);
+	}
+
 
 }

@@ -161,7 +161,6 @@ public class BuyController extends HttpServlet{
 				
 	        // ====================================================	
 			// 											주문 완료 페이지
-			//					- 주문한 제품만 보여지게 하기(이전에 구매한 제품은 안보이게 > createDate나 by id이용하면 될거같긴한데...)
 			// ====================================================		
 			}else if(cmd.equals("order")) {
 			    String orderNum = request.getParameter("orderNum");
