@@ -397,6 +397,9 @@ public class ProductDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, brand);
 			rs = pstmt.executeQuery();
+			System.out.println("ProductDao/findByBrand/pstmt : " + pstmt);
+			System.out.println("ProductDao/findByBrand/rs : " + rs);
+			System.out.println("ProductDao/findByBrand/conn : " + conn);
 			
 			while(rs.next()) {
 				DetailRespDto dto = DetailRespDto.builder()
@@ -414,7 +417,9 @@ public class ProductDao {
 						.explanation(rs.getString("explanation"))
 						.build();
 				suggests.add(dto);
+				System.out.println("ProductDao/findByBrand/dto : " + dto);
 			}
+			System.out.println("ProductDao/findByBrand/suggests : " + suggests);
 			return suggests;
 		}catch(Exception e) {
 			e.printStackTrace();

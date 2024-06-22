@@ -68,6 +68,7 @@ public class ProductService {
 	}
 
 	public List<DetailRespDto> 추천상품(String brand) {
+		System.out.println("ProductService/추천상품/brand : " + brand);
 		return productDao.findByBrand(brand);
 	}
 

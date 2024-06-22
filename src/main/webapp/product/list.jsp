@@ -125,7 +125,7 @@
 				<c:if test="${status.index < 16}">
 					<c:if test="${empty param.categoryId || product.categoryId == param.categoryId}">
 						<input type="hidden" name="id" value="${product.id }">
-						<input type="hidden" name="brand" value="${product.brand }">
+						<input type="hidden" name="brand" value="${product.brand}">
 						<div class="col-md-3">
 							<div class="card m-2">
 								<a href="/project4/product?cmd=detail&id=${product.id}&brand=${product.brand}">

@@ -57,7 +57,7 @@
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=basketList&id=${principal.id }" >장바구니</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/buy?cmd=list&page=0&userId=${principal.id }" >주문 내역</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list&page=0">커뮤니티</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
+						<%-- <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li> --%>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=logout">로그아웃</a></li>
 					</ul>
 	

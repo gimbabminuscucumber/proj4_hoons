@@ -206,13 +206,17 @@ public class ProductController extends HttpServlet{
 			// ====================================================
 			}else if(cmd.equals("detail")) {
 				int id = Integer.parseInt(request.getParameter("id"));		// id = product테이블의 id
-				String brand = request.getParameter("brand");
+				//String brand = request.getParameter("brand");
+				//System.out.println("ProductController/detail/brand : " + brand);
 				DetailRespDto products = productService.상품상세보기(id);
+				String brand = products.getBrand();
 				List<DetailRespDto> mostViews = productService.많이본상품();
 				List<InfoRespDto> reviews = buyService.리뷰정보(id);
 				List<DetailRespDto> suggests = productService.추천상품(brand);
 				
-				System.out.println("ProductController/detail/products : " + products);
+				System.out.println("ProductController/detail/brand : " + brand);
+				//System.out.println("ProductController/detail/products : " + products);
+				//System.out.println("ProductController/detail/products.getBrand() : " + products.getBrand());
 				
 				if(products == null) {
 					Script.back(response, "상품을 찾을 수 없습니다.");
