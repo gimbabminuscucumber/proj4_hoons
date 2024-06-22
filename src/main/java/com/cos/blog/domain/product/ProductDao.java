@@ -461,7 +461,6 @@ public class ProductDao {
 	    	System.out.println("ProductDao/update 222");
 	        DB.close(conn, pstmt);
 	    }
-	    
 	    return -1;
 	}
 

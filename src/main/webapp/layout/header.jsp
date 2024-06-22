@@ -93,7 +93,7 @@
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=loginForm">로그인</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product?cmd=list&page=0">상품 목록</a></li>
 						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/board?cmd=list&page=0">커뮤니티</a></li>
-						<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li>
+						<%-- <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/user?cmd=test">테스트 페이지</a></li> --%>
 					</ul>
 				</div>
 			</c:otherwise>

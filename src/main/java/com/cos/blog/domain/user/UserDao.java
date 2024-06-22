@@ -173,6 +173,7 @@ public class UserDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
+			System.out.println("UserDao/findByEmail/pstmt : " + pstmt);
 			DB.close(conn, pstmt, rs);
 		}
 		return -1;							// 확인한 email이 DB에 없을 때 (중복 안 되면)
@@ -193,12 +194,13 @@ public class UserDao {
 			
 			if(rs.next()) {
 				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("username"));
 				user.setUsername(rs.getString("nickName"));
+				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
 				user.setEmail(rs.getString("email"));
 				user.setAddress(rs.getString("address"));
 			}
+			System.out.println("UserDao/userInfo/user :  " + user);
 			return user;
 		}catch(Exception e) {
 			e.printStackTrace();

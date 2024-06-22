@@ -76,6 +76,7 @@ public class ProductService {
 	}
 
 	public int 상품수정(SaveReqDto dto) throws IOException {
+		System.out.println("ProductService/상품수정");
 		return productDao.update(dto);
 	}
 

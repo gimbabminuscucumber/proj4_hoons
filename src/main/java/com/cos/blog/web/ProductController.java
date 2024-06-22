@@ -139,7 +139,8 @@ public class ProductController extends HttpServlet{
 				int result = productService.상품등록(dto);
 				
 				if(result == 1) {	// 정상 입력 완료
-					response.sendRedirect("/project4/product?cmd=list");
+					//response.sendRedirect("/project4/product?cmd=list");
+					response.sendRedirect("/project4/product?cmd=list&page=0");
 				}else {					// 정상 입력 실패
 					Script.back(response, "상품 등록 실패");
 				}
@@ -322,7 +323,8 @@ public class ProductController extends HttpServlet{
 				int result = productService.상품수정(dto);
 				
 				if(result == 1) {	// 정상 입력 완료
-					response.sendRedirect("/project4/product?cmd=list");
+					//response.sendRedirect("/project4/product?cmd=list");
+					response.sendRedirect("/project4/product?cmd=list&page=0");
 				}else {					// 정상 입력 실패
 					Script.back(response, "상품 수정 실패");
 				}
